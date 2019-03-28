@@ -3,7 +3,8 @@ title: "Effective Programming"
 teaching: 0
 exercises: 0
 questions:
-- "Key question (FIXME)"
+- Why should I care about code quality?
+- How do I make my code more legible?
 objectives:
 - "Create expressive variable names."
 - "Write effective code comments."
@@ -13,7 +14,9 @@ objectives:
 - "Reuse the results of other commands."
 - "Automate repetitive tasks using `foreach` and `forvalues`."
 keypoints:
-- "First key point. Brief Answer to questions. (FIXME)"
+- Write expressive variable names.
+- Comments the why, not the what.
+- Use for loops to automate anything that happens more than twice.
 ---
 FIXME
 
