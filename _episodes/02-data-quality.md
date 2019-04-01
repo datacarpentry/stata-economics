@@ -4,7 +4,7 @@ teaching: 0
 exercises: 0
 questions:
 - "How do I read and write tabular data?"
-- "How do I have to explore my data?"
+- "How can I explore my data?"
 - "How does Stata handle missing values?"
 objectives:
 - "Read and write data using relative path."
