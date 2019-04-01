@@ -8,7 +8,7 @@ questions:
 objectives:
 - "Run commands and .do files from the Stata command line."
 - "Run .do files from Unix shell or the Windows terminal."
-- "Pass parameters from the command line. "
+- "Pass parameters from the command line."
 - "Determine and change your working directory in Stata."
 - "Log your results window."
 - "Use interactive dialogs to find the exact syntax of a command."
