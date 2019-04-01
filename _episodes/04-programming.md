@@ -9,7 +9,7 @@ objectives:
 - "Create expressive variable names."
 - "Write effective code comments."
 - "Write code that is easy to read."
-- "Use temporary variables, scalars and files."
+- "Use temporary variables, scalars, and files."
 - "Understand and use local and global macros."
 - "Reuse the results of other commands."
 - "Automate repetitive tasks using `foreach` and `forvalues`."
