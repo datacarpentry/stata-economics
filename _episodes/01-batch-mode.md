@@ -18,7 +18,40 @@ keypoints:
 - "Check what directory you are running .do files from."
 - "Run .do files _en bloc_, not by parts." 
 ---
-FIXME
+
+> ## Challenge
+>
+> How do you find your current working directory?
+>
+> > ## Solution
+> > Check the bottom line of the Stata application window [SCREENSHOT], or enter the command `pwd`.
+> {: .solution}
+{: .challenge}
+
+> ## Challenge
+>
+> Your current working directory is `/home/user/dc-economics/data`. Which of the following Stata commands can you use to run the .do file at `/home/user/dc-economics/code/read_data.do`?
+> 1. `do read_data`
+> 2. `do ../read_data`
+> 3. `do code/read_data`
+> 4. `do /home/user/dc-economics/code/read_data.do`
+> 5. `cd ../code`
+>    `do read_data`
+>
+> > ## Solution
+> {: .solution}
+{: .challenge}
+
+> ## Challenge
+>
+> List three ways of running `read_data.do`.
+>
+> > ## Solution
+> > 1. From Stata: `do /home/user/dc-economics/code/read_data.do`
+> > 2. From Stata: `do read_data` (if current working directory is `/home/user/dc-economics/code`)
+> > 3. From the shell: `stata -b do read_data` (if current working directory is `/home/user/dc-economics/code`)
+> {: .solution}
+{: .challenge}
 
 {% include links.md %}
 

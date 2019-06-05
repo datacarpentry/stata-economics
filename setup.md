@@ -1,7 +1,7 @@
 ---
 title: Setup
 ---
-FIXME
+Download the [data repository](https://github.com/korenmiklos/dc-economics-data). (FIXME: create a zenodo repository)
 
 ## Data resources
 ### Explicit open license
