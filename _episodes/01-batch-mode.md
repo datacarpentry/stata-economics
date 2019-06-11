@@ -30,7 +30,7 @@ keypoints:
 
 > ## Challenge
 >
-> Your current working directory is `/home/user/dc-economics/data`. Which of the following Stata commands can you use to run the .do file at `/home/user/dc-economics/code/read_data.do`?
+> If your current working directory is `/home/user/dc-economics/data`, which of the following Stata commands can you use to run the .do file at `/home/user/dc-economics/code/read_data.do`?
 > 1. `do read_data`
 > 2. `do ../read_data`
 > 3. `do code/read_data`
