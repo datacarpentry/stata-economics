@@ -19,7 +19,7 @@ keypoints:
 ---
 
 > ## Challenge
-> Your current working directory is `/home/user/dc-economics`. Which of the following can load the data in `/home/user/dc-economics/data/dist_cepii.dta`?
+> If your current working directory is `/home/user/dc-economics`, which of the following can you use to load the data in `/home/user/dc-economics/data/dist_cepii.dta`?
 > 1. `use "/home/user/dc-economics/data/dist_cepii.dta"`
 > 2. `use "data/dist_cepii.dta"`
 > 3. `use "/data/dist_cepii.dta"`
@@ -27,29 +27,28 @@ keypoints:
 > 5. `use "../dist_cepii.dta"`
 > 
 > > ## Solution
-> > 1. Yes. You can always use the _absolute path_ of a datafile you want to load. It is good practice to put the filename inside double quotes to guard against space and other special characters. Note, however, that your code may not run on someone else's computer where the absolute path is different.
-> > 2. Yes. You are using a _relative path_. 
-> > 3. No. This is an absolute path because it starts with `/`, but it is not the correct absolute path of `/home/user/dc-economics/data/dist_cepii.dta`.
-> > 4. It depends. It will work on Windows, but not on Linux and Mac machines. Use forward slash, `/` instead.
+> > 1. Yes. You can always use the _absolute path_ of a datafile you want to load. It is good practice to put the filename inside double quotes to guard against problems caused by spaces and other special characters in filenames. Note, however, that your code may not run on someone else's computer where the absolute path is different.
+> > 2. Yes. Here you are using a _relative path_. 
+> > 3. No. This is an absolute path because it starts with `/`, but it is not the correct absolute path for `/home/user/dc-economics/data/dist_cepii.dta`.
+> > 4. It depends. This will work on Windows, but not on Linux and Mac machines. Use forward slash, `/` instead.
 > > 5. No. This would look for `dist_cepii.dta` in the directory `/home/user`, one level up from the current working directory, `/home/user/dc-economics`.
 > {: .solution}
 {: .challenge}
 
 > ## Challenge
 > Load `data/dist_cepii.dta`. Explore the variable `distw` (weighted average distance between cities in the pair of countries).
-> 1. What are its measurement units?
-> 2. What is its smallest and largest value?
-> 3. In how many cases is it missing?
+> 1. What is the unit of measurement?
+> 2. What is the smallest and largest value?
+> 3. In how many cases is this variable missing?
 > > ## Solution
-> > 1. `describe distw` gives you the variable label "weighted distance (pop-wt, km)". It is hence recorded in kilometers. You also see that the variable is _double_, not _integer_.
-> > 2. `summarize distw` shows that the distance varies between  0.995 and 19781.39 kilometers.
-> > 3. `inspect distw` shows that it is missing 2,215 cases. This command also gives you the minimum and maximum values.
+> > 1. `describe distw` gives you the variable label "weighted distance (pop-wt, km)". It is hence recorded in kilometers. This command also shows that the variable is _double_, not _integer_.
+> > 2. `summarize distw` shows that the distance varies between 0.995 and 19781.39 kilometers.
+> > 3. `inspect distw` shows that `distw` is missing in 2,215 cases. This command also gives you the minimum and maximum values.
 > {: .solution}
 {: .challenge}
 
-
 > ## Challenge
-> Load `data/dist_cepii.dta`. Replace missing values in the variable `distw` with 0.
+> Load `data/dist_cepii.dta`. Replace missing values in the variable `distw` with 0 using the following code.
 > ```
 > use "data/dist_cepii.dta"
 > mvencode distw, mv(0)
@@ -58,10 +57,9 @@ keypoints:
 > > ## Solution
 > > You get an error message:
 > > [OUTPUT]
-> > To force the replacement of missing values with zero, an already existing value of `distw`, use `mvencode distw, mv(0) override`.
+> > To force the replacement of missing values with zero (which is an already existing value of `distw`), use `mvencode distw, mv(0) override`.
 > {: .solution}
 {: .challenge}
-
 
 {% include links.md %}
 
