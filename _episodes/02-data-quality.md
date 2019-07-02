@@ -59,6 +59,57 @@ keypoints:
 FIXME: How to get rid of byte-order-marker?
 
 > ## Challenge
+> Explore the variables `v5`, `v63` and `v64`. Which years do they correspond to? Do they have missing values?
+>
+> > ## Solution
+> > ```input
+> > inspect v5 v63 v64
+> > ```
+> > v5:  1960                                       Number of Observations
+> > ---------                              ---------------------------------------
+> >                                              Total      Integers   Nonintegers
+> > |      #                     Negative          692           240           452
+> > |      #                     Zero            1,269         1,269             -
+> > |      #                     Positive       36,335         8,139        28,196
+> > |      #                               -----------   -----------   -----------
+> > |      #                     Total          38,296         9,648        28,648
+> > |  .   #   .   .   .         Missing       383,840
+> > +----------------------                -----------
+> > -3.34e+14      8.35e+14                    422,136
+> > (More than 99 unique values)
+> > 
+> > v63:  2018                                      Number of Observations
+> > ----------                             ---------------------------------------
+> >                                              Total      Integers   Nonintegers
+> > |  #                         Negative           75             -            75
+> > |  #                         Zero              690           690             -
+> > |  #                         Positive       29,482         8,816        20,666
+> > |  #                                   -----------   -----------   -----------
+> > |  #                         Total          30,247         9,506        20,741
+> > |  #   .   .   .   .         Missing       391,889
+> > +----------------------                -----------
+> > -43.86237      6.82e+13                    422,136
+> > (More than 99 unique values)
+> > 
+> > v64:                                            Number of Observations
+> > ------                                 ---------------------------------------
+> >                                              Total      Integers   Nonintegers
+> > |                            Negative            -             -             -
+> > |                            Zero                -             -             -
+> > |                            Positive            -             -             -
+> > |                                      -----------   -----------   -----------
+> > |                            Total               -             -             -
+> > |                            Missing       422,136
+> > +----------------------                -----------
+> > .             -9.0e+307                    422,136
+   (0 unique value)
+> > ```output
+> >
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge
 > Load `data/dist_cepii.dta`. Explore the variable `distw` (weighted average distance between cities in the pair of countries).
 > 1. What are its measurement units?
 > 2. What is its smallest and largest value?
@@ -78,6 +129,9 @@ FIXME: How to get rid of byte-order-marker?
 > > `count if distw > 15000 & !missing(distw)` gives you an answer of 5,070. If you use `count if distw > 15000`, you get 7,285. This is because Stata treats missing values as larger than any real number. It hence adds the 2,215 missing values.
 > {: .solution}
 {: .challenge}
+
+> ## Gotcha
+> Missing values are greater than any number.
 
 > ## Challenge
 > Which of the following tells you how often the weighted distance is greater than the simple unweighted distance?
