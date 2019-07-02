@@ -75,6 +75,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 "Software Carpentry" and "Data Carpentry" and their respective logos
 are registered trademarks of [NumFOCUS][numfocus].
 
+"Stata" is a registered trademark of [StataCorp LLC](https://www.stata.com/).
+
 [cc-by-human]: https://creativecommons.org/licenses/by/4.0/
 [cc-by-legal]: https://creativecommons.org/licenses/by/4.0/legalcode
 [mit-license]: https://opensource.org/licenses/mit-license.html
