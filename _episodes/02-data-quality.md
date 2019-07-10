@@ -5,6 +5,7 @@ exercises: 0
 questions:
 - "How do I read and write tabular data?"
 - "How can I explore my data?"
+- "How does Stata deal with variable names doesn't like?"
 - "How does Stata handle missing values?"
 objectives:
 - "Read and write data using relative path."
@@ -43,7 +44,7 @@ keypoints:
 > > ## Solution
 > > Load the data and launch a data browser.
 > > ```
-> > import delimited data/WDIData.csv
+> > import delimited "data/WDIData.csv"
 > > browse
 > > ```
 > > You find that the variables are named `v1` through `v64` and the first row contains the actual variable names. 
@@ -52,13 +53,11 @@ keypoints:
 > > ![Variable names are not read]({{ relative_root_path }}{% link img/import-header-2.png %})
 > > You can force Stata to use the values in row 1 as variable names.
 > > ```
-> > import delimited data/WDIData.csv, varnames(1) clear
+> > import delimited "data/WDIData.csv", varnames(1) clear
 > > ```
 > > But since 1960, 1961, etc., are not valid variable names, these will still be called `v5` through `v64`.
 > {: .solution}
 {: .challenge}
-
-FIXME: How to get rid of byte-order-marker?
 
 > ## Challenge
 > Explore the variables `v5`, `v63` and `v64`. Which years do they correspond to? Do they have missing values?
@@ -132,6 +131,7 @@ FIXME: How to get rid of byte-order-marker?
 
 > ## Gotcha
 > Missing values are greater than any number.
+{: .callout}
 
 > ## Challenge
 > Which of the following tells you how often the weighted distance is greater than the simple unweighted distance?
@@ -174,6 +174,7 @@ FIXME: How to get rid of byte-order-marker?
 > {: .solution}
 {: .challenge}
 
+QUESTION: metadata? labels?
 
 {% include links.md %}
 

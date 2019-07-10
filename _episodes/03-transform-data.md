@@ -16,7 +16,7 @@ keypoints:
 - "Create tidy data before merging."
 ---
 
-The WDI dataset you loaded in the previous episode has a strange shape. Variables are in separate rows, whereas years are in separate columns. This is the opposite of "[tidy data](REF)," where each variable has its own column, and different observations such as different years are in separate rows. We will reshape the data in the tidy format.
+The WDI dataset you loaded in the previous episode has a strange shape. Variables are in separate rows, whereas years are in separate columns. This is the opposite of "[tidy data](http://dx.doi.org/10.18637/jss.v059.i10)," where each variable has its own column, and different observations such as different years are in separate rows. We will reshape the data in the tidy format.
 
 > ## Challenge
 > Load the WDI dataset you saved in the previous episode. 
@@ -46,6 +46,8 @@ The WDI dataset you loaded in the previous episode has a strange shape. Variable
 > > ```
 > {: .solution}
 {: .challenge}
+
+FIXME: Refer to metadata file in `WDISeries.csv`
 
 FIXME: This is probably too complex a challenge, break it up.
 
@@ -126,7 +128,7 @@ variable indicatorname not constant within countrycode year". Variables that you
 > > rename v* *
 > > ```
 > > A quick `browse` confirms that the data is in the tidy format.
-> > ![WDI data in tidy format](img/wdi-reshaped.png)
+> > ![WDI data in tidy format]({{ relative_root_path }}{% link img/wdi-reshaped.png %})
 > {: .solution}
 {: .challenge}
 
@@ -191,9 +193,11 @@ variable indicatorname not constant within countrycode year". Variables that you
 > {: .solution}
 {: .challenge}
 
+FIXME: explain _merge codes, add update...
 
 > ## Gotcha
 > Never do a many-to-many, `m:m` merge. It does not do what you expect. You probably want to do a `joinby` instead.
+{: .callout}
 
 > ## Challenge
 >  

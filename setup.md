@@ -5,7 +5,7 @@ This lesson uses the statistical package [Stata](https://www.stata.com/products/
 
 Download the [data repository](https://github.com/korenmiklos/dc-economics-data). (FIXME: create a figshare repository)
 
-
+FIXME: provide metadata
 
 ## Data resources
 ### Explicit open license
