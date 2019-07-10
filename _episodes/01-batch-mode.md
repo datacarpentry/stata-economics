@@ -17,21 +17,23 @@ keypoints:
 - "Add commands to a .do file."
 - "Check what directory you are running .do files from."
 - "Run .do files _en bloc_, not by parts." 
+- "Always use forward slash `/` in path names."
+- "Never abbreviate. Always write out the file extensions."
 ---
 
-> ## Challenge
->
-> How do you find your current working directory?
->
-> > ## Solution
-> > Check the bottom line of the Stata application window, or enter the command `pwd`.
-> > ![Two ways of checking your working directory](img/pwd.png)
-> {: .solution}
-{: .challenge}
+FIXME: introduce standard stata syntax: `command expression, options`
+
+How do you find your current working directory? Check the bottom line of the Stata application window, or enter the command `pwd`.
+
+![Two ways of checking your working directory]({{ relative_root_path }}{% link img/pwd.png %})
+
+FIXME: this may be an explanation. CHECK `pwd` on a Windows machine. If different, include a callout. 
+
+FIXME: check tab completion?
 
 > ## Challenge
 >
-> Your current working directory is `/home/user/dc-economics/data`. Which of the following Stata commands can you use to run the .do file at `/home/user/dc-economics/code/read_data.do`?
+> If your current working directory is `/home/user/dc-economics/data`, which of the following Stata commands can you use to run the .do file at `/home/user/dc-economics/code/read_data.do`?
 > 1. `do read_data`
 > 2. `do ../read_data`
 > 3. `do ../code/read_data`
