@@ -47,12 +47,14 @@ keypoints:
 > > browse
 > > ```
 > > You find that the variables are named `v1` through `v64` and the first row contains the actual variable names. 
-> > ![](img/import-header.png)
+> > ![Variable names are not read]({{ relative_root_path }}{% link img/import-header.png %})
 > > This is because WDI uses years for variable names, but Stata does not allow purely numeric variable names.
-> > ![](img/import-header-2.png)
+> > ![Variable names are not read]({{ relative_root_path }}{% link img/import-header-2.png %})
+> > You can force Stata to use the values in row 1 as variable names.
 > > ```
 > > import delimited data/WDIData.csv, varnames(1) clear
 > > ```
+> > But since 1960, 1961, etc., are not valid variable names, these will still be called `v5` through `v64`.
 > {: .solution}
 {: .challenge}
 
