@@ -17,28 +17,36 @@ keypoints:
 - "Add commands to a .do file."
 - "Check what directory you are running .do files from."
 - "Run .do files _en bloc_, not by parts." 
+- "Always use forward slash `/` in path names."
+- "Never abbreviate. Always write out the file extensions."
 ---
 
-> ## Challenge
->
-> How do you find your current working directory?
->
-> > ## Solution
-> > Check the bottom line of the Stata application window [SCREENSHOT], or enter the command `pwd`.
-> {: .solution}
-{: .challenge}
+FIXME: introduce standard stata syntax: `command expression, options`
+
+How do you find your current working directory? Check the bottom line of the Stata application window, or enter the command `pwd`.
+
+![Two ways of checking your working directory]({{ relative_root_path }}{% link img/pwd.png %})
+
+FIXME: this may be an explanation. CHECK `pwd` on a Windows machine. If different, include a callout. 
+
+FIXME: check tab completion?
 
 > ## Challenge
 >
 > If your current working directory is `/home/user/dc-economics/data`, which of the following Stata commands can you use to run the .do file at `/home/user/dc-economics/code/read_data.do`?
 > 1. `do read_data`
 > 2. `do ../read_data`
-> 3. `do code/read_data`
+> 3. `do ../code/read_data`
 > 4. `do /home/user/dc-economics/code/read_data.do`
 > 5. `cd ../code`
 >    `do read_data`
 >
 > > ## Solution
+> > 1. No. This looks for `read_data.do` in the current directory, `/home/user/dc-economics/data`.
+> > 2. No. This looks for `read_data.do` one level up from the current directory, `/home/user/dc-economics/`.
+> > 3. Yes. This looks for `read_data.do` in the `code` folder one level up from the current folder. This is where your .do file is.
+> > 4. Yes. You can always use the fully qualified, absolute path to run a .do file. It is, however, not good practice to do so, as the absolute path may be different on a different computer.
+> > 5. Yes. This first changes the working directory to `/home/user/dc-economics/code`, the runs `read_data.do` from there.
 > {: .solution}
 {: .challenge}
 

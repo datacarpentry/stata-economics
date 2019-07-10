@@ -14,6 +14,8 @@ objectives:
 - "Deal with missing values."
 keypoints:
 - "Use the missing value feature of Stata, not a numerical code."
+- "Test for missing values with the `missing` function."
+- "In Stata expressions, missing values are greater than any number. Functions of missing values are missing value."
 - "Check CSV files for separator, variable names, and character encoding."
 - "Always write out filename extensions to avoid confusion."
 ---
@@ -36,6 +38,80 @@ keypoints:
 {: .challenge}
 
 > ## Challenge
+> Import the World Development Indicator dataset from .csv format using the command `import delimited data/WDIData.csv`. What goes wrong and how can you fix it?
+> 
+> > ## Solution
+> > Load the data and launch a data browser.
+> > ```
+> > import delimited data/WDIData.csv
+> > browse
+> > ```
+> > You find that the variables are named `v1` through `v64` and the first row contains the actual variable names. 
+> > ![Variable names are not read]({{ relative_root_path }}{% link img/import-header.png %})
+> > This is because WDI uses years for variable names, but Stata does not allow purely numeric variable names.
+> > ![Variable names are not read]({{ relative_root_path }}{% link img/import-header-2.png %})
+> > You can force Stata to use the values in row 1 as variable names.
+> > ```
+> > import delimited data/WDIData.csv, varnames(1) clear
+> > ```
+> > But since 1960, 1961, etc., are not valid variable names, these will still be called `v5` through `v64`.
+> {: .solution}
+{: .challenge}
+
+FIXME: How to get rid of byte-order-marker?
+
+> ## Challenge
+> Explore the variables `v5`, `v63` and `v64`. Which years do they correspond to? Do they have missing values?
+>
+> > ## Solution
+> > ```input
+> > inspect v5 v63 v64
+> > ```
+> > v5:  1960                                       Number of Observations
+> > ---------                              ---------------------------------------
+> >                                              Total      Integers   Nonintegers
+> > |      #                     Negative          692           240           452
+> > |      #                     Zero            1,269         1,269             -
+> > |      #                     Positive       36,335         8,139        28,196
+> > |      #                               -----------   -----------   -----------
+> > |      #                     Total          38,296         9,648        28,648
+> > |  .   #   .   .   .         Missing       383,840
+> > +----------------------                -----------
+> > -3.34e+14      8.35e+14                    422,136
+> > (More than 99 unique values)
+> > 
+> > v63:  2018                                      Number of Observations
+> > ----------                             ---------------------------------------
+> >                                              Total      Integers   Nonintegers
+> > |  #                         Negative           75             -            75
+> > |  #                         Zero              690           690             -
+> > |  #                         Positive       29,482         8,816        20,666
+> > |  #                                   -----------   -----------   -----------
+> > |  #                         Total          30,247         9,506        20,741
+> > |  #   .   .   .   .         Missing       391,889
+> > +----------------------                -----------
+> > -43.86237      6.82e+13                    422,136
+> > (More than 99 unique values)
+> > 
+> > v64:                                            Number of Observations
+> > ------                                 ---------------------------------------
+> >                                              Total      Integers   Nonintegers
+> > |                            Negative            -             -             -
+> > |                            Zero                -             -             -
+> > |                            Positive            -             -             -
+> > |                                      -----------   -----------   -----------
+> > |                            Total               -             -             -
+> > |                            Missing       422,136
+> > +----------------------                -----------
+> > .             -9.0e+307                    422,136
+   (0 unique value)
+> > ```output
+> >
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge
 > Load `data/dist_cepii.dta`. Explore the variable `distw` (weighted average distance between cities in the pair of countries).
 > 1. What is the unit of measurement?
 > 2. What is the smallest and largest value?
@@ -48,7 +124,34 @@ keypoints:
 {: .challenge}
 
 > ## Challenge
-> Load `data/dist_cepii.dta`. Replace missing values in the variable `distw` with 0 using the following code.
+> Using the weighted distance between countries, count how many pairs of countries are farther than 15,000 km.
+> > ## Solution
+> > `count if distw > 15000 & !missing(distw)` gives you an answer of 5,070. If you use `count if distw > 15000`, you get 7,285. This is because Stata treats missing values as larger than any real number. It hence adds the 2,215 missing values.
+> {: .solution}
+{: .challenge}
+
+> ## Gotcha
+> Missing values are greater than any number.
+
+> ## Challenge
+> Which of the following tells you how often the weighted distance is greater than the simple unweighted distance?
+> ```
+> count if dist < distw
+> count if dist - distw < 0
+> count if distw - dist > 0
+> ```
+> > ## Solution
+> > The second. When neither variable is missing, the three comparisons give the same answer. However, when `distw` has missing values, the first comparison evaluates to true, because missing values are greater than anything. The second comparison starts with a mathematical operation, which evaluates to missing and is hence *not* smaller than zero. 
+> > As this property of missing values is a regular *gotcha*, you should always explicitly test for missing values like so
+> > ```
+> > count if dist < distw & !missing(dist, distw)
+> > ```
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge
+> Load `data/dist_cepii.dta`. Replace missing values in the variable `distw` with 0.
 > ```
 > use "data/dist_cepii.dta"
 > mvencode distw, mv(0)
@@ -60,6 +163,17 @@ keypoints:
 > > To force the replacement of missing values with zero (which is an already existing value of `distw`), use `mvencode distw, mv(0) override`.
 > {: .solution}
 {: .challenge}
+
+> ## Challenge
+> Load `data/dist_cepii.dta`. If the variable `distw` is missing, replace it with the value from the variable `dist`.
+> > ## Solution
+> > ```
+> > use "data/dist_cepii.dta"
+> > replace distw = dist if missing(distw)
+> > ```
+> {: .solution}
+{: .challenge}
+
 
 {% include links.md %}
 
