@@ -110,7 +110,8 @@ Next we will read the World Development Indicators dataset. The data is in `data
 > > +----------------------                -----------
 > > .             -9.0e+307                    422,136
    (0 unique value)
-> > ```output
+> > ```
+> > {: .output}
 > >
 > {: .solution}
 {: .challenge}
@@ -146,12 +147,14 @@ Next we will read the World Development Indicators dataset. The data is in `data
 > count if dist - distw < 0
 > count if distw - dist > 0
 > ```
+> {: .source}
 > > ## Solution
 > > The second. When neither variable is missing, the three comparisons give the same answer. However, when `distw` has missing values, the first comparison evaluates to true, because missing values are greater than anything. The second comparison starts with a mathematical operation, which evaluates to missing and is hence *not* smaller than zero. 
-> > As this property of missing values is a regular *gotcha*, you should always explicitly test for missing values like so
+> > As this property of missing values is a common *gotcha*, you should always explicitly test for missing values like so
 > > ```
 > > count if dist < distw & !missing(dist, distw)
 > > ```
+> > {: .source}
 > {: .solution}
 {: .challenge}
 
@@ -162,6 +165,7 @@ Next we will read the World Development Indicators dataset. The data is in `data
 > use "data/dist_cepii.dta"
 > mvencode distw, mv(0)
 > ```
+> > {: .source}
 > What happens?
 > > ## Solution
 > > You get an error message:
@@ -177,6 +181,7 @@ Next we will read the World Development Indicators dataset. The data is in `data
 > > use "data/dist_cepii.dta"
 > > replace distw = dist if missing(distw)
 > > ```
+> > {: .source}
 > {: .solution}
 {: .challenge}
 
