@@ -24,7 +24,7 @@ The WDI dataset you loaded in the previous episode has a strange shape. Variable
 >
 > > ## Solution
 > > To minimize the risk of typos, it is better to use the short idenifier of each variable. You can `browse` the dataset to see which identifier corresponds to which variable.
-> > ![Names and codes of indicators]({{ relative_root_path }}{% link img/browse-indicators.png %})
+> > ![Names and codes of indicators]({{ "/img/browse-indicators.png" | relative_url }})
 > > Or you can use `tabulate` to see the variable name (`indicatorcode`) in the results window. 
 > > ```input
 > > tabulate indicatorcode if indicatorname == "Merchandise trade (% of GDP)"
@@ -128,7 +128,7 @@ variable indicatorname not constant within countrycode year". Variables that you
 > > rename v* *
 > > ```
 > > A quick `browse` confirms that the data is in the tidy format.
-> > ![WDI data in tidy format]({{ relative_root_path }}{% link img/wdi-reshaped.png %})
+> > ![WDI data in tidy format]({{ "/img/wdi-reshaped.png" | relative_url }})
 > {: .solution}
 {: .challenge}
 
