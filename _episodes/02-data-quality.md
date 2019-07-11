@@ -38,6 +38,8 @@ keypoints:
 > {: .solution}
 {: .challenge}
 
+Next we will read the World Development Indicators dataset. The data is in `data/WDIData.csv`. The other .csv files starting with `WDI` give some metadata. For example, `data/WDISeries.csv` describes the variables ("indicators" in World Bank speak), `data/WDICountry.csv` gives a codelist of countries, and `data/WDIFootnote.csv` includes footnotes.
+
 > ## Challenge
 > Import the World Development Indicator dataset from .csv format using the command `import delimited data/WDIData.csv`. What goes wrong and how can you fix it?
 > 
@@ -173,8 +175,6 @@ keypoints:
 > > ```
 > {: .solution}
 {: .challenge}
-
-QUESTION: metadata? labels?
 
 {% include links.md %}
 
