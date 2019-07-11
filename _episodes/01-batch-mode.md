@@ -25,7 +25,7 @@ FIXME: introduce standard stata syntax: `command expression, options`
 
 How do you find your current working directory? Check the bottom line of the Stata application window, or enter the command `pwd`.
 
-![Two ways of checking your working directory]({{ relative_root_path }}{% link img/pwd.png %})
+![Two ways of checking your working directory]({{ "/img/pwd.png" | relative_url }})
 
 > ## Backward or forward?
 > On a Windows machine, Stata will display your working directory with a backslash (`\`) separating its components, like
