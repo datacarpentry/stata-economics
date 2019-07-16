@@ -286,7 +286,7 @@ From the examples, this looks like a numerical field, but is encoded as a 166-lo
 ```
 . destring latestpopulationcensus, generate(censusyear) force
 latestpopulationcensus: contains nonnumeric characters; censusyear generated as int
-(82 missing values generated)
+(72 missing values generated)
 
 . tabulate censusyear, missing
 
@@ -294,31 +294,33 @@ latestpopulationcensus: contains nonnumeric characters; censusyear generated as 
  population |
      census |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-       1943 |          1        0.37        0.37
-       1984 |          2        0.75        1.12
-       1989 |          1        0.37        1.49
-       1997 |          1        0.37        1.87
-       2001 |          1        0.37        2.24
-       2002 |          2        0.75        2.99
-       2003 |          2        0.75        3.73
-       2004 |          2        0.75        4.48
-       2005 |          2        0.75        5.22
-       2006 |          2        0.75        5.97
-       2007 |          3        1.12        7.09
-       2008 |          7        2.61        9.70
-       2009 |         11        4.10       13.81
-       2010 |         36       13.43       27.24
-       2011 |         39       14.55       41.79
-       2012 |         16        5.97       47.76
-       2013 |          7        2.61       50.37
-       2014 |         11        4.10       54.48
-       2015 |         12        4.48       58.96
-       2016 |         13        4.85       63.81
-       2017 |         11        4.10       67.91
-       2018 |          4        1.49       69.40
-          . |         82       30.60      100.00
+       1943 |          1        0.38        0.38
+       1979 |          1        0.38        0.76
+       1984 |          2        0.76        1.52
+       1987 |          1        0.38        1.90
+       1989 |          1        0.38        2.28
+       1997 |          1        0.38        2.66
+       2001 |          1        0.38        3.04
+       2002 |          2        0.76        3.80
+       2003 |          2        0.76        4.56
+       2004 |          2        0.76        5.32
+       2005 |          2        0.76        6.08
+       2006 |          3        1.14        7.22
+       2007 |          3        1.14        8.37
+       2008 |          7        2.66       11.03
+       2009 |         11        4.18       15.21
+       2010 |         37       14.07       29.28
+       2011 |         40       15.21       44.49
+       2012 |         16        6.08       50.57
+       2013 |          7        2.66       53.23
+       2014 |         11        4.18       57.41
+       2015 |         12        4.56       61.98
+       2016 |         13        4.94       66.92
+       2017 |         11        4.18       71.10
+       2018 |          4        1.52       72.62
+          . |         72       27.38      100.00
 ------------+-----------------------------------
-      Total |        268      100.00
+      Total |        263      100.00
 ```
 {: .output}
 
@@ -332,38 +334,41 @@ latestpopulationcensus: contains nonnumeric characters; censusyear generated as 
 
  censusyear |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-       1943 |          1        0.37        0.37
-       1984 |          2        0.75        1.12
-       1989 |          1        0.37        1.49
-       1997 |          1        0.37        1.87
-       2001 |          1        0.37        2.24
-       2002 |          2        0.75        2.99
-       2003 |          2        0.75        3.73
-       2004 |          2        0.75        4.48
-       2005 |          2        0.75        5.22
-       2006 |          2        0.75        5.97
-       2007 |          3        1.12        7.09
-       2008 |          7        2.61        9.70
-       2009 |         12        4.48       14.18
-       2010 |         40       14.93       29.10
-       2011 |         55       20.52       49.63
-       2012 |         18        6.72       56.34
-       2013 |          7        2.61       58.96
-       2014 |         11        4.10       63.06
-       2015 |         13        4.85       67.91
-       2016 |         13        4.85       72.76
-       2017 |         11        4.10       76.87
-       2018 |          5        1.87       78.73
-          . |         57       21.27      100.00
+       1943 |          1        0.38        0.38
+       1979 |          1        0.38        0.76
+       1984 |          2        0.76        1.52
+       1987 |          1        0.38        1.90
+       1989 |          1        0.38        2.28
+       1997 |          1        0.38        2.66
+       2001 |          1        0.38        3.04
+       2002 |          2        0.76        3.80
+       2003 |          2        0.76        4.56
+       2004 |          2        0.76        5.32
+       2005 |          2        0.76        6.08
+       2006 |          3        1.14        7.22
+       2007 |          3        1.14        8.37
+       2008 |          7        2.66       11.03
+       2009 |         12        4.56       15.59
+       2010 |         41       15.59       31.18
+       2011 |         56       21.29       52.47
+       2012 |         18        6.84       59.32
+       2013 |          7        2.66       61.98
+       2014 |         11        4.18       66.16
+       2015 |         13        4.94       71.10
+       2016 |         13        4.94       76.05
+       2017 |         11        4.18       80.23
+       2018 |          5        1.90       82.13
+          . |         47       17.87      100.00
 ------------+-----------------------------------
-      Total |        268      100.00
+      Total |        263      100.00
+
 ```
 {: .output}
 
 > ## Challenge
-> FIXME: compare number of missing values. why are they missing?
+> Compare the number of missing values in the two tables above. Why are they different?
 > > ## Solution
-> > ???
+> > The first method, `destring` forces all values with non-numerical entries to be missing. This includes entries like "2011. Population data compiled from administrative registers." The second method, converting the first four characters of the string to a number, can parse this entry as 2011 and these entries will not be missing.
 > {: .solution}
 {: .challenge}
 

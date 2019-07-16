@@ -158,6 +158,13 @@ variable indicatorname not constant within countrycode year". Variables that you
 > {: .solution}
 {: .challenge}
 
+FIXME: `collapse` deletes data from memory. more advanced, maybe move to back.
+FIXME: this could be a point to introduce command history "planned error"
+
+> ## Gotcha
+> The command `collapse` creates a new, aggregated dataset in memory, and your old dataset will be gone without any warning. Use `collapse` with caution.
+{: .callout}
+
 > ## Challenge
 > Create a decade variable with `generate decade = int(year/10)*10`. Aggregate the dataset by country and decade, keeping only the mean of each variable. Save this as `data/wdi_decades.dta`.
 > > ## Solution
@@ -181,7 +188,11 @@ variable indicatorname not constant within countrycode year". Variables that you
 > {: .solution}
 {: .challenge}
 
-FIXME: merge. differences to other popular languages like R and pandas
+The command `merge` merges a dataset in memory (the "master" data) to another one on disk (the "using" data) by matching keys between the two datasets.
+
+> ## Data in memory, data on disk
+> Stata is different from other popular statistical and data manipulation languages like R and python/pandas in that it can only hold one dataset in memory at a time. In most applications, you will work with multiple datasets, so you will need to `merge` them quite often.
+{: .callout}
 
 > ## Challenge
 > Load the decadal WDI data. Merge the average distance measure for each country. 
@@ -231,8 +242,6 @@ FIXME: merge. differences to other popular languages like R and pandas
 
 By default, each row gets a merge code, saved in a new variable called `_merge`. Merge codes are useful to check the results of our merge. "Master" is the dataset in memory, "using" is the dataset on disk. 
 
-FIXME: remove any reference to JOINs
-
 ```
 . use "data/wdi_decades.dta", clear
 . rename countrycode iso_o
@@ -272,10 +281,6 @@ FIXME: find a good use case for `update` option
 {: .callout}
 
 FIXME: add `egen` examples
-
-FIXME: `collapse` deletes data from memory. more advanced, maybe move to back.
-
-FIXME: this could be a point to introduce command history "planned error"
 
 > ## Challenge
 > What is the difference between `collapse (mean) average_distance = distw, by(iso_o)` and `egen average_distance = mean(distw), by(iso_o)`?
