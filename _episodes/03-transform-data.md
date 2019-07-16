@@ -144,9 +144,8 @@ variable indicatorname not constant within countrycode year". Variables that you
 {: .challenge}
 
 > ## Challenge
-> Check for which years we have data on GDP per capita. Drop the years before and after this sample. 
+> Drop data outside the 1990-2017 range. 
 > > ## Solution
-> > `tabulate year if !missing(gdp_per_capita)` reveals that GDP per capital data is only available after 1990 (invlusive) and before 2017 (inclusive).
 > > ```
 > > drop if year < 1990 | (year > 2017 & !missing(year)) 
 > > ```
