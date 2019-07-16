@@ -117,6 +117,176 @@ Next we will read the World Development Indicators dataset. The data is in `data
 {: .challenge}
 
 
+```
+import delimited "data/WDICountry.csv", varnames(1) clear
+```
+{: .source}
+```
+. import delimited "data/WDICountry.csv", varnames(1) clear
+(31 vars, 268 obs)
+```
+{: .output}
+
+![Broken column]({{ "/img/csv-newline.png" | relative_url }})
+
+`"Central Bureau of Statistics and Central Bank of Aruba ; Source of population estimates: UN Population Division's World Population Prospects 2019 PROVISIONAL estimates. Not for circulation. Subject to change. Mining is included in agriculture\n 
+Electricty and gas includes manufactures of refined petroleoum products"`
+
+```
+. import delimited "data/WDICountry.csv", varnames(1) bindquotes(strict) clear
+(31 vars, 263 obs)
+```
+{: .output}
+
+There are 5 fewer lines. 
+
+![CSV correctly parsed]({{ "/img/csv-correct.png" | relative_url }})
+
+
+```
+. codebook latestpopulationcensus 
+
+----------------------------------------------------------------------------------
+latestpopulationcensus                                    Latest population census
+----------------------------------------------------------------------------------
+
+                  type:  string (str166)
+
+         unique values:  34                       missing "":  46/263
+
+              examples:  "1989"
+                         "2010"
+                         "2011"
+                         "2014"
+
+               warning:  variable has embedded blanks
+
+```
+{: .output}
+
+From the examples, this looks like a numerical field, but is encoded as a 166-long string.
+
+```
+. tabulate latestpopulationcensus
+
+               Latest population census |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+                                   1943 |          1        0.46        0.46
+                                   1979 |          1        0.46        0.92
+                                   1984 |          2        0.92        1.84
+                                   1987 |          1        0.46        2.30
+                                   1989 |          1        0.46        2.76
+                                   1997 |          1        0.46        3.23
+                                   2001 |          1        0.46        3.69
+                                   2002 |          2        0.92        4.61
+                                   2003 |          2        0.92        5.53
+                                   2004 |          2        0.92        6.45
+                                   2005 |          2        0.92        7.37
+                                   2006 |          3        1.38        8.76
+                                   2007 |          3        1.38       10.14
+                                   2008 |          7        3.23       13.36
+                                   2009 |         11        5.07       18.43
+2009. Population data compiled from a.. |          1        0.46       18.89
+                                   2010 |         37       17.05       35.94
+2010. Population data compiled from a.. |          1        0.46       36.41
+2010. Population data compiled from a.. |          3        1.38       37.79
+                                   2011 |         40       18.43       56.22
+2011. Population data compiled from a.. |          9        4.15       60.37
+2011. Population data compiled from a.. |          6        2.76       63.13
+2011. Population figures compiled fro.. |          1        0.46       63.59
+                                   2012 |         16        7.37       70.97
+2012. Population data compiled from a.. |          2        0.92       71.89
+                                   2013 |          7        3.23       75.12
+                                   2014 |         11        5.07       80.18
+                                   2015 |         12        5.53       85.71
+2015. Population data compiled from a.. |          1        0.46       86.18
+                                   2016 |         13        5.99       92.17
+                                   2017 |         11        5.07       97.24
+                                   2018 |          4        1.84       99.08
+2018. Population data compiled from a.. |          1        0.46       99.54
+          Guernsey: 2015; Jersey: 2011. |          1        0.46      100.00
+----------------------------------------+-----------------------------------
+                                  Total |        217      100.00
+```
+{: .output}
+
+```
+. destring latestpopulationcensus, generate(censusyear) force
+latestpopulationcensus: contains nonnumeric characters; censusyear generated as int
+(82 missing values generated)
+
+. tabulate censusyear, missing
+
+     Latest |
+ population |
+     census |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1943 |          1        0.37        0.37
+       1984 |          2        0.75        1.12
+       1989 |          1        0.37        1.49
+       1997 |          1        0.37        1.87
+       2001 |          1        0.37        2.24
+       2002 |          2        0.75        2.99
+       2003 |          2        0.75        3.73
+       2004 |          2        0.75        4.48
+       2005 |          2        0.75        5.22
+       2006 |          2        0.75        5.97
+       2007 |          3        1.12        7.09
+       2008 |          7        2.61        9.70
+       2009 |         11        4.10       13.81
+       2010 |         36       13.43       27.24
+       2011 |         39       14.55       41.79
+       2012 |         16        5.97       47.76
+       2013 |          7        2.61       50.37
+       2014 |         11        4.10       54.48
+       2015 |         12        4.48       58.96
+       2016 |         13        4.85       63.81
+       2017 |         11        4.10       67.91
+       2018 |          4        1.49       69.40
+          . |         82       30.60      100.00
+------------+-----------------------------------
+      Total |        268      100.00
+```
+{: .output}
+
+```
+. drop censusyear
+
+. generate censusyear = real(substr(latestpopulationcensus, 1, 4))
+(57 missing values generated)
+
+. tabulate censusyear, missing
+
+ censusyear |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1943 |          1        0.37        0.37
+       1984 |          2        0.75        1.12
+       1989 |          1        0.37        1.49
+       1997 |          1        0.37        1.87
+       2001 |          1        0.37        2.24
+       2002 |          2        0.75        2.99
+       2003 |          2        0.75        3.73
+       2004 |          2        0.75        4.48
+       2005 |          2        0.75        5.22
+       2006 |          2        0.75        5.97
+       2007 |          3        1.12        7.09
+       2008 |          7        2.61        9.70
+       2009 |         12        4.48       14.18
+       2010 |         40       14.93       29.10
+       2011 |         55       20.52       49.63
+       2012 |         18        6.72       56.34
+       2013 |          7        2.61       58.96
+       2014 |         11        4.10       63.06
+       2015 |         13        4.85       67.91
+       2016 |         13        4.85       72.76
+       2017 |         11        4.10       76.87
+       2018 |          5        1.87       78.73
+          . |         57       21.27      100.00
+------------+-----------------------------------
+      Total |        268      100.00
+```
+{: .output}
+
 > ## Challenge
 > Load `data/dist_cepii.dta`. Explore the variable `distw` (weighted average distance between cities in the pair of countries).
 > 1. What is the unit of measurement?

@@ -211,15 +211,63 @@ variable indicatorname not constant within countrycode year". Variables that you
 > {: .solution}
 {: .challenge}
 
-FIXME: explain _merge codes, add update...
+```
+. tabulate _merge
+
+                 _merge |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+        master only (1) |        195       23.87       23.87
+         using only (2) |         25        3.06       26.93
+            matched (3) |        597       73.07      100.00
+------------------------+-----------------------------------
+                  Total |        817      100.00
+```
+{: .output}
+
+By default, each row gets a merge code, saved in a new variable called `_merge`. Merge codes are useful to check the results of our merge. "Master" is the dataset in memory, "using" is the dataset on disk. The default is outer join, keeping merge codes 1, 2 and 3.
+
+```
+. use "data/wdi_decades.dta", clear
+. rename countrycode iso_o
+. merge m:1 iso_o using "data/average_distance.dta", keep(master match)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                           195
+        from master                       195  (_merge==1)
+        from using                          0  (_merge==2)
+
+    matched                               597  (_merge==3)
+    -----------------------------------------
+
+. tabulate _merge
+                 _merge |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+        master only (1) |        195       24.62       24.62
+            matched (3) |        597       75.38      100.00
+------------------------+-----------------------------------
+                  Total |        792      100.00
+
+```
+{: .output}
+
+Since `merge` displays the distribution of merge codes, we often do not need to save it directly. `merge m:1 iso_o using "data/average_distance.dta", keep(master match) nogenerate`
+
+FIXME: find a good use case for `update` option 
+
+> ## On to many, many to one
+> We have seen a many-to-one `m:1` merge, where the "master" data has many rows with the same key, the "using" data has only one row for each key value. One-to-many `1:m` are exactly the flipside of this, with the role of "master" and "using" data reversed. 
+{: .callout}
+
 
 > ## Gotcha
 > Never do a many-to-many, `m:m` merge. It does not do what you expect. You probably want to do a `joinby` instead.
 {: .callout}
 
 > ## Challenge
->  
+> What is the difference between `collapse (mean) average_distance = distw, by(iso_o)` and `egen average_distance = mean(distw), by(iso_o)`?
 > > ## Solution
+> > Both calculate the average `distw` by origin country code. `collapse` creates a new dataset with one row for each group (origin country code). `egen` keeps the original dataset, its rows and variables, and adds a new variable with the group average.
 > {: .solution}
 {: .challenge}
 

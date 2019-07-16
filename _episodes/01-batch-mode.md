@@ -33,6 +33,45 @@ How do you find your current working directory? Check the bottom line of the Sta
 > You should still refer to directories using a forward slash (`/`) to stay compatible with other platforms. The forward slash is understood by all three major platforms, whereas the backslash has a special meaning on Unix and Mac.
 {: .callout}
 
+```
+cd data
+```
+{: .source}
+```
+/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics/data
+```
+{: .output}
+
+```
+ls
+```
+{: .source}
+```
+total 537336
+-rwxr-xr-x@ 1 koren  staff     785984 Jul 10 15:20 WDICountry-Series.csv*
+-rwxr-xr-x@ 1 koren  staff     169534 Jul 10 15:20 WDICountry.csv*
+-rwxr-xr-x@ 1 koren  staff  213164145 Jul 10 15:21 WDIData.csv*
+-rwxr-xr-x@ 1 koren  staff   49492815 Jul 10 15:21 WDIFootNote.csv*
+-rwxr-xr-x@ 1 koren  staff      43570 Jul 10 15:21 WDISeries-Time.csv*
+-rwxr-xr-x@ 1 koren  staff    3898578 Jul 10 15:21 WDISeries.csv*
+-rw-r--r--@ 1 koren  staff       5673 Jul  2 11:41 average_distance.dta
+-rw-r--r--@ 1 koren  staff    1909446 Mar 18  2014 dist_cepii.dta
+-rw-r--r--@ 1 koren  staff       4844 Jun 20 19:33 head.csv
+-rw-r--r--@ 1 koren  staff      44554 Jul  2 11:46 wdi_decades.dta
+```
+{: .output}
+
+FIXME: this will look different on a Windows machine
+
+```
+cd ..
+```
+{: .source}
+```
+/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics
+```
+{: .output}
+
 > ## Challenge
 >
 > If your current working directory is `/home/user/dc-economics/data`, which of the following Stata commands can you use to run the .do file at `/home/user/dc-economics/code/read_data.do`?
@@ -52,6 +91,77 @@ How do you find your current working directory? Check the bottom line of the Sta
 > {: .solution}
 {: .challenge}
 
+```
+stata
+```
+{: .language-bash}
+```
+  ___  ____  ____  ____  ____ (R)
+ /__    /   ____/   /   ____/
+___/   /   /___/   /   /___/   15.1   Copyright 1985-2017 StataCorp LLC
+  Statistics/Data Analysis            StataCorp
+                                      4905 Lakeway Drive
+     MP - Parallel Edition            College Station, Texas 77845 USA
+                                      800-STATA-PC        http://www.stata.com
+                                      979-696-4600        stata@stata.com
+                                      979-696-4601 (fax)
+
+Single-user 2-core Stata perpetual license:
+       Serial number:  XXXXXXXXXXXX
+         Licensed to:  XXXXXXXXXXXX
+                       XXXXXXXXXXXX
+
+
+Notes:
+      1.  Unicode is supported; see help unicode_advice.
+      2.  More than 2 billion observations are allowed; see help obs_advice.
+      3.  Maximum number of variables is set to 5000; see help set_maxvar.
+
+. 
+```
+{: .output}
+
+```
+stata -b display 1234
+```
+{: .language-bash}
+```
+```
+{: .output}
+Nothing happens. Output is stored in `stata.log`.
+```
+cat stata.log
+```
+{: .language-bash}
+```
+  ___  ____  ____  ____  ____ (R)
+ /__    /   ____/   /   ____/
+___/   /   /___/   /   /___/   15.1   Copyright 1985-2017 StataCorp LLC
+  Statistics/Data Analysis            StataCorp
+                                      4905 Lakeway Drive
+     MP - Parallel Edition            College Station, Texas 77845 USA
+                                      800-STATA-PC        http://www.stata.com
+                                      979-696-4600        stata@stata.com
+                                      979-696-4601 (fax)
+
+Single-user 2-core Stata perpetual license:
+       Serial number:  XXXXXXXXXXXX
+         Licensed to:  XXXXXXXXXXXX
+                       XXXXXXXXXXXX
+
+
+Notes:
+      1.  Stata is running in batch mode.
+      2.  Unicode is supported; see help unicode_advice.
+      3.  More than 2 billion observations are allowed; see help obs_advice.
+      4.  Maximum number of variables is set to 5000; see help set_maxvar.
+
+. display 1234 
+1234```
+{: .output}
+
+FIXME: this may only work on unix-type machines
+
 > ## Challenge
 >
 > List three ways of running `read_data.do`.
@@ -62,6 +172,17 @@ How do you find your current working directory? Check the bottom line of the Sta
 > > 3. From the shell: `stata -b do read_data.do` (if current working directory is `/home/user/dc-economics/code`)
 > {: .solution}
 {: .challenge}
+
+FIXME: this episode is about HOW to do things, but we do not yet have things to do.
+
+```
+* to make sure there are no log files open
+capture log close
+log using read_data.log, text replace
+...
+log close
+```
+{: .source}
 
 > ## Never abbreviate
 > A quirky feature of Stata is that it lets you abbreviate everything: commands, variable names, even file names. Abbreviation might save you some typing, but destroys legibility of your code, so please think of your coauthors and your future self and never do it. 
