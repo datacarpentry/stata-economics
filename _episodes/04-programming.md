@@ -13,10 +13,12 @@ objectives:
 - "Understand and use local and global macros."
 - "Reuse the results of other commands."
 - "Automate repetitive tasks using `foreach` and `forvalues`."
+- Use return values of Stata commands.
 keypoints:
 - "Write expressive variable names."
 - "Comment the why, not the what."
 - "Use for loops to automate anything that happens more than twice."
+- "Use `return list` after a command to see what you can reuse."
 ---
 FIXME
 
