@@ -23,7 +23,7 @@ keypoints:
 - "Always use forward slash `/` in path names."
 ---
 
-FIXME: overview of interface, like https://datacarpentry.org/genomics-r-intro/fig/rstudio_session_4pane_layout.png 
+![The Stata interface]({{ "/img/interface.png" | relative_url }})
 
 FIXME: introduce standard stata syntax: `command expression, options`
 
