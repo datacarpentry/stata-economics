@@ -130,6 +130,60 @@ Next we will read the World Development Indicators dataset. The data is in `data
 {: .challenge}
 
 > ## Challenge
+> Load `data/dist_cepii.dta`. Do you use `codebook` or `inspect` to check how many district countries are coded in `iso_d`?
+> > ## Solution
+> > ```
+> > codebook iso_d
+> > ```
+> > {: .source}
+> > ```
+> > ----------------------------------------------------------------------------------------------------------------------
+> > iso_d                                                                                                ISO3 alphanumeric
+> > ----------------------------------------------------------------------------------------------------------------------
+> > 
+> >                   type:  string (str3)
+> > 
+> >          unique values:  224                      missing "":  0/50,176
+> > 
+> >               examples:  "CPV"
+> >                          "HTI"
+> >                          "MRT"
+> >                          "SLV"
+> > ```
+> > {: .output}
+> > `inspect` only works for numeric variables.
+> > ```
+> > inspect iso_d
+> > ```
+> > {: .source}
+> > ```
+> > iso_d:  ISO3 alphanumeric                       Number of Observations
+> > -------------------------              ---------------------------------------
+> >                                              Total      Integers   Nonintegers
+> > |                            Negative            -             -             -
+> > |                            Zero                -             -             -
+> > |                            Positive            -             -             -
+> > |                                      -----------   -----------   -----------
+> > |                            Total               -             -             -
+> > |                            Missing        50,176
+> > +----------------------                -----------
+> > .             -9.0e+307                     50,176
+> >    (0 unique value)
+> > ```
+> > {: .output}
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge
+> Using the weighted distance between countries, count how many pairs of countries are farther than 15,000 km.
+> > ## Solution
+> > `count if distw > 15000 & !missing(distw)` gives you an answer of 5,070. If you use `count if distw > 15000`, you get 7,285. This is because Stata treats missing values as larger than any real number. It hence adds the 2,215 missing values.
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge
 > Using the weighted distance between countries, count how many pairs of countries are farther than 15,000 km.
 > > ## Solution
 > > `count if distw > 15000 & !missing(distw)` gives you an answer of 5,070. If you use `count if distw > 15000`, you get 7,285. This is because Stata treats missing values as larger than any real number. It hence adds the 2,215 missing values.
@@ -165,7 +219,7 @@ Next we will read the World Development Indicators dataset. The data is in `data
 > use "data/dist_cepii.dta"
 > mvencode distw, mv(0)
 > ```
-> > {: .source}
+> {: .source}
 > What happens?
 > > ## Solution
 > > You get an error message:
