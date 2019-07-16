@@ -21,7 +21,11 @@ keypoints:
 - "Never abbreviate. Always write out the file extensions."
 ---
 
+FIXME: overview of interface, like https://datacarpentry.org/genomics-r-intro/fig/rstudio_session_4pane_layout.png 
+
 FIXME: introduce standard stata syntax: `command expression, options`
+
+FIXME: reorder episodes: shell comes later. "save as a script"
 
 How do you find your current working directory? Check the bottom line of the Stata application window, or enter the command `pwd`.
 

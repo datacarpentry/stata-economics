@@ -288,10 +288,19 @@ latestpopulationcensus: contains nonnumeric characters; censusyear generated as 
 {: .output}
 
 > ## Challenge
+> FIXME: compare number of missing values. why are they missing?
+> > ## Solution
+> > ???
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge
 > Load `data/dist_cepii.dta`. Explore the variable `distw` (weighted average distance between cities in the pair of countries).
 > 1. What is the unit of measurement?
 > 2. What is the smallest and largest value?
 > 3. In how many cases is this variable missing?
+> 
 > > ## Solution
 > > 1. `describe distw` gives you the variable label "weighted distance (pop-wt, km)". It is hence recorded in kilometers. This command also shows that the variable is _double_, not _integer_.
 > > 2. `summarize distw` shows that the distance varies between 0.995 and 19781.39 kilometers.

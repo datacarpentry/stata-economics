@@ -18,6 +18,8 @@ keypoints:
 
 The WDI dataset you loaded in the previous episode has a strange shape. Variables are in separate rows, whereas years are in separate columns. This is the opposite of "[tidy data](http://dx.doi.org/10.18637/jss.v059.i10)," where each variable has its own column, and different observations such as different years are in separate rows. We will reshape the data in the tidy format.
 
+FIXME: use narrative very similar to challenge. break up?
+
 > ## Challenge
 > Load the WDI dataset you saved in the previous episode. 
 > Keep the variables "Merchandise trade (% of GDP)", "Life expectancy at birth, total (years)", "GDP per capita, PPP (constant 2011 international $)", "Population, total", "Population density (people per sq. km of land area)".
@@ -103,6 +105,8 @@ FIXME: This is probably too complex a challenge, break it up.
 > {: .solution}
 {: .challenge}
 
+FIXME: add `rename` examples and explain variable conventions
+
 > ## Challenge
 > Reshape the data so that each variable is in a separate column. 
 > > ## Solution
@@ -177,6 +181,8 @@ variable indicatorname not constant within countrycode year". Variables that you
 > {: .solution}
 {: .challenge}
 
+FIXME: merge. differences to other popular languages like R and pandas
+
 > ## Challenge
 > Load the decadal WDI data. Merge the average distance measure for each country. 
 > > ## Solution
@@ -223,7 +229,9 @@ variable indicatorname not constant within countrycode year". Variables that you
 ```
 {: .output}
 
-By default, each row gets a merge code, saved in a new variable called `_merge`. Merge codes are useful to check the results of our merge. "Master" is the dataset in memory, "using" is the dataset on disk. The default is outer join, keeping merge codes 1, 2 and 3.
+By default, each row gets a merge code, saved in a new variable called `_merge`. Merge codes are useful to check the results of our merge. "Master" is the dataset in memory, "using" is the dataset on disk. 
+
+FIXME: remove any reference to JOINs
 
 ```
 . use "data/wdi_decades.dta", clear
@@ -262,6 +270,12 @@ FIXME: find a good use case for `update` option
 > ## Gotcha
 > Never do a many-to-many, `m:m` merge. It does not do what you expect. You probably want to do a `joinby` instead.
 {: .callout}
+
+FIXME: add `egen` examples
+
+FIXME: `collapse` deletes data from memory. more advanced, maybe move to back.
+
+FIXME: this could be a point to introduce command history "planned error"
 
 > ## Challenge
 > What is the difference between `collapse (mean) average_distance = distw, by(iso_o)` and `egen average_distance = mean(distw), by(iso_o)`?
