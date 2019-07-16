@@ -51,17 +51,14 @@ ls
 ```
 {: .source}
 ```
-total 537336
+total 537216
 -rwxr-xr-x@ 1 koren  staff     785984 Jul 10 15:20 WDICountry-Series.csv*
 -rwxr-xr-x@ 1 koren  staff     169534 Jul 10 15:20 WDICountry.csv*
 -rwxr-xr-x@ 1 koren  staff  213164145 Jul 10 15:21 WDIData.csv*
 -rwxr-xr-x@ 1 koren  staff   49492815 Jul 10 15:21 WDIFootNote.csv*
 -rwxr-xr-x@ 1 koren  staff      43570 Jul 10 15:21 WDISeries-Time.csv*
 -rwxr-xr-x@ 1 koren  staff    3898578 Jul 10 15:21 WDISeries.csv*
--rw-r--r--@ 1 koren  staff       5673 Jul  2 11:41 average_distance.dta
 -rw-r--r--@ 1 koren  staff    1909446 Mar 18  2014 dist_cepii.dta
--rw-r--r--@ 1 koren  staff       4844 Jun 20 19:33 head.csv
--rw-r--r--@ 1 koren  staff      44554 Jul  2 11:46 wdi_decades.dta
 ```
 {: .output}
 
