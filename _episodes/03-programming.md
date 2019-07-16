@@ -1,81 +1,34 @@
 ---
-title: "Running Stata in Batch Mode"
+title: "Effective Programming"
 teaching: 0
 exercises: 0
 questions:
 - "How can .do files make my work more reproducible?"
 - "How do I run my or someone else's .do file?"
+- "Why should I care about code quality?"
+- "How do I make my code more legible?"
 objectives:
 - "Run commands and .do files from the Stata command line."
 - "Run .do files from Unix shell or the Windows terminal."
 - "Pass parameters from the command line."
-- "Determine and change your working directory in Stata."
 - "Log your results window."
-- "Use interactive dialogs to find the exact syntax of a command."
+- "Create expressive variable names."
+- "Write effective code comments."
+- "Write code that is easy to read."
+- "Use temporary variables, scalars, and files."
+- "Understand and use local and global macros."
+- "Reuse the results of other commands."
+- "Automate repetitive tasks using `foreach` and `forvalues`."
+- Use return values of Stata commands.
 keypoints:
-- "Only use interactive dialogs to find the command you need."
 - "Add commands to a .do file."
-- "Check what directory you are running .do files from."
 - "Run .do files _en bloc_, not by parts." 
-- "Always use forward slash `/` in path names."
-- "Never abbreviate. Always write out the file extensions."
+- "Check what directory you are running .do files from."
+- "Write expressive variable names."
+- "Comment the why, not the what."
+- "Use for loops to automate anything that happens more than twice."
+- "Use `return list` after a command to see what you can reuse."
 ---
-
-FIXME: overview of interface, like https://datacarpentry.org/genomics-r-intro/fig/rstudio_session_4pane_layout.png 
-
-FIXME: introduce standard stata syntax: `command expression, options`
-
-FIXME: reorder episodes: shell comes later. "save as a script"
-
-How do you find your current working directory? Check the bottom line of the Stata application window, or enter the command `pwd`.
-
-![Two ways of checking your working directory]({{ "/img/pwd.png" | relative_url }})
-
-> ## Backward or forward?
-> On a Windows machine, Stata will display your working directory with a backslash (`\`) separating its components, like
-> `C:\Users\koren\Dropbox\teaching\courses\2019\carpentries\stata-economics`.
-> You should still refer to directories using a forward slash (`/`) to stay compatible with other platforms. The forward slash is understood by all three major platforms, whereas the backslash has a special meaning on Unix and Mac.
-{: .callout}
-
-```
-cd data
-```
-{: .source}
-```
-/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics/data
-```
-{: .output}
-
-```
-ls
-```
-{: .source}
-```
-total 537336
--rwxr-xr-x@ 1 koren  staff     785984 Jul 10 15:20 WDICountry-Series.csv*
--rwxr-xr-x@ 1 koren  staff     169534 Jul 10 15:20 WDICountry.csv*
--rwxr-xr-x@ 1 koren  staff  213164145 Jul 10 15:21 WDIData.csv*
--rwxr-xr-x@ 1 koren  staff   49492815 Jul 10 15:21 WDIFootNote.csv*
--rwxr-xr-x@ 1 koren  staff      43570 Jul 10 15:21 WDISeries-Time.csv*
--rwxr-xr-x@ 1 koren  staff    3898578 Jul 10 15:21 WDISeries.csv*
--rw-r--r--@ 1 koren  staff       5673 Jul  2 11:41 average_distance.dta
--rw-r--r--@ 1 koren  staff    1909446 Mar 18  2014 dist_cepii.dta
--rw-r--r--@ 1 koren  staff       4844 Jun 20 19:33 head.csv
--rw-r--r--@ 1 koren  staff      44554 Jul  2 11:46 wdi_decades.dta
-```
-{: .output}
-
-FIXME: this will look different on a Windows machine
-
-```
-cd ..
-```
-{: .source}
-```
-/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics
-```
-{: .output}
-
 > ## Challenge
 >
 > If your current working directory is `/home/user/dc-economics/data`, which of the following Stata commands can you use to run the .do file at `/home/user/dc-economics/code/read_data.do`?
@@ -99,6 +52,7 @@ cd ..
 stata
 ```
 {: .language-bash}
+
 ```
   ___  ____  ____  ____  ____ (R)
  /__    /   ____/   /   ____/
@@ -161,7 +115,8 @@ Notes:
       4.  Maximum number of variables is set to 5000; see help set_maxvar.
 
 . display 1234 
-1234```
+1234
+```
 {: .output}
 
 FIXME: this may only work on unix-type machines
@@ -177,8 +132,6 @@ FIXME: this may only work on unix-type machines
 > {: .solution}
 {: .challenge}
 
-FIXME: this episode is about HOW to do things, but we do not yet have things to do.
-
 ```
 * to make sure there are no log files open
 capture log close
@@ -188,23 +141,28 @@ log close
 ```
 {: .source}
 
-> ## Never abbreviate
-> A quirky feature of Stata is that it lets you abbreviate everything: commands, variable names, even file names. Abbreviation might save you some typing, but destroys legibility of your code, so please think of your coauthors and your future self and never do it. 
-> ```
-> u data
-> g gdp_per_capita = 1
-> ren gdp gdp
-> ```
-> {: .source}
-> means the same as
-> ```
-> use "data.dta"
-> generate gdp_per_capita = 1
-> rename gdp_per_capita gdp
-> ```
-> {: .source}
-> but the latter is much more explicit. The built-in editor of Stata 16 offers [tab completion](https://www.stata.com/new-in-stata/do-file-editor-autocompletion/) so you don't even have to type to write out the full command and variable names.
-{: .callout}
+
+> ## Challenge
+> Using the `wdi_decades.dta` dataset, calculate the ratio of GDP per capita to the average GDP per capita of that decade.
+> > ## Solution
+> > ```
+> > use "data/wdi_decades.dta", clear
+> > tempvar decade_gdp_average
+> > egen `decade_gdp_average' = mean(gdp_per_capita), by(decade)
+> > generate relative_gdp_per_capita = gdp_per_capita / `decade_gdp_average'
+> > ```
+> > {: .source}
+> > Note the verbose variable names, the use of `egen` and `tempvar`.
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge
+> What is the difference between `collapse (mean) average_distance = distw, by(iso_o)` and `egen average_distance = mean(distw), by(iso_o)`?
+> > ## Solution
+> > Both calculate the average `distw` by origin country code. `collapse` creates a new dataset with one row for each group (origin country code). `egen` keeps the original dataset, its rows and variables, and adds a new variable with the group average.
+> {: .solution}
+{: .challenge}
+
 
 {% include links.md %}
-

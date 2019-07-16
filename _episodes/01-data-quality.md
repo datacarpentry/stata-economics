@@ -8,6 +8,7 @@ questions:
 - "How does Stata deal with variable names doesn't like?"
 - "How does Stata handle missing values?"
 objectives:
+- "Determine and change your working directory in Stata."
 - "Read and write data using relative path."
 - "Import and export spreadsheet data."
 - "Explore your dataset using `browse`, `describe`, `summarize`, `tabulate` and `inspect`."
@@ -19,7 +20,63 @@ keypoints:
 - "In Stata expressions, missing values are greater than any number. Functions of missing values are missing value."
 - "Check CSV files for separator, variable names, and character encoding."
 - "Always write out filename extensions to avoid confusion."
+- "Always use forward slash `/` in path names."
 ---
+
+FIXME: overview of interface, like https://datacarpentry.org/genomics-r-intro/fig/rstudio_session_4pane_layout.png 
+
+FIXME: introduce standard stata syntax: `command expression, options`
+
+How do you find your current working directory? Check the bottom line of the Stata application window, or enter the command `pwd`.
+
+![Two ways of checking your working directory]({{ "/img/pwd.png" | relative_url }})
+
+> ## Backward or forward?
+> On a Windows machine, Stata will display your working directory with a backslash (`\`) separating its components, like
+> `C:\Users\koren\Dropbox\teaching\courses\2019\carpentries\stata-economics`.
+> You should still refer to directories using a forward slash (`/`) to stay compatible with other platforms. The forward slash is understood by all three major platforms, whereas the backslash has a special meaning on Unix and Mac.
+{: .callout}
+
+```
+cd data
+```
+{: .source}
+```
+/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics/data
+```
+{: .output}
+
+```
+ls
+```
+{: .source}
+```
+total 537336
+-rwxr-xr-x@ 1 koren  staff     785984 Jul 10 15:20 WDICountry-Series.csv*
+-rwxr-xr-x@ 1 koren  staff     169534 Jul 10 15:20 WDICountry.csv*
+-rwxr-xr-x@ 1 koren  staff  213164145 Jul 10 15:21 WDIData.csv*
+-rwxr-xr-x@ 1 koren  staff   49492815 Jul 10 15:21 WDIFootNote.csv*
+-rwxr-xr-x@ 1 koren  staff      43570 Jul 10 15:21 WDISeries-Time.csv*
+-rwxr-xr-x@ 1 koren  staff    3898578 Jul 10 15:21 WDISeries.csv*
+-rw-r--r--@ 1 koren  staff       5673 Jul  2 11:41 average_distance.dta
+-rw-r--r--@ 1 koren  staff    1909446 Mar 18  2014 dist_cepii.dta
+-rw-r--r--@ 1 koren  staff       4844 Jun 20 19:33 head.csv
+-rw-r--r--@ 1 koren  staff      44554 Jul  2 11:46 wdi_decades.dta
+```
+{: .output}
+
+FIXME: this will look different on a Windows machine
+
+```
+cd ..
+```
+{: .source}
+```
+/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics
+```
+{: .output}
+
+
 
 > ## Challenge
 > If your current working directory is `/home/user/dc-economics`, which of the following can you use to load the data in `/home/user/dc-economics/data/dist_cepii.dta`?
@@ -37,6 +94,25 @@ keypoints:
 > > 5. No. This would look for `dist_cepii.dta` in the directory `/home/user`, one level up from the current working directory, `/home/user/dc-economics`.
 > {: .solution}
 {: .challenge}
+
+> ## Never abbreviate
+> A quirky feature of Stata is that it lets you abbreviate everything: commands, variable names, even file names. Abbreviation might save you some typing, but destroys legibility of your code, so please think of your coauthors and your future self and never do it. 
+> ```
+> u data
+> g gdp_per_capita = 1
+> ren gdp gdp
+> ```
+> {: .source}
+> means the same as
+> ```
+> use "data.dta"
+> generate gdp_per_capita = 1
+> rename gdp_per_capita gdp
+> ```
+> {: .source}
+> but the latter is much more explicit. The built-in editor of Stata 16 offers [tab completion](https://www.stata.com/new-in-stata/do-file-editor-autocompletion/) so you don't even have to type to write out the full command and variable names.
+{: .callout}
+
 
 Next we will read the World Development Indicators dataset. The data is in `data/WDIData.csv`. The other .csv files starting with `WDI` give some metadata. For example, `data/WDISeries.csv` describes the variables ("indicators" in World Bank speak), `data/WDICountry.csv` gives a codelist of countries, and `data/WDIFootnote.csv` includes footnotes.
 
