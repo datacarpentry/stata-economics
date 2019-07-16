@@ -176,7 +176,7 @@ FIXME: this may only work on unix-type machines
 FIXME: this episode is about HOW to do things, but we do not yet have things to do.
 
 ```
-* to make sure there are no log files open
+to make sure there are no log files open
 capture log close
 log using read_data.log, text replace
 ...
