@@ -264,28 +264,104 @@ log close
 ```
 {: .source}
 
+## Temporary files
+Because Stata keeps only one dataset at a time in memory, you may need to save and load datasets frequently. Not all of these datasets will be needed later and you should not clutter your project folder.
 
-> ## Challenge
-> Using the `wdi_decades.dta` dataset, calculate the ratio of GDP per capita to the average GDP per capita of that decade.
-> > ## Solution
-> > ```
-> > use "data/wdi_decades.dta", clear
-> > tempvar decade_gdp_average
-> > egen `decade_gdp_average' = mean(gdp_per_capita), by(decade)
-> > generate relative_gdp_per_capita = gdp_per_capita / `decade_gdp_average'
-> > ```
-> > {: .source}
-> > Note the verbose variable names, the use of `egen` and `tempvar`.
-> {: .solution}
-{: .challenge}
+Merge names of countries and the income group classification from `WDICountry.csv`.
 
+```
+import delimited "data/WDICountry.csv", varnames(1) bindquotes(strict) clear
+keep countrycode shortname incomegroup
+tempfile wdi
+save `wdi', replace
 
-> ## Challenge
-> What is the difference between `collapse (mean) average_distance = distw, by(iso_o)` and `egen average_distance = mean(distw), by(iso_o)`?
-> > ## Solution
-> > Both calculate the average `distw` by origin country code. `collapse` creates a new dataset with one row for each group (origin country code). `egen` keeps the original dataset, its rows and variables, and adds a new variable with the group average.
-> {: .solution}
-{: .challenge}
+use "data/WDI-select-variables.dta", clear
+merge m:1 countrycode using `wdi', keep(master match) nogen
+```
+{: .source}
+
+FIXME: this uses locals
+
+```
+...
+reshape wide v, i(countrycode year) j(variable_name) string
+tempfile wide_wdi
+save `wide_wdi', replace
+rename v* *
+save "data/WDI-select-variables.dta", replace
+use `wide_wdi', clear
+* do something else with the wide data
+```
+{: .source}
+
+There are two dedicated Stata commands to put aside a dataset in memory and reuse it later: `preserve` and `restore`.
+
+```
+...
+reshape wide v, i(countrycode year) j(variable_name) string
+preserve
+rename v* *
+save "data/WDI-select-variables.dta", replace
+restore
+* do something else with the wide data
+```
+{: .source}
+
+```
+local gdp_per_capita "NY.GDP.PCAP.PP.KD"
+import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
+keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "SP.DYN.LE00.IN", `gdp_per_capita', "SP.POP.TOTL", "EN.POP.DNST")
+reshape long v, i(countrycode indicatorcode) j(year)
+replace year = year - 5 + 1960
+generate str variable_name = ""
+replace variable_name = "merchandise_trade" if indicatorcode == "TG.VAL.TOTL.GD.ZS"
+replace variable_name = "life_expectancy" if indicatorcode == "SP.DYN.LE00.IN"
+replace variable_name = "gdp_per_capita" if indicatorcode == "`gdp_per_capita'"
+replace variable_name = "population" if indicatorcode == "SP.POP.TOTL" 
+replace variable_name = "population_density" if indicatorcode == "EN.POP.DNST"
+drop indicatorcode indicatorname
+reshape wide v, i(countrycode year) j(variable_name) string
+rename v* *
+save "data/WDI-select-variables.dta", replace
+```
+{: .source}
+
+## Advanced example of macro evaluation and for loops
+```
+clear all
+local merchandise_trade "TG.VAL.TOTL.GD.ZS"
+local life_expectancy "SP.DYN.LE00.IN"
+local gdp_per_capita "NY.GDP.PCAP.PP.KD"
+local population "SP.POP.TOTL" 
+local population_density "EN.POP.DNST"
+
+local variables merchandise_trade life_expectancy gdp_per_capita population population_density
+
+import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
+
+tempvar sample_to_keep
+gen `sample_to_keep' = 0
+foreach X in `variables' {
+    replace `sample_to_keep' = 1 if indicatorcode == "``X''"
+    * note the double quote. `X' evaluates to merchandise_trade, ``X'' evaluates to `merchandise_trade' = TG.VAL.TOTL.GD.ZS 
+}
+keep if `sample_to_keep' == 1
+* this temporary variable will be deleted once the .do file stops
+
+reshape long v, i(countrycode indicatorcode) j(year)
+replace year = year - 5 + 1960
+generate str variable_name = ""
+foreach X in `variables' {
+    replace variable_name = "`X'" if indicatorcode == "``X''"
+    * note that the LHS is in single quotes, the RHS in double quotes
+}
+
+drop indicatorcode indicatorname
+reshape wide v, i(countrycode year) j(variable_name) string
+rename v* *
+save "data/WDI-select-variables.dta", replace
+```
+{: .source}
 
 
 {% include links.md %}
