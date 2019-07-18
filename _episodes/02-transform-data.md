@@ -212,6 +212,28 @@ egen gdp_decade_mean = mean(gdp_per_capita), by(countrycode decade)
 > The command `collapse` creates a new, aggregated dataset in memory, and your old dataset will be gone without any warning. Use `collapse` with caution.
 {: .callout}
 
+> ## Challenge
+> Using the `wdi_decades.dta` dataset, calculate the ratio of GDP per capita to the average GDP per capita of that decade.
+> > ## Solution
+> > ```
+> > use "data/wdi_decades.dta", clear
+> > tempvar decade_gdp_average
+> > egen `decade_gdp_average' = mean(gdp_per_capita), by(decade)
+> > generate relative_gdp_per_capita = gdp_per_capita / `decade_gdp_average'
+> > ```
+> > {: .source}
+> > Note the verbose variable names, the use of `egen` and `tempvar`.
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge
+> What is the difference between `collapse (mean) average_distance = distw, by(iso_o)` and `egen average_distance = mean(distw), by(iso_o)`?
+> > ## Solution
+> > Both calculate the average `distw` by origin country code. `collapse` creates a new dataset with one row for each group (origin country code). `egen` keeps the original dataset, its rows and variables, and adds a new variable with the group average.
+> {: .solution}
+{: .challenge}
+
 
 > ## Challenge
 > Using the CEPII distance dataset, calculate for each country the average distance to other countries, naming this variable `average_distance`. Save the dataset as `data/average_distance.dta`.
