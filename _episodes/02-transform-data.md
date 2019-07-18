@@ -25,7 +25,7 @@ We will need the variables "Merchandise trade (% of GDP)", "Life expectancy at b
 Look for the indicator code of these variables and copy them
 
 ```
-import delimited "data/WDISeries.csv", varnames(1) bindquotes(strict) clear 
+import delimited "data/WDISeries.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear 
 sort indicatorname
 browse indicatorname seriescode 
 ```
@@ -43,7 +43,7 @@ browse indicatorname seriescode
 >
 > > ## Solution
 > > ```
-> > import delimited "data/WDIData.csv", varnames(1) clear
+> > import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
 > > keep if indicatorcode == "TG.VAL.TOTL.GD.ZS" | indicatorcode == "SP.DYN.LE00.IN" | indicatorcode == "NY.GDP.PCAP.PP.KD" | indicatorcode == "SP.POP.TOTL" | indicatorcode == "EN.POP.DNST"
 > > ```
 > > {: .source}
@@ -141,7 +141,7 @@ save "data/WDI-select-variables.dta", replace
 ![Select commands to save as a .do file]({{ "/img/send-to-editor.png" | relative_url }})
 
 ```
-import delimited "data/WDIData.csv", varnames(1) clear
+import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
 keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "SP.DYN.LE00.IN", "NY.GDP.PCAP.PP.KD", "SP.POP.TOTL", "EN.POP.DNST")
 reshape long v, i(countrycode indicatorcode) j(year)
 replace year = year - 5 + 1960

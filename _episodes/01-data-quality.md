@@ -390,6 +390,14 @@ There are 5 fewer lines.
 
 ![CSV correctly parsed]({{ "/img/csv-correct.png" | relative_url }})
 
+"Côte d'Ivoire" and "Curaçao" are misspelled.
+
+![Wrong characters]({{ "/img/wrong-encoding.png" | relative_url }})
+
+```
+import delimited "data/WDICountry.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
+```
+{: .source}
 
 ```
 . codebook latestpopulationcensus 
