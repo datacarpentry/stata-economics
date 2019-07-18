@@ -25,8 +25,6 @@ keypoints:
 
 ![The Stata interface]({{ "/img/interface.png" | relative_url }})
 
-FIXME: introduce standard stata syntax: `command expression, options`
-
 How do you find your current working directory? Check the bottom line of the Stata application window, or enter the command `pwd`.
 
 ![Two ways of checking your working directory]({{ "/img/pwd.png" | relative_url }})
@@ -92,6 +90,57 @@ cd ..
 > {: .solution}
 {: .challenge}
 
+FIXME: introduce standard stata syntax: `command expression, options`
+
+```
+. bysort contig: summarize dist, detail 
+
+---------------------------------------------------------------------------------------------
+-> contig = 0
+
+         simple distance (most populated cities, km)
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     509.7472       .9951369
+ 5%     1554.469       1.189416
+10%     2449.292       1.407336       Obs              49,560
+25%     4901.463       1.723628       Sum of Wgt.      49,560
+
+50%     8167.061                      Mean           8573.666
+                        Largest       Std. Dev.      4658.176
+75%     12075.63       19904.45
+90%     15305.38       19904.45       Variance       2.17e+07
+95%     16741.36       19951.16       Skewness       .2599526
+99%     18570.86       19951.16       Kurtosis       2.197631
+
+---------------------------------------------------------------------------------------------
+-> contig = 1
+
+         simple distance (most populated cities, km)
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     85.94135       10.47888
+ 5%     172.7219       10.47888
+10%     215.0746       59.61723       Obs                 616
+25%     417.8577       59.61723       Sum of Wgt.         616
+
+50%     789.7066                      Mean           1090.698
+                        Largest       Std. Dev.      1004.337
+75%     1357.383       5795.045
+90%      2380.92       5795.045       Variance        1008693
+95%     3277.169       6418.446       Skewness       2.030284
+99%     4464.312       6418.446       Kurtosis       8.019088
+
+```
+{: .output}
+
+`set more off, permanently`
+
+```
+bysort contig: summarize dist if dist<1000, detail 
+```
+{: .source}
+
 > ## Never abbreviate
 > A quirky feature of Stata is that it lets you abbreviate everything: commands, variable names, even file names. Abbreviation might save you some typing, but destroys legibility of your code, so please think of your coauthors and your future self and never do it. 
 > ```
@@ -110,6 +159,131 @@ cd ..
 > but the latter is much more explicit. The built-in editor of Stata 16 offers [tab completion](https://www.stata.com/new-in-stata/do-file-editor-autocompletion/) so you don't even have to type to write out the full command and variable names.
 {: .callout}
 
+
+
+
+> ## Challenge
+> Load `data/dist_cepii.dta`. Explore the variable `distw` (weighted average distance between cities in the pair of countries).
+> 1. What is the unit of measurement?
+> 2. What is the smallest and largest value?
+> 3. In how many cases is this variable missing?
+> 
+> > ## Solution
+> > 1. `describe distw` gives you the variable label "weighted distance (pop-wt, km)". It is hence recorded in kilometers. This command also shows that the variable is _double_, not _integer_.
+> > 2. `summarize distw` shows that the distance varies between 0.995 and 19781.39 kilometers.
+> > 3. `inspect distw` shows that `distw` is missing in 2,215 cases. This command also gives you the minimum and maximum values.
+> {: .solution}
+{: .challenge}
+
+> ## Challenge
+> Load `data/dist_cepii.dta`. Do you use `codebook` or `inspect` to check how many district countries are coded in `iso_d`?
+> > ## Solution
+> > ```
+> > codebook iso_d
+> > ```
+> > {: .source}
+> > ```
+> > ----------------------------------------------------------------------------------------------------------------------
+> > iso_d                                                                                                ISO3 alphanumeric
+> > ----------------------------------------------------------------------------------------------------------------------
+> > 
+> >                   type:  string (str3)
+> > 
+> >          unique values:  224                      missing "":  0/50,176
+> > 
+> >               examples:  "CPV"
+> >                          "HTI"
+> >                          "MRT"
+> >                          "SLV"
+> > ```
+> > {: .output}
+> > `inspect` only works for numeric variables.
+> > ```
+> > inspect iso_d
+> > ```
+> > {: .source}
+> > ```
+> > iso_d:  ISO3 alphanumeric                       Number of Observations
+> > -------------------------              ---------------------------------------
+> >                                              Total      Integers   Nonintegers
+> > |                            Negative            -             -             -
+> > |                            Zero                -             -             -
+> > |                            Positive            -             -             -
+> > |                                      -----------   -----------   -----------
+> > |                            Total               -             -             -
+> > |                            Missing        50,176
+> > +----------------------                -----------
+> > .             -9.0e+307                     50,176
+> >    (0 unique value)
+> > ```
+> > {: .output}
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge
+> Using the weighted distance between countries, count how many pairs of countries are farther than 15,000 km.
+> > ## Solution
+> > `count if distw > 15000 & !missing(distw)` gives you an answer of 5,070. If you use `count if distw > 15000`, you get 7,285. This is because Stata treats missing values as larger than any real number. It hence adds the 2,215 missing values.
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge
+> Using the weighted distance between countries, count how many pairs of countries are farther than 15,000 km.
+> > ## Solution
+> > `count if distw > 15000 & !missing(distw)` gives you an answer of 5,070. If you use `count if distw > 15000`, you get 7,285. This is because Stata treats missing values as larger than any real number. It hence adds the 2,215 missing values.
+> {: .solution}
+{: .challenge}
+
+> ## Gotcha
+> Missing values are greater than any number.
+{: .callout}
+
+> ## Challenge
+> Which of the following tells you how often the weighted distance is greater than the simple unweighted distance?
+> ```
+> count if dist < distw
+> count if dist - distw < 0
+> count if distw - dist > 0
+> ```
+> {: .source}
+> > ## Solution
+> > The second. When neither variable is missing, the three comparisons give the same answer. However, when `distw` has missing values, the first comparison evaluates to true, because missing values are greater than anything. The second comparison starts with a mathematical operation, which evaluates to missing and is hence *not* smaller than zero. 
+> > As this property of missing values is a common *gotcha*, you should always explicitly test for missing values like so
+> > ```
+> > count if dist < distw & !missing(dist, distw)
+> > ```
+> > {: .source}
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge
+> Load `data/dist_cepii.dta`. Replace missing values in the variable `distw` with 0.
+> ```
+> use "data/dist_cepii.dta"
+> mvencode distw, mv(0)
+> ```
+> {: .source}
+> What happens?
+> > ## Solution
+> > You get an error message:
+> > [OUTPUT]
+> > To force the replacement of missing values with zero (which is an already existing value of `distw`), use `mvencode distw, mv(0) override`.
+> {: .solution}
+{: .challenge}
+
+> ## Challenge
+> Load `data/dist_cepii.dta`. If the variable `distw` is missing, replace it with the value from the variable `dist`.
+> > ## Solution
+> > ```
+> > use "data/dist_cepii.dta"
+> > replace distw = dist if missing(distw)
+> > ```
+> > {: .source}
+> {: .solution}
+{: .challenge}
 
 Next we will read the World Development Indicators dataset. The data is in `data/WDIData.csv`. The other .csv files starting with `WDI` give some metadata. For example, `data/WDISeries.csv` describes the variables ("indicators" in World Bank speak), `data/WDICountry.csv` gives a codelist of countries, and `data/WDIFootnote.csv` includes footnotes.
 
@@ -188,6 +362,7 @@ Next we will read the World Development Indicators dataset. The data is in `data
 > >
 > {: .solution}
 {: .challenge}
+
 
 
 ```
@@ -372,129 +547,6 @@ latestpopulationcensus: contains nonnumeric characters; censusyear generated as 
 > {: .solution}
 {: .challenge}
 
-
-> ## Challenge
-> Load `data/dist_cepii.dta`. Explore the variable `distw` (weighted average distance between cities in the pair of countries).
-> 1. What is the unit of measurement?
-> 2. What is the smallest and largest value?
-> 3. In how many cases is this variable missing?
-> 
-> > ## Solution
-> > 1. `describe distw` gives you the variable label "weighted distance (pop-wt, km)". It is hence recorded in kilometers. This command also shows that the variable is _double_, not _integer_.
-> > 2. `summarize distw` shows that the distance varies between 0.995 and 19781.39 kilometers.
-> > 3. `inspect distw` shows that `distw` is missing in 2,215 cases. This command also gives you the minimum and maximum values.
-> {: .solution}
-{: .challenge}
-
-> ## Challenge
-> Load `data/dist_cepii.dta`. Do you use `codebook` or `inspect` to check how many district countries are coded in `iso_d`?
-> > ## Solution
-> > ```
-> > codebook iso_d
-> > ```
-> > {: .source}
-> > ```
-> > ----------------------------------------------------------------------------------------------------------------------
-> > iso_d                                                                                                ISO3 alphanumeric
-> > ----------------------------------------------------------------------------------------------------------------------
-> > 
-> >                   type:  string (str3)
-> > 
-> >          unique values:  224                      missing "":  0/50,176
-> > 
-> >               examples:  "CPV"
-> >                          "HTI"
-> >                          "MRT"
-> >                          "SLV"
-> > ```
-> > {: .output}
-> > `inspect` only works for numeric variables.
-> > ```
-> > inspect iso_d
-> > ```
-> > {: .source}
-> > ```
-> > iso_d:  ISO3 alphanumeric                       Number of Observations
-> > -------------------------              ---------------------------------------
-> >                                              Total      Integers   Nonintegers
-> > |                            Negative            -             -             -
-> > |                            Zero                -             -             -
-> > |                            Positive            -             -             -
-> > |                                      -----------   -----------   -----------
-> > |                            Total               -             -             -
-> > |                            Missing        50,176
-> > +----------------------                -----------
-> > .             -9.0e+307                     50,176
-> >    (0 unique value)
-> > ```
-> > {: .output}
-> {: .solution}
-{: .challenge}
-
-
-> ## Challenge
-> Using the weighted distance between countries, count how many pairs of countries are farther than 15,000 km.
-> > ## Solution
-> > `count if distw > 15000 & !missing(distw)` gives you an answer of 5,070. If you use `count if distw > 15000`, you get 7,285. This is because Stata treats missing values as larger than any real number. It hence adds the 2,215 missing values.
-> {: .solution}
-{: .challenge}
-
-
-> ## Challenge
-> Using the weighted distance between countries, count how many pairs of countries are farther than 15,000 km.
-> > ## Solution
-> > `count if distw > 15000 & !missing(distw)` gives you an answer of 5,070. If you use `count if distw > 15000`, you get 7,285. This is because Stata treats missing values as larger than any real number. It hence adds the 2,215 missing values.
-> {: .solution}
-{: .challenge}
-
-> ## Gotcha
-> Missing values are greater than any number.
-{: .callout}
-
-> ## Challenge
-> Which of the following tells you how often the weighted distance is greater than the simple unweighted distance?
-> ```
-> count if dist < distw
-> count if dist - distw < 0
-> count if distw - dist > 0
-> ```
-> {: .source}
-> > ## Solution
-> > The second. When neither variable is missing, the three comparisons give the same answer. However, when `distw` has missing values, the first comparison evaluates to true, because missing values are greater than anything. The second comparison starts with a mathematical operation, which evaluates to missing and is hence *not* smaller than zero. 
-> > As this property of missing values is a common *gotcha*, you should always explicitly test for missing values like so
-> > ```
-> > count if dist < distw & !missing(dist, distw)
-> > ```
-> > {: .source}
-> {: .solution}
-{: .challenge}
-
-
-> ## Challenge
-> Load `data/dist_cepii.dta`. Replace missing values in the variable `distw` with 0.
-> ```
-> use "data/dist_cepii.dta"
-> mvencode distw, mv(0)
-> ```
-> {: .source}
-> What happens?
-> > ## Solution
-> > You get an error message:
-> > [OUTPUT]
-> > To force the replacement of missing values with zero (which is an already existing value of `distw`), use `mvencode distw, mv(0) override`.
-> {: .solution}
-{: .challenge}
-
-> ## Challenge
-> Load `data/dist_cepii.dta`. If the variable `distw` is missing, replace it with the value from the variable `dist`.
-> > ## Solution
-> > ```
-> > use "data/dist_cepii.dta"
-> > replace distw = dist if missing(distw)
-> > ```
-> > {: .source}
-> {: .solution}
-{: .challenge}
 
 {% include links.md %}
 

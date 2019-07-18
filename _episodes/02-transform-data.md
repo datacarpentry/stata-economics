@@ -18,30 +18,32 @@ keypoints:
 
 The WDI dataset you loaded in the previous episode has a strange shape. Variables are in separate rows, whereas years are in separate columns. This is the opposite of "[tidy data](http://dx.doi.org/10.18637/jss.v059.i10)," where each variable has its own column, and different observations such as different years are in separate rows. We will reshape the data in the tidy format.
 
-FIXME: use narrative very similar to challenge. break up?
+We first read metadata from `data/WDISeries.csv`. This file contains the indicator codes and long descriptions. 
+
+We will need the variables "Merchandise trade (% of GDP)", "Life expectancy at birth, total (years)", "GDP per capita, PPP (constant 2011 international $)", "Population, total", "Population density (people per sq. km of land area)".
+
+Look for the indicator code of these variables and copy them
+
+```
+import delimited "data/WDISeries.csv", varnames(1) bindquotes(strict) clear 
+sort indicatorname
+browse indicatorname seriescode 
+```
+{: .source}
+
+![Names and codes of indicators]({{ "/img/browse-indicators.png" | relative_url }})
+
+![Do file editor]({{ "/img/do-file-editor.png" | relative_url }})
+
+![Wrap lines]({{ "/img/wrap-lines.png" | relative_url }})
 
 > ## Challenge
-> Load the WDI dataset you saved in the previous episode. 
+> Load the WDI dataset from the .csv file you explored in the previous episode. 
 > Keep the variables "Merchandise trade (% of GDP)", "Life expectancy at birth, total (years)", "GDP per capita, PPP (constant 2011 international $)", "Population, total", "Population density (people per sq. km of land area)".
 >
 > > ## Solution
-> > To minimize the risk of typos, it is better to use the short idenifier of each variable. You can `browse` the dataset to see which identifier corresponds to which variable.
-> > ![Names and codes of indicators]({{ "/img/browse-indicators.png" | relative_url }})
-> > Or you can use `tabulate` to see the variable name (`indicatorcode`) in the results window. 
 > > ```
-> > tabulate indicatorcode if indicatorname == "Merchandise trade (% of GDP)"
-> > ```
-> > {: .source}
-> > ```
-> >            Indicator Code |      Freq.     Percent        Cum.
-> > --------------------------+-----------------------------------
-> >         TG.VAL.TOTL.GD.ZS |        264      100.00      100.00
-> > --------------------------+-----------------------------------
-> >                     Total |        264      100.00
-> > ```
-> > {: .output}
-> > After you have found all variable ids, use `keep` to keep only the rows corresponding to these.
-> > ```
+> > import delimited "data/WDIData.csv", varnames(1) clear
 > > keep if indicatorcode == "TG.VAL.TOTL.GD.ZS" | indicatorcode == "SP.DYN.LE00.IN" | indicatorcode == "NY.GDP.PCAP.PP.KD" | indicatorcode == "SP.POP.TOTL" | indicatorcode == "EN.POP.DNST"
 > > ```
 > > {: .source}
@@ -53,99 +55,110 @@ FIXME: use narrative very similar to challenge. break up?
 > {: .solution}
 {: .challenge}
 
-FIXME: Refer to metadata file in `WDISeries.csv`
+Note that variable `v5` corresponds to year 1960, `v63` corresponds to year 2018. Reshape the data so that each year is in a separate row.
 
-FIXME: This is probably too complex a challenge, break it up.
+```
+reshape long v, i(countrycode indicatorcode) j(year)
+replace year = year - 5 + 1960
+```
+{: .source}
 
-> ## Challenge
->  Note that variable `v5` corresponds to year 1960, `v63` corresponds to year 2018. Reshape the data so that each year is in a separate row.
-> > ## Solution
-> > ```
-> > reshape long v, i(countrycode indicatorcode) j(year)
-> > replace year = year - 5 + 1960
-> > ```
-> > {: .source}
-> > ```
-> > . reshape long v, i(countrycode indicatorcode) j(year)
-> > (note: j = 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 3
-> >  > 0 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 
-> >  > 57 58 59 60 61 62 63 64)
-> > 
-> > Data                               wide   ->   long
-> > -----------------------------------------------------------------------------
-> > Number of obs.                     1320   ->   79200
-> > Number of variables                  64   ->       6
-> > j variable (60 values)                    ->   year
-> > xij variables:
-> >                           v5 v6 ... v64   ->   v
-> > -----------------------------------------------------------------------------
-> > 
-> > . replace year = year - 5 + 1960
-> > variable year was byte now int
-> > (79,200 real changes made)
-> > ```
-> > {: .output}
-> {: .solution}
-{: .challenge}
+```
+. reshape long v, i(countrycode indicatorcode) j(year)
+(note: j = 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 3
+ > 0 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 
+ > 57 58 59 60 61 62 63 64)
 
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                     1320   ->   79200
+Number of variables                  64   ->       6
+j variable (60 values)                    ->   year
+xij variables:
+                          v5 v6 ... v64   ->   v
+-----------------------------------------------------------------------------
 
+. replace year = year - 5 + 1960
+variable year was byte now int
+(79,200 real changes made)
+```
+{: .output}
 
-> ## Challenge
-> Create a new string variable `variable_name`. Fill it with more legible variable names based on the WDI `indicatorcode`. It should take the values "merchandise_trade", "life_expectancy", "gdp_per_capita", "population", "population_density". 
-> > ## Solution
-> > ```
-> > generate str variable_name = ""
-> > replace variable_name = "merchandise_trade" if indicatorcode == "TG.VAL.TOTL.GD.ZS"
-> > replace variable_name = "life_expectancy" if indicatorcode == "SP.DYN.LE00.IN"
-> > replace variable_name = "gdp_per_capita" if indicatorcode == "NY.GDP.PCAP.PP.KD"
-> > replace variable_name = "population" if indicatorcode == "SP.POP.TOTL" 
-> > replace variable_name = "population_density" if indicatorcode == "EN.POP.DNST"
-> > ```
-> > {: .source}
-> {: .solution}
-{: .challenge}
+Create a new string variable `variable_name`. Fill it with more legible variable names based on the WDI `indicatorcode`. It should take the values "merchandise_trade", "life_expectancy", "gdp_per_capita", "population", "population_density". 
+```
+generate str variable_name = ""
+replace variable_name = "merchandise_trade" if indicatorcode == "TG.VAL.TOTL.GD.ZS"
+replace variable_name = "life_expectancy" if indicatorcode == "SP.DYN.LE00.IN"
+replace variable_name = "gdp_per_capita" if indicatorcode == "NY.GDP.PCAP.PP.KD"
+replace variable_name = "population" if indicatorcode == "SP.POP.TOTL" 
+replace variable_name = "population_density" if indicatorcode == "EN.POP.DNST"
+```
+{: .source}
 
 FIXME: add `rename` examples and explain variable conventions
 
-> ## Challenge
-> Reshape the data so that each variable is in a separate column. 
-> > ## Solution
-> > You will use the `reshape wide` command. The column names are in `variable_name`, which is a string variable.
-> > ```
-> > reshape wide v, i(countrycode year) j(variable_name) string
-> > ```
-> > {: .source}
-> > This gives an error "variable indicatorcode not constant within countrycode year.
-variable indicatorname not constant within countrycode year". Variables that you are not reshaping should be constant within `i()`. Since `indicatorcode` and `indicatorname` are just alternative names for `variable_name`, we can safely drop the.
-> > ```
-> > drop indicatorcode indicatorname
-> > reshape wide v, i(countrycode year) j(variable_name) string
-> > ```
-> > {: .source}
-> > ```
-> > (note: j = gdp_per_capita life_expectancy merchandise_trade population population_
-> >  > density)
-> > 
-> > Data                               long   ->   wide
-> > -----------------------------------------------------------------------------
-> > Number of obs.                    79200   ->   15840
-> > Number of variables                   5   ->       8
-> > j variable (5 values)     variable_name   ->   (dropped)
-> > xij variables:
-> >                                       v   ->   vgdp_per_capita vlife_expectancy ..
-> >  > . vpopulation_density
-> > -----------------------------------------------------------------------------
-> > ```
-> > {: .output}
-> > We now have five new variables, `vgdp_per_capita`, etc, but the variables `v` and `variable_name` have been dropped. Our new variable names look a bit clunky, we can remove the `v` from the beginning,
-> > ```
-> > rename v* *
-> > ```
-> > {: .source}
-> > A quick `browse` confirms that the data is in the tidy format.
-> > ![WDI data in tidy format]({{ "/img/wdi-reshaped.png" | relative_url }})
-> {: .solution}
-{: .challenge}
+Reshape the data so that each variable is in a separate column. 
+You will use the `reshape wide` command. The column names are in `variable_name`, which is a string variable.
+```
+reshape wide v, i(countrycode year) j(variable_name) string
+```
+{: .source}
+This gives an error "variable indicatorcode not constant within countrycode year. variable indicatorname not constant within countrycode year". Variables that you are not reshaping should be constant within `i()`. Since `indicatorcode` and `indicatorname` are just alternative names for `variable_name`, we can safely drop the.
+```
+drop indicatorcode indicatorname
+reshape wide v, i(countrycode year) j(variable_name) string
+```
+{: .source}
+```
+(note: j = gdp_per_capita life_expectancy merchandise_trade population population_
+ > density)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                    79200   ->   15840
+Number of variables                   5   ->       8
+j variable (5 values)     variable_name   ->   (dropped)
+xij variables:
+                                      v   ->   vgdp_per_capita vlife_expectancy ..
+ > . vpopulation_density
+-----------------------------------------------------------------------------
+```
+{: .output}
+We now have five new variables, `vgdp_per_capita`, etc, but the variables `v` and `variable_name` have been dropped. Our new variable names look a bit clunky, we can remove the `v` from the beginning,
+```
+rename v* *
+```
+{: .source}
+A quick `browse` confirms that the data is in the tidy format.
+![WDI data in tidy format]({{ "/img/wdi-reshaped.png" | relative_url }})
+
+Time to save our data
+```
+save "data/WDI-select-variables.dta", replace
+```
+{: .source}
+
+![Select commands to save as a .do file]({{ "/img/send-to-editor.png" | relative_url }})
+
+```
+import delimited "data/WDIData.csv", varnames(1) clear
+keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "SP.DYN.LE00.IN", "NY.GDP.PCAP.PP.KD", "SP.POP.TOTL", "EN.POP.DNST")
+reshape long v, i(countrycode indicatorcode) j(year)
+replace year = year - 5 + 1960
+generate str variable_name = ""
+replace variable_name = "merchandise_trade" if indicatorcode == "TG.VAL.TOTL.GD.ZS"
+replace variable_name = "life_expectancy" if indicatorcode == "SP.DYN.LE00.IN"
+replace variable_name = "gdp_per_capita" if indicatorcode == "NY.GDP.PCAP.PP.KD"
+replace variable_name = "population" if indicatorcode == "SP.POP.TOTL" 
+replace variable_name = "population_density" if indicatorcode == "EN.POP.DNST"
+drop indicatorcode indicatorname
+reshape wide v, i(countrycode year) j(variable_name) string
+rename v* *
+save "data/WDI-select-variables.dta", replace
+```
+{: .source}
+
+In the next episode, we will learn how to better format and document this code and how to run it.
 
 > ## Challenge
 > Drop data outside the 1990-2017 range. 
@@ -161,12 +174,32 @@ variable indicatorname not constant within countrycode year". Variables that you
 FIXME: `collapse` deletes data from memory. more advanced, maybe move to back.
 FIXME: this could be a point to introduce command history "planned error"
 
-> ## Gotcha
-> The command `collapse` creates a new, aggregated dataset in memory, and your old dataset will be gone without any warning. Use `collapse` with caution.
-{: .callout}
+Create a decade variable with values 1960, 1970, etc. Calculate the mean of GDP per capita for each country by decade. 
+```
+generate decade = int(year/10)*10
+egen gdp_decade_mean = mean(gdp_per_capita), by(countrycode decade)
+```
+{: .source}
 
 > ## Challenge
-> Create a decade variable with `generate decade = int(year/10)*10`. Aggregate the dataset by country and decade, keeping only the mean of each variable. Save this as `data/wdi_decades.dta`.
+> Create a variable for the percentage deviation of GDP per capita from the decadal average. Show that its mean is zero. Why?
+> > ## Solution
+> > ```
+> > . gen relative_gdp = gdp_per_capita / gdp_decade_mean * 100 - 100
+> > (9,381 missing values generated)
+> >
+> > . summarize relative_gdp 
+> > 
+> >     Variable |        Obs        Mean    Std. Dev.       Min        Max
+> > -------------+---------------------------------------------------------
+> > relative_gdp |      6,459   -7.32e-08    11.30361  -72.25054   175.2852
+> > ```
+> > {: .output}
+> {: .solution}
+{: .challenge}
+
+> ## Challenge
+> Aggregate the dataset by country and decade, keeping only the mean of each variable. Save this as `data/wdi_decades.dta`.
 > > ## Solution
 > > ```
 > > collapse (mean) gdp_per_capita life_expectancy merchandise_trade population population_density, by(countrycode decade)
@@ -174,6 +207,11 @@ FIXME: this could be a point to introduce command history "planned error"
 > > {: .source}
 > {: .solution}
 {: .challenge}
+
+> ## Gotcha
+> The command `collapse` creates a new, aggregated dataset in memory, and your old dataset will be gone without any warning. Use `collapse` with caution.
+{: .callout}
+
 
 > ## Challenge
 > Using the CEPII distance dataset, calculate for each country the average distance to other countries, naming this variable `average_distance`. Save the dataset as `data/average_distance.dta`.
