@@ -71,6 +71,12 @@ cd ..
 ```
 {: .output}
 
+![Open a Stata file]({{ "/img/open.png" | relative_url }})
+
+```
+use "/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics/data/dist_cepii.dta"
+```
+{: .source}
 
 
 > ## Challenge
@@ -89,8 +95,6 @@ cd ..
 > > 5. No. This would look for `dist_cepii.dta` in the directory `/home/user`, one level up from the current working directory, `/home/user/dc-economics`.
 > {: .solution}
 {: .challenge}
-
-FIXME: introduce standard stata syntax: `command expression, options`
 
 ```
 . bysort contig: summarize dist, detail 
@@ -159,8 +163,63 @@ bysort contig: summarize dist if dist<1000, detail
 > but the latter is much more explicit. The built-in editor of Stata 16 offers [tab completion](https://www.stata.com/new-in-stata/do-file-editor-autocompletion/) so you don't even have to type to write out the full command and variable names.
 {: .callout}
 
+```
+. describe
+
+Contains data from /Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics/dat
+> a/dist_cepii.dta
+  obs:        50,176                          
+ vars:            14                          8 Oct 2004 20:08
+ size:     1,906,688                          
+---------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+---------------------------------------------------------------------------------------------
+iso_o           str3    %9s                   ISO3 alphanumeric
+iso_d           str3    %9s                   ISO3 alphanumeric
+contig          byte    %8.0g                 1 for contiguity
+comlang_off     byte    %8.0g                 1 for common official of primary language
+comlang_ethno   byte    %8.0g                 1 if a language is spoken by at least 9% of the
+                                                population in both countries
+colony          byte    %8.0g                 1 for pairs ever in colonial relationship
+comcol          byte    %8.0g                 1 for common colonizer post 1945
+curcol          byte    %8.0g                 1 for pairs currently in colonial relationship
+col45           byte    %8.0g                 1 for pairs in colonial relationship post 1945
+smctry          byte    %9.0g                 1 if countries were or are the same country
+dist            float   %9.0g                 simple distance (most populated cities, km)
+distcap         float   %9.0g                 simple distance between capitals (capitals, km)
+distw           double  %9.0g                 weighted distance (pop-wt, km)
+distwces        double  %9.0g                 weighted distance (pop-wt, km) CES distances
+                                                with theta=-1
+---------------------------------------------------------------------------------------------
+Sorted by: iso_o  iso_d
+```
+{: .output}
+
+```
+. rename iso_o iso_3166_alphanumeric_origin_country
+1 new variable name invalid
+    You attempted to rename iso_o to iso_3166_alphanumeric_origin_country.  That is an
+    invalid Stata variable name.
+r(198);
+```
+{: .output}
+
+![help limits]({{ "/img/help-limits.png" | relative_url }})
 
 
+```
+. label variable iso_o "ISO3166 alphanumeric code of origin country"
+
+. describe iso_o 
+
+              storage   display    value
+variable name   type    format     label      variable label
+---------------------------------------------------------------------------------------------
+iso_o           str3    %9s                   ISO3166 alphanumeric code of origin country
+
+```
+{: .output}
 
 > ## Challenge
 > Load `data/dist_cepii.dta`. Explore the variable `distw` (weighted average distance between cities in the pair of countries).

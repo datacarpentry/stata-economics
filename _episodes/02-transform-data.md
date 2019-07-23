@@ -22,7 +22,7 @@ We first read metadata from `data/WDISeries.csv`. This file contains the indicat
 
 We will need the variables "Merchandise trade (% of GDP)", "Life expectancy at birth, total (years)", "GDP per capita, PPP (constant 2011 international $)", "Population, total", "Population density (people per sq. km of land area)".
 
-Look for the indicator code of these variables and copy them
+Look for the indicator code of these variables and copy them into a text editor (like Stata's Do-file Editor).
 
 ```
 import delimited "data/WDISeries.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear 
@@ -38,7 +38,7 @@ browse indicatorname seriescode
 ![Wrap lines]({{ "/img/wrap-lines.png" | relative_url }})
 
 > ## Challenge
-> Load the WDI dataset from the .csv file you explored in the previous episode. 
+> Load the WDI dataset from `WDIData.csv`. 
 > Keep the variables "Merchandise trade (% of GDP)", "Life expectancy at birth, total (years)", "GDP per capita, PPP (constant 2011 international $)", "Population, total", "Population density (people per sq. km of land area)".
 >
 > > ## Solution
@@ -94,8 +94,6 @@ replace variable_name = "population" if indicatorcode == "SP.POP.TOTL"
 replace variable_name = "population_density" if indicatorcode == "EN.POP.DNST"
 ```
 {: .source}
-
-FIXME: add `rename` examples and explain variable conventions
 
 Reshape the data so that each variable is in a separate column. 
 You will use the `reshape wide` command. The column names are in `variable_name`, which is a string variable.
@@ -170,9 +168,6 @@ In the next episode, we will learn how to better format and document this code a
 > > Note how we control for potential missing values in year to avoid the "missing greater than" gotcha.
 > {: .solution}
 {: .challenge}
-
-FIXME: `collapse` deletes data from memory. more advanced, maybe move to back.
-FIXME: this could be a point to introduce command history "planned error"
 
 Create a decade variable with values 1960, 1970, etc. Calculate the mean of GDP per capita for each country by decade. 
 ```
