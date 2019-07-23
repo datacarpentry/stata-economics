@@ -97,6 +97,40 @@ use "/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics/data
 {: .challenge}
 
 ```
+. summarize dist
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        dist |     50,176    8481.799    4703.571   .9951369   19951.16
+
+```
+{. :output}
+
+```
+. summarize dist, detail
+
+         simple distance (most populated cities, km)
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     381.8563       .9951369
+ 5%      1366.76       1.189416
+10%      2263.26       1.407336       Obs              50,176
+25%     4783.271       1.723628       Sum of Wgt.      50,176
+
+50%     8084.515                      Mean           8481.799
+                        Largest       Std. Dev.      4703.571
+75%     12030.18       19904.45
+90%     15276.66       19904.45       Variance       2.21e+07
+95%     16714.46       19951.16       Skewness         .25614
+99%     18569.45       19951.16       Kurtosis       2.191578
+```
+{: .output}
+
+FIXME: if
+
+FIXME: `help summarize`
+
+```
 . bysort contig: summarize dist, detail 
 
 ---------------------------------------------------------------------------------------------
@@ -144,6 +178,10 @@ use "/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics/data
 bysort contig: summarize dist if dist<1000, detail 
 ```
 {: .source}
+
+FIXME: how to find help. screenshot
+
+NARRATIVE: by group: command if, options
 
 > ## Never abbreviate
 > A quirky feature of Stata is that it lets you abbreviate everything: commands, variable names, even file names. Abbreviation might save you some typing, but destroys legibility of your code, so please think of your coauthors and your future self and never do it. 
@@ -203,10 +241,9 @@ Sorted by: iso_o  iso_d
     invalid Stata variable name.
 r(198);
 ```
-{: .output}
+{: .error}
 
-![help limits]({{ "/img/help-limits.png" | relative_url }})
-
+FIXME: add googling step and finding solution. check for open access resources on variable naming.
 
 ```
 . label variable iso_o "ISO3166 alphanumeric code of origin country"
@@ -221,6 +258,8 @@ iso_o           str3    %9s                   ISO3166 alphanumeric code of origi
 ```
 {: .output}
 
+NARRATIVE: ALWAYS ADD LABELS
+
 > ## Challenge
 > Load `data/dist_cepii.dta`. Explore the variable `distw` (weighted average distance between cities in the pair of countries).
 > 1. What is the unit of measurement?
@@ -233,6 +272,8 @@ iso_o           str3    %9s                   ISO3166 alphanumeric code of origi
 > > 3. `inspect distw` shows that `distw` is missing in 2,215 cases. This command also gives you the minimum and maximum values.
 > {: .solution}
 {: .challenge}
+
+FIXME: move this challenge later
 
 > ## Challenge
 > Load `data/dist_cepii.dta`. Do you use `codebook` or `inspect` to check how many district countries are coded in `iso_d`?
@@ -343,6 +384,10 @@ iso_o           str3    %9s                   ISO3166 alphanumeric code of origi
 > > {: .source}
 > {: .solution}
 {: .challenge}
+
+## Reading .csv files
+
+FIXME: split into two episodes. explore 1 dataset. read, label and clean the other dataset. .dta already stata format and has metadata. move labels here.
 
 Next we will read the World Development Indicators dataset. The data is in `data/WDIData.csv`. The other .csv files starting with `WDI` give some metadata. For example, `data/WDISeries.csv` describes the variables ("indicators" in World Bank speak), `data/WDICountry.csv` gives a codelist of countries, and `data/WDIFootnote.csv` includes footnotes.
 

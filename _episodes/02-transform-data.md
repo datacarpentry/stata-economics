@@ -33,7 +33,12 @@ browse indicatorname seriescode
 
 ![Names and codes of indicators]({{ "/img/browse-indicators.png" | relative_url }})
 
+NARRATIVE: introduce `keep` and `drop`
+
 ![Do file editor]({{ "/img/do-file-editor.png" | relative_url }})
+
+NARRATIVE: "and" and "or" and "=="
+FIXME: spacing around `==`
 
 ![Wrap lines]({{ "/img/wrap-lines.png" | relative_url }})
 
@@ -135,6 +140,8 @@ Time to save our data
 save "data/WDI-select-variables.dta", replace
 ```
 {: .source}
+
+FIXME: add screenshot with just command history
 
 ![Select commands to save as a .do file]({{ "/img/send-to-editor.png" | relative_url }})
 
