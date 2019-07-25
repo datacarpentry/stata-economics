@@ -117,60 +117,36 @@ use "/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics/data
 ```
 {: .output}
 
-FIXME: if
-
-FIXME: `help summarize`
-
 ```
-. bysort contig: summarize dist, detail 
-
----------------------------------------------------------------------------------------------
--> contig = 0
+. summarize dist if dist < 1000, detail
 
          simple distance (most populated cities, km)
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%     509.7472       .9951369
- 5%     1554.469       1.189416
-10%     2449.292       1.407336       Obs              49,560
-25%     4901.463       1.723628       Sum of Wgt.      49,560
+ 1%     5.826925       .9951369
+ 5%     60.77057       1.189416
+10%     131.0087       1.407336       Obs               1,644
+25%     320.5764       1.723628       Sum of Wgt.       1,644
 
-50%     8167.061                      Mean           8573.666
-                        Largest       Std. Dev.      4658.176
-75%     12075.63       19904.45
-90%     15305.38       19904.45       Variance       2.17e+07
-95%     16741.36       19951.16       Skewness       .2599526
-99%     18570.86       19951.16       Kurtosis       2.197631
-
----------------------------------------------------------------------------------------------
--> contig = 1
-
-         simple distance (most populated cities, km)
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%     85.94135       10.47888
- 5%     172.7219       10.47888
-10%     215.0746       59.61723       Obs                 616
-25%     417.8577       59.61723       Sum of Wgt.         616
-
-50%     789.7066                      Mean           1090.698
-                        Largest       Std. Dev.      1004.337
-75%     1357.383       5795.045
-90%      2380.92       5795.045       Variance        1008693
-95%     3277.169       6418.446       Skewness       2.030284
-99%     4464.312       6418.446       Kurtosis       8.019088
-
+50%     595.3761                      Mean           563.3924
+                        Largest       Std. Dev.      294.0478
+75%     816.7297        998.694
+90%     932.9859        998.694       Variance       86464.13
+95%     969.2816       999.9088       Skewness      -.2782705
+99%     996.0536       999.9088       Kurtosis       1.856825
 ```
 {: .output}
-
-`set more off, permanently`
 
 ```
 bysort contig: summarize dist if dist<1000, detail 
 ```
 {: .source}
 
-FIXME: how to find help. screenshot
+![Getting help]({{ "/img/help-summarize.png" | relative_url }})
+
+![Search for PDF manual]({{ "/img/google-manual.png" | relative_url }})
+
+![Detailed formulas]({{ "/img/formulas.png" | relative_url }})
 
 NARRATIVE: by group: command if, options
 
