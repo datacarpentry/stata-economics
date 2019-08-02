@@ -7,7 +7,27 @@ Download the [data repository](https://github.com/korenmiklos/dc-economics-data)
 
 FIXME: create a data folder with the data repository.
 
-FIXME: add Stata to the path so that `stata` can be called from the command line
+### Add Stata to the path so that `stata` can be called from the command line (Mac)
+
+If Stata is installed in /Applications/Stata/ the path to the Stata executable is 
+
+/Applications/Stata/StataSE.app/Contents/MacOS/ for StataSE 
+
+and
+ /Applications/Stata/StataMP.app/Contents/MacOS/ for StataMP. 
+
+ 
+To add StataMP to the path you should open the terminal and type
+ 
+$ sudo vi /etc/paths 
+
+and add /Applications/Stata/StataSE.app/Contents/MacOS/ to it. 
+
+Finally, close the terminal and reopen it. Once everything is set up, type Stata in your terminal to launch Stata.
+
+
+FIXME: Add Stata to the path so that `stata` can be called from the command line (For Windows)
+
 
 ## Data resources
 ### Explicit open license
