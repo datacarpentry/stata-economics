@@ -210,7 +210,7 @@ r(198);
 ```
 {: .error}
 
-If you search `label variables Stata` on google , the fist link will direct you to Stata Manual.
+If you search `label variables Stata` on google, the fist link will direct you to Stata Manual.
 ![Google Stata Label]({{ "/img/google-label.png" | relative_url }})
 
 ![Manual Stata Label]({{ "/img/help-label.png" | relative_url }})
@@ -336,7 +336,7 @@ As this property of missing values is a common *gotcha*, it's recommendable to a
 > > ```
 > > use "data/dist_cepii.dta"
 > > summarize distw, d
-> > mvencode distw, mv(r(mean)')
+> > mvencode distw, mv(`r(mean)')
 > > ```
 > > {: .source}
 > {: .solution}
