@@ -264,7 +264,87 @@ log close
 ```
 {: .source}
 
-## Temporary files
+## Scalars and macros
+
+```
+use "data/WDI-select-variables.dta", clear
+scalar begin_year = 1991
+scalar end_year = 2010
+keep if (year >= begin_year) & (year <= end_year) 
+```
+{: .source}
+
+```
+use "data/WDI-select-variables.dta", clear
+local begin_year 1991
+local end_year 2010
+keep if (year >= `begin_year') & (year <= `end_year') 
+```
+{: .source}
+
+
+```
+generate gdp_per_capita_1991 = cond(year == 1991, gdp_per_capita, .)
+egen mean_gdp_per_capita_1991 = mean(gdp_per_capita_1991), by(countrycode)
+browse countrycode year gdp_per_capita gdp_per_capita_1991 mean_gdp_per_capita_1991 
+```
+{: .source}
+
+![The egen-mean-cond pattern]({{ "/img/egen-mean-cond.png" | relative_url }})
+
+```
+egen gdp_per_capita_1991 = mean(cond(year == 1991, gdp_per_capita, .)), by(countrycode)  
+```
+{: .source}
+
+
+```
+local begin_year 1991
+egen gdp_per_capita_`begin_year' = mean(cond(year == `begin_year', gdp_per_capita, .)), by(countrycode)  
+```
+{: .source}
+
+You can only use a macro in this situation, not a scalar.
+
+> ## Challenge
+>
+> Create an index of GDP per capita for each country in each year, relative to a base year set in the local macro `base_year`. This index should take the value 100 in the base year.
+>
+> > ## Solution
+> > ```
+> > egen gdp_per_capita_`base_year' = mean(cond(year == `base_year', gdp_per_capita, .)), by(countrycode)
+> > generate gdp_per_capita_index = gdp_per_capita / gdp_per_capita_`base_year' * 100
+> > ```
+> > {: .source}
+> {: .solution}
+{: .challenge}
+
+GOTCHA: undefined macros evaluate as empty strings
+
+
+## Temporary variables and files
+
+```
+. local base_year 1991
+. tempvar base_value
+. egen `base_value' = mean(cond(year == `base_year', gdp_per_capita, .)), by(countrycode)
+(1100 missing values generated)
+
+. summarize `base_value'
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+    __000000 |      4,180    11528.92    14240.77   387.0233   105171.4
+
+. generate gdp_per_capita_index = gdp_per_capita / `base_value' * 100
+(1,100 missing values generated)
+
+```
+{: .output}
+
+`base_value` is a macro containing a uniquely generate variable name that can be used as a name for a temporary variable. The variable is not created, you have to do it yourself with `generate` or `egen`. Once your .do file concludes, the temporary variable is dropped.
+
+
 Because Stata keeps only one dataset at a time in memory, you may need to save and load datasets frequently. Not all of these datasets will be needed later and you should not clutter your project folder.
 
 Merge names of countries and the income group classification from `WDICountry.csv`.
@@ -279,8 +359,6 @@ use "data/WDI-select-variables.dta", clear
 merge m:1 countrycode using `wdi', keep(master match) nogen
 ```
 {: .source}
-
-FIXME: this uses locals
 
 ```
 ...
@@ -325,6 +403,40 @@ rename v* *
 save "data/WDI-select-variables.dta", replace
 ```
 {: .source}
+
+## For loops
+
+Repeat the creation of index variable for population.
+
+```
+local base_year 1991
+egen gdp_per_capita_`base_year' = mean(cond(year == `base_year', gdp_per_capita, .)), by(countrycode)
+generate gdp_per_capita_index = gdp_per_capita / gdp_per_capita_`base_year' * 100
+egen population_`base_year' = mean(cond(year == `base_year', population, .)), by(countrycode)
+generate population_index = population / gdp_per_capita_`base_year' * 100
+```
+{: .error}
+
+Copying and pasting are prone to errors. Not all will be easy to spot and fix.
+
+```
+foreach X of varlist gdp_per_capita population {
+    egen `X'_`base_year' = mean(cond(year == `base_year', `X', .)), by(countrycode)
+    generate `X'_index = `X' / `X'_`base_year' * 100
+}
+```
+{: .source}
+
+Use for loops to ensure consistency and to minimize the risk the erros, not to save typing. Note that X appears on both sides. It is a macro that is evaluated before the command is run, so it can become part of the variable name.
+
+```
+foreach X of varlist *_index {
+    generate log_`X' = log(`X' / 100)
+}
+```
+{: .source}
+
+You can reuse the loop variable later in different loops. Note the use of variable name wildcards.
 
 ## Advanced example of macro evaluation and for loops
 ```

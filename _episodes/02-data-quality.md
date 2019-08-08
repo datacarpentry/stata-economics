@@ -19,6 +19,8 @@ keypoints:
 
 FIXME: split into two episodes. explore 1 dataset. read, label and clean the other dataset. .dta already stata format and has metadata. move labels here.
 
+FIXME: start with smaller data. make sure students are at same wd. point back to options, like clear
+
 Next we will read the World Development Indicators dataset. The data is in `data/WDIData.csv`. The other .csv files starting with `WDI` give some metadata. For example, `data/WDISeries.csv` describes the variables ("indicators" in World Bank speak), `data/WDICountry.csv` gives a codelist of countries, and `data/WDIFootnote.csv` includes footnotes.
 
 > ## Challenge
@@ -113,6 +115,8 @@ import delimited "data/WDICountry.csv", varnames(1) clear
 
 `"Central Bureau of Statistics and Central Bank of Aruba ; Source of population estimates: UN Population Division's World Population Prospects 2019 PROVISIONAL estimates. Not for circulation. Subject to change. Mining is included in agriculture\n 
 Electricty and gas includes manufactures of refined petroleoum products"`
+
+FIXME: multiple lines instead of line break
 
 ```
 . import delimited "data/WDICountry.csv", varnames(1) bindquotes(strict) clear
