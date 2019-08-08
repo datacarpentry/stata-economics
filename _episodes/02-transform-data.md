@@ -47,7 +47,8 @@ browse indicatorname seriescode
 > > keep if indicatorcode == "TG.VAL.TOTL.GD.ZS" | indicatorcode == "SP.DYN.LE00.IN" | indicatorcode == "NY.GDP.PCAP.PP.KD" | indicatorcode == "SP.POP.TOTL" | indicatorcode == "EN.POP.DNST"
 > > ```
 > > {: .source}
-> > Whenever you are checking a variable against a list of admissible values, you can use the `inlist` function,
+> > Whenever you are checking a variable against a list of admissible values, you can use the `inlist` function. The number of 
+> > arguments is between 2 and 250 for reals and between 2 and 10 for strings.
 > > ```
 > > keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "SP.DYN.LE00.IN", "NY.GDP.PCAP.PP.KD", "SP.POP.TOTL", "EN.POP.DNST")
 > > ```
