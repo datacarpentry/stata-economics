@@ -21,9 +21,9 @@ How do you find your current working directory? Check the bottom line of the Sta
 ![Two ways of checking your working directory]({{ "/img/pwd.png" | relative_url }})
 
 > ## Backward or forward?
-> On a Windows machine, Stata will display your working directory with a backslash (`\`) separating its components, like
-> `C:\Users\koren\Dropbox\teaching\courses\2019\carpentries\stata-economics`.
-> You should still refer to directories using a forward slash (`/`) to stay compatible with other platforms. The forward slash is understood by all three major platforms, whereas the backslash has a special meaning on Unix and Mac.
+> It is highly recommended to use the a forward slash (`/`)   to stay compatible across platforms.  This implies that on a Windows 
+> machine your directory is to be set up as `C:/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics` rather than the default one which contains the backward slash (`\`).
+> The forward slash is understood by all three major platforms, whereas the backslash has a special meaning on Unix and Mac.
 {: .callout}
 
 ```
@@ -210,8 +210,12 @@ r(198);
 ```
 {: .error}
 
-FIXME: add googling step and finding solution. check for open access resources on variable naming.
+If you search `label variables Stata` on google, the fist link will direct you to Stata Manual.
+![Google Stata Label]({{ "/img/google-label.png" | relative_url }})
 
+![Manual Stata Label]({{ "/img/help-label.png" | relative_url }})
+
+[This UCLA website is very helpful](https://stats.idre.ucla.edu/stata/modules/labeling-data/)
 ```
 . label variable iso_o "ISO3166 alphanumeric code of origin country"
 
@@ -317,7 +321,7 @@ FIXME: move this challenge later
 > {: .source}
 > > ## Solution
 > > The second. When neither variable is missing, the three comparisons give the same answer. However, when `distw` has missing values, the first comparison evaluates to true, because missing values are greater than anything. The second comparison starts with a mathematical operation, which evaluates to missing and is hence *not* smaller than zero. 
-> > As this property of missing values is a common *gotcha*, you should always explicitly test for missing values like so
+As this property of missing values is a common *gotcha*, it's recommendable to always explicitly test for missing values.
 > > ```
 > > count if dist < distw & !missing(dist, distw)
 > > ```
@@ -327,17 +331,22 @@ FIXME: move this challenge later
 
 
 > ## Challenge
-> Load `data/dist_cepii.dta`. Replace missing values in the variable `distw` with 0.
-> ```
-> use "data/dist_cepii.dta"
-> mvencode distw, mv(0)
-> ```
-> {: .source}
-> What happens?
+> Load `data/dist_cepii.dta`. Replace missing values in the variable `distw` with the mean of the variable.
+> > ## Solution
+> > ```
+> > use "data/dist_cepii.dta"
+> > summarize distw, d
+> > mvencode distw, mv(`r(mean)')
+> > ```
+> > {: .source}
+> {: .solution}
+{: .challenge}
+
+> ## Challenge what happens when you use the mvencode command to replace missing values with a value that already exists?
 > > ## Solution
 > > You get an error message:
 > > [OUTPUT]
-> > To force the replacement of missing values with zero (which is an already existing value of `distw`), use `mvencode distw, mv(0) override`.
+> > To force the replacement of missing values with zero (which is an already existing value of `distw`), use `mvencode distw, mv(value) override`.
 > {: .solution}
 {: .challenge}
 
@@ -353,4 +362,7 @@ FIXME: move this challenge later
 {: .challenge}
 
 {% include links.md %}
+
+
+> Missing values are excluded from the statistical analyses by default; some commands will permit inclusion of missing values via options. Always be cautios when dealing with missing values and their replacement.  
 

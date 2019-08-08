@@ -52,7 +52,7 @@ FIXME: spacing around `==`
 > > keep if indicatorcode == "TG.VAL.TOTL.GD.ZS" | indicatorcode == "SP.DYN.LE00.IN" | indicatorcode == "NY.GDP.PCAP.PP.KD" | indicatorcode == "SP.POP.TOTL" | indicatorcode == "EN.POP.DNST"
 > > ```
 > > {: .source}
-> > Whenever you are checking a variable against a list of admissible values, you can use the `inlist` function,
+> > Whenever you are checking a variable against a list of admissible values, you can use the `inlist` function.
 > > ```
 > > keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "SP.DYN.LE00.IN", "NY.GDP.PCAP.PP.KD", "SP.POP.TOTL", "EN.POP.DNST")
 > > ```
@@ -62,6 +62,19 @@ FIXME: spacing around `==`
 
 Note that variable `v5` corresponds to year 1960, `v63` corresponds to year 2018. Reshape the data so that each year is in a separate row.
 
+> ## Challenge
+> Rename variables v5-v64 with the use of a for loop.
+>
+> > ## Solution
+>> One way to approach this would be the following
+> > ```
+> > forvalues i=5(1)64{
+> >    local year= 1960+`i'-5
+> >    rename v`i' year`year'
+> > }
+> > ```
+
+Now let's reshape the data
 ```
 reshape long v, i(countrycode indicatorcode) j(year)
 replace year = year - 5 + 1960
@@ -106,7 +119,7 @@ You will use the `reshape wide` command. The column names are in `variable_name`
 reshape wide v, i(countrycode year) j(variable_name) string
 ```
 {: .source}
-This gives an error "variable indicatorcode not constant within countrycode year. variable indicatorname not constant within countrycode year". Variables that you are not reshaping should be constant within `i()`. Since `indicatorcode` and `indicatorname` are just alternative names for `variable_name`, we can safely drop the.
+This gives an error "variable indicatorcode not constant within countrycode year. variable indicatorname not constant within countrycode year". Variables that you are not reshaping should be constant within `i()`. Since `indicatorcode` and `indicatorname` are just alternative names for `variable_name`, we can safely drop them.
 ```
 drop indicatorcode indicatorname
 reshape wide v, i(countrycode year) j(variable_name) string
@@ -127,7 +140,7 @@ xij variables:
 -----------------------------------------------------------------------------
 ```
 {: .output}
-We now have five new variables, `vgdp_per_capita`, etc, but the variables `v` and `variable_name` have been dropped. Our new variable names look a bit clunky, we can remove the `v` from the beginning,
+We now have five new variables, `vgdp_per_capita`, etc, but the variables `v` and `variable_name` have been dropped. Our new variable names look a bit clunky, we can remove the `v` from the beginning.
 ```
 rename v* *
 ```
@@ -135,9 +148,16 @@ rename v* *
 A quick `browse` confirms that the data is in the tidy format.
 ![WDI data in tidy format]({{ "/img/wdi-reshaped.png" | relative_url }})
 
-Time to save our data
+Time to save our data. Stata 16, Stata 15, and Stata 14 share the same format, so you can just go ahead and save the data using the `save` command.
+
 ```
 save "data/WDI-select-variables.dta", replace
+```
+{: .source}
+
+To save a dataset in Stata 14, Stata 15, or Stata 16 so that it can be used in Stata 13, use the `saveold` command. 
+```
+saveold "data/WDI-select-variables.dta", v(13) replace
 ```
 {: .source}
 
@@ -253,14 +273,14 @@ egen gdp_decade_mean = mean(gdp_per_capita), by(countrycode decade)
 The command `merge` merges a dataset in memory (the "master" data) to another one on disk (the "using" data) by matching keys between the two datasets.
 
 > ## Data in memory, data on disk
-> Stata is different from other popular statistical and data manipulation languages like R and python/pandas in that it can only hold one dataset in memory at a time. In most applications, you will work with multiple datasets, so you will need to `merge` them quite often.
+> Stata is different from other popular statistical and data manipulation languages like R (Data Frame) and Python (Pandas) in that it can only hold one dataset in memory at a time. In most applications, you will work with multiple datasets, so you will need to `merge` them quite often.
 {: .callout}
 
 > ## Challenge
 > Load the decadal WDI data. Merge the average distance measure for each country. 
 > > ## Solution
 > > ```
-> > use "data/wdi_decades.dta"
+> > use "data/wdi_decades.dta", clear
 > > merge m:1 countrycode using "data/average_distance.dta"
 > > ```
 > > {: .source}
@@ -271,7 +291,7 @@ The command `merge` merges a dataset in memory (the "master" data) to another on
 > > {: .error}
 > > The problem is that in the "using" dataset (`data/average_distance.dta`), country codes are called `iso_o`, not `countrycode`. Merge requires that the keys on which you are merging are called the same in both datasets.
 > > ```
-> > use "data/wdi_decades.dta"
+> > use "data/wdi_decades.dta", clear
 > > rename countrycode iso_o
 > > merge m:1 iso_o using "data/average_distance.dta"
 > > ```
@@ -338,11 +358,38 @@ FIXME: find a good use case for `update` option
 {: .callout}
 
 
+> ## Fuzzy merge
+>  In cases where where no perfect key fields exists, `reclink` allows for a fuzzy merge which will provide weights for each match. The master and using datasets must each have a variable that uniquely identifies observations. These methods are imperfect and results should be manually reviewed, especially for observations with lower matching scores. In case the variable on which you are matching is the same in both datasets, reclink will provide the same result as the merge method.
+{: .callout}
+
 > ## Gotcha
 > Never do a many-to-many, `m:m` merge. It does not do what you expect. You probably want to do a `joinby` instead.
 {: .callout}
 
 FIXME: add `egen` examples
+
+
+> Always think of possible ways to provide compact code. If the one or some .dta files are generated only for the purpose of merging think of ereasing them from your computer using the `erase` command. Before saving the final dataset a good practice is to compress the amount of memory used by your data using the `compress` command.
+
+```
+. use "data/dist_cepii.dta", clear
+
+. egen average_distance = mean(distw), by(iso_o)
+(1120 missing values generated)
+.
+. rename iso_o countrycode 
+
+. joinby countrycode using "data/wdi_decades.dta"
+
+. 
+. compress
+  variable decade was float now int
+  variable population was double now long
+  variable countryname was str52 now str30
+  (34,947,584 bytes saved)
+
+. erase "data/wdi_decades.dta"
+```
 
 > ## Challenge
 > What is the difference between `collapse (mean) average_distance = distw, by(iso_o)` and `egen average_distance = mean(distw), by(iso_o)`?
