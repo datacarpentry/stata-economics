@@ -611,6 +611,7 @@ latestpopulationcensus: contains nonnumeric characters; censusyear generated as 
 > Compare the number of missing values in the two tables above. Why are they different?
 > > ## Solution
 > > The first method, `destring` forces all values with non-numerical entries to be missing. This includes entries like "2011. Population data compiled from administrative registers." The second method, converting the first four characters of the string to a number, can parse this entry as 2011 and these entries will not be missing.
+When the destring replace or destring generate method was unsuccessful Stata doesn't quit with an error code. What you got is a feedback to the viewer window like `contains nonnumeric characters; no replace`. We would recommend you to use destring along with `assert` command. 
 > {: .solution}
 {: .challenge}
 
