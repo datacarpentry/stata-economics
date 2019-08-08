@@ -439,6 +439,61 @@ foreach X of varlist *_index {
 
 You can reuse the loop variable later in different loops. Note the use of variable name wildcards.
 
+You can list any words to loop over.
+
+FIXME: add `foreach X in` example
+
+```
+. forvalues i = 1/5 {
+  2.     display `i'
+  3. }
+1
+2
+3
+4
+5
+
+```
+{: .output}
+
+Note that the loop variable is a macro, not a scalar. This helps us write code as
+
+```
+. forvalues i = 1/5 {
+  2.     generate gdp_`i' = gdp_per_capita^`i'
+  3. }
+(9,381 missing values generated)
+(9,381 missing values generated)
+(9,381 missing values generated)
+(9,381 missing values generated)
+(9,381 missing values generated)
+
+. su gdp_?
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       gdp_1 |      6,459    15209.41    17872.38   354.2845   135318.8
+       gdp_2 |      6,459    5.51e+08    1.42e+09   125517.5   1.83e+10
+       gdp_3 |      6,459    3.13e+13    1.38e+14   4.45e+07   2.48e+15
+       gdp_4 |      6,459    2.33e+18    1.49e+19   1.58e+10   3.35e+20
+       gdp_5 |      6,459    2.06e+23    1.71e+24   5.58e+12   4.54e+25
+```
+{: .output}
+
+Create an indicator variable for each decade.
+
+```
+forvalues decade = 1960(10)2010 {
+    generate decade`decade' = (int(year / 10) * 10 == `decade')
+}
+```
+{: .source}
+
+The loop variable increases in step size 10. Note the use of a boolean formula. Whenever it evaluates to true, its value will be 1, otherwise 0.
+
+![Decade indicator variables]({{ "/img/decade-loop.png" | relative_url }})
+
+
 ## Advanced example of macro evaluation and for loops
 ```
 clear all
