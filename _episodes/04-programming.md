@@ -141,6 +141,7 @@ There are relative paths in `read_wdi_variables.do`, so it matters which working
 Your .do file begins with loading a dataset and ends with saving one. It leaves no other trace.
 
 > ## House rules for code and data to live happily together
+> Always assume that mistakes will happen and you should be prepared to minimize them. 
 > 1. Never modify the raw data files. Save the results of your data cleaning in a new file.
 > 2. Every data file is created by a script. Convert your interactive data cleaning session to a .do file.
 > 3. No data file is modified by multiple scripts.
@@ -308,8 +309,8 @@ restore
 {: .source}
 
 ```
-local gdp_per_capita "NY.GDP.PCAP.PP.KD"
 import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
+local gdp_per_capita "NY.GDP.PCAP.PP.KD"
 keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "SP.DYN.LE00.IN", `gdp_per_capita', "SP.POP.TOTL", "EN.POP.DNST")
 reshape long v, i(countrycode indicatorcode) j(year)
 replace year = year - 5 + 1960
@@ -329,6 +330,8 @@ save "data/WDI-select-variables.dta", replace
 ## Advanced example of macro evaluation and for loops
 ```
 clear all
+import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
+
 local merchandise_trade "TG.VAL.TOTL.GD.ZS"
 local life_expectancy "SP.DYN.LE00.IN"
 local gdp_per_capita "NY.GDP.PCAP.PP.KD"
@@ -337,7 +340,6 @@ local population_density "EN.POP.DNST"
 
 local variables merchandise_trade life_expectancy gdp_per_capita population population_density
 
-import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
 
 tempvar sample_to_keep
 gen `sample_to_keep' = 0
