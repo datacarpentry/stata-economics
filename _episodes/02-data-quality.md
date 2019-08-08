@@ -286,15 +286,16 @@ latestpopulationcensus: contains nonnumeric characters; censusyear generated as 
 ```
 {: .output}
 
+FIXME: regex may be an extra layer of complexity at this stage.
 
-If the year is placed anywhere in the string, we can use regular expressions to extract the year in string format and convert the string to a numeric variable as we did above.
+If the year is placed anywhere in the string, we can use [regular expressions](https://en.wikipedia.org/wiki/Regular_expression) to extract the year in string format and convert the string to a numeric variable as we did above.
 
 
 ```
-. gen year_string= regexs(0) if(regexm(latestpopulationcensus, "[0-9][0-9][0-9][0-9]")) 
+. generate year_string = regexs(0) if regexm(latestpopulationcensus, "(19|20)[0-9][0-9]") 
 (46 missing values generated)
 
-. gen year=real(year_string)
+. generate year = real(year_string)
 (46 missing values generated)
 
 . 
@@ -330,7 +331,7 @@ If the year is placed anywhere in the string, we can use regular expressions to 
 ------------+-----------------------------------
       Total |        263      100.00
 ```
-
+{: .output}
 
 > ## Challenge
 > Compare the number of missing values in the tables above. Why are they different? What does the regular expression do?

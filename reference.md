@@ -7,5 +7,6 @@ layout: reference
 ## Additional resources
 - http://geocenter.github.io/StataTraining/
 - https://github.com/uo-ec607/lectures
+- https://stats.idre.ucla.edu/stata/modules/
 
 {% include links.md %}

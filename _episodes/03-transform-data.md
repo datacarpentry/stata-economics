@@ -62,18 +62,6 @@ FIXME: spacing around `==`
 
 Note that variable `v5` corresponds to year 1960, `v63` corresponds to year 2018. Reshape the data so that each year is in a separate row.
 
-> ## Challenge
-> Rename variables v5-v64 with the use of a for loop.
->
-> > ## Solution
->> One way to approach this would be the following
-> > ```
-> > forvalues i=5(1)64{
-> >    local year= 1960+`i'-5
-> >    rename v`i' year`year'
-> > }
-> > ```
-
 Now let's reshape the data
 ```
 reshape long v, i(countrycode indicatorcode) j(year)
@@ -357,19 +345,13 @@ FIXME: find a good use case for `update` option
 > We have seen a many-to-one `m:1` merge, where the "master" data has many rows with the same key, the "using" data has only one row for each key value. One-to-many `1:m` are exactly the flipside of this, with the role of "master" and "using" data reversed. 
 {: .callout}
 
-
-> ## Fuzzy merge
->  In cases where where no perfect key fields exists, `reclink` allows for a fuzzy merge which will provide weights for each match. The master and using datasets must each have a variable that uniquely identifies observations. These methods are imperfect and results should be manually reviewed, especially for observations with lower matching scores. In case the variable on which you are matching is the same in both datasets, reclink will provide the same result as the merge method.
-{: .callout}
-
 > ## Gotcha
 > Never do a many-to-many, `m:m` merge. It does not do what you expect. You probably want to do a `joinby` instead.
 {: .callout}
 
 FIXME: add `egen` examples
 
-
-> Always think of possible ways to provide compact code. If the one or some .dta files are generated only for the purpose of merging think of ereasing them from your computer using the `erase` command. Before saving the final dataset a good practice is to compress the amount of memory used by your data using the `compress` command.
+Before saving the final dataset a good practice is to compress the amount of memory used by your data using the `compress` command.
 
 ```
 . use "data/dist_cepii.dta", clear
@@ -387,9 +369,12 @@ FIXME: add `egen` examples
   variable population was double now long
   variable countryname was str52 now str30
   (34,947,584 bytes saved)
-
-. erase "data/wdi_decades.dta"
 ```
+{: .output}
+
+FIXME: explain joinby
+
+NB: tempfiles are explained in episode 4
 
 > ## Challenge
 > What is the difference between `collapse (mean) average_distance = distw, by(iso_o)` and `egen average_distance = mean(distw), by(iso_o)`?
