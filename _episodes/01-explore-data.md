@@ -334,15 +334,35 @@ As this property of missing values is a common *gotcha*, it is recommended to al
 > Load `data/dist_cepii.dta`. Replace missing values in the variable `distw` with the mean of the variable.
 > > ## Solution
 > > ```
-> > use "data/dist_cepii.dta"
-> > summarize distw, detail
-> > mvencode distw, mv(`r(mean)')
+> > . use "data/dist_cepii.dta", clear
+> > 
+> > . summarize distw, detail
+> > 
+> >                weighted distance (pop-wt, km)
+> > -------------------------------------------------------------
+> >       Percentiles      Smallest
+> >  1%     443.9466       .9951369
+> >  5%     1380.288       1.723628
+> > 10%     2258.153       2.225194       Obs              47,961
+> > 25%     4687.852       6.225999       Sum of Wgt.      47,961
+> > 
+> > 50%     8006.123                      Mean           8392.728
+> >                         Largest       Std. Dev.      4670.531
+> > 75%     11894.69       19735.32
+> > 90%     15155.13       19735.32       Variance       2.18e+07
+> > 95%     16614.14       19781.39       Skewness       .2676779
+> > 99%     18424.84       19781.39       Kurtosis       2.183358
+> > 
+> > . mvencode distw, mv(8392.728)
+> >        distw: 2215 missing values recoded
+> > 
 > > ```
-> > {: .source}
+> > {: .output}
+> > In Episode 4, we will see how to reuse the results of a previous command (`summarize`) in the next one (`mvencode`) programmatically.
 > {: .solution}
 {: .challenge}
 
-FIXME: this is great, but they do not know macros and return value yet, which come in episode 4
+FIXME: mvencode example with error
 
 > ## Challenge what happens when you use the mvencode command to replace missing values with a value that already exists?
 > > ## Solution
@@ -365,6 +385,5 @@ FIXME: this is great, but they do not know macros and return value yet, which co
 
 {% include links.md %}
 
-
-> Missing values are excluded from the statistical analyses by default; some commands will permit inclusion of missing values via options. Always be cautios when dealing with missing values and their replacement.  
+Missing values are excluded from the statistical analyses by default; some commands will permit inclusion of missing values via options. Always be cautios when dealing with missing values and their replacement.  
 

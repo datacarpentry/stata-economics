@@ -38,7 +38,6 @@ NARRATIVE: introduce `keep` and `drop`
 ![Do file editor]({{ "/img/do-file-editor.png" | relative_url }})
 
 NARRATIVE: "and" and "or" and "=="
-FIXME: spacing around `==`
 
 ![Wrap lines]({{ "/img/wrap-lines.png" | relative_url }})
 
@@ -145,11 +144,11 @@ save "data/WDI-select-variables.dta", replace
 
 To save a dataset in Stata 14, Stata 15, or Stata 16 so that it can be used in Stata 13, use the `saveold` command. 
 ```
-saveold "data/WDI-select-variables.dta", v(13) replace
+saveold "data/WDI-select-variables-13.dta", v(13) replace
 ```
 {: .source}
 
-FIXME: add screenshot with just command history
+![Review command history]({{ "/img/command-history.png" | relative_url }})
 
 ![Select commands to save as a .do file]({{ "/img/send-to-editor.png" | relative_url }})
 
@@ -213,6 +212,7 @@ egen gdp_decade_mean = mean(gdp_per_capita), by(countrycode decade)
 > > ## Solution
 > > ```
 > > collapse (mean) gdp_per_capita life_expectancy merchandise_trade population population_density, by(countrycode decade)
+> > save "data/wdi_decades.dta", replace
 > > ```
 > > {: .source}
 > {: .solution}
@@ -261,7 +261,7 @@ egen gdp_decade_mean = mean(gdp_per_capita), by(countrycode decade)
 The command `merge` merges a dataset in memory (the "master" data) to another one on disk (the "using" data) by matching keys between the two datasets.
 
 > ## Data in memory, data on disk
-> Stata is different from other popular statistical and data manipulation languages like R (Data Frame) and Python (Pandas) in that it can only hold one dataset in memory at a time. In most applications, you will work with multiple datasets, so you will need to `merge` them quite often.
+> Stata is different from other popular statistical and data manipulation languages like R (Data Frame) and Python (Pandas) in that it can only hold one dataset in memory at a time. In most applications, you will work with multiple datasets, so you will need to `merge` them quite often. (Stata 16 will allow for multiple data frames in memory.)
 {: .callout}
 
 > ## Challenge
