@@ -376,7 +376,7 @@ countryname     str52   %52s                  Country Name
 > > ## Solution
 > > 2.
 > {: .solution}
-{: .output}
+{: .challenge}
 
 > ## Challenge
 > After running the previous code, what does the following code do?
@@ -393,7 +393,7 @@ countryname     str52   %52s                  Country Name
 > > ## Solution
 > > 2.
 > {: .solution}
-{: .output}
+{: .challenge}
 
 
 ```
