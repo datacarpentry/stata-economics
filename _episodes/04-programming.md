@@ -267,6 +267,12 @@ log close
 
 ## Scalars and macros
 
+FIXME: `help macro`
+
+FIXME: illustrate macro evaluation
+
+NB: scalars may not be necessary, as all can be done with macros
+
 ```
 use "data/WDI-select-variables.dta", clear
 scalar begin_year = 1991
@@ -297,7 +303,6 @@ browse countrycode year gdp_per_capita gdp_per_capita_1991 mean_gdp_per_capita_1
 egen gdp_per_capita_1991 = mean(cond(year == 1991, gdp_per_capita, .)), by(countrycode)  
 ```
 {: .source}
-
 
 ```
 local begin_year 1991
@@ -407,49 +412,6 @@ save "data/WDI-select-variables.dta", replace
 
 ## For loops
 
-FIXME: start with `forvalues`. even for `foreach` start with simpler
-
-FIXME: `help macro`
-
-FIXME: illustrate macro evaluation
-
-
-Repeat the creation of index variable for population.
-
-```
-local base_year 1991
-egen gdp_per_capita_`base_year' = mean(cond(year == `base_year', gdp_per_capita, .)), by(countrycode)
-generate gdp_per_capita_index = gdp_per_capita / gdp_per_capita_`base_year' * 100
-egen population_`base_year' = mean(cond(year == `base_year', population, .)), by(countrycode)
-generate population_index = population / gdp_per_capita_`base_year' * 100
-```
-{: .error}
-
-Copying and pasting are prone to errors. Not all will be easy to spot and fix.
-
-```
-foreach X of varlist gdp_per_capita population {
-    egen `X'_`base_year' = mean(cond(year == `base_year', `X', .)), by(countrycode)
-    generate `X'_index = `X' / `X'_`base_year' * 100
-}
-```
-{: .source}
-
-Use for loops to ensure consistency and to minimize the risk the erros, not to save typing. Note that X appears on both sides. It is a macro that is evaluated before the command is run, so it can become part of the variable name.
-
-```
-foreach X of varlist *_index {
-    generate log_`X' = log(`X' / 100)
-}
-```
-{: .source}
-
-You can reuse the loop variable later in different loops. Note the use of variable name wildcards.
-
-You can list any words to loop over.
-
-FIXME: add `foreach X in` example
-
 ```
 . forvalues i = 1/5 {
   2.     display `i'
@@ -463,7 +425,128 @@ FIXME: add `foreach X in` example
 ```
 {: .output}
 
-Note that the loop variable is a macro, not a scalar. This helps us write code as
+You should always place the curly braces like this. The indentation is optional, but helps read your code better, especially with nested loops.
+
+```
+. forvalues i = 1/5
+{ required
+r(100);
+```
+{: .error}
+
+We can use multiple commands inside the loop.
+
+```
+. forvalues i = 1/5 {
+  2.     display `i'
+  3.     display 6 - `i'
+  4. }
+1
+5
+2
+4
+3
+3
+4
+2
+5
+1
+```
+{: .output}
+
+You can use the loop variable in any command, in any place.
+
+```
+. forvalues t = 2010/2017 {
+  2.    summarize gdp_per_capita if year == `t'
+  3. }
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        239       17122    18892.45    660.211   125140.8
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        242    17372.16    19354.81   682.4322   129349.9
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        239    17645.64    19386.14    706.798   125302.1
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        239    17833.08    19529.57    593.056   135318.8
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        238    17885.82    19371.79   597.1352   130755.2
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        237    18017.96     18936.6   621.5698   119872.6
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        237    18227.89    18957.92   642.8735   118222.4
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        235    18567.77    19230.34     661.24     116932
+```
+{: .output}
+
+The loop variable is not displayed, so we may not know where the loop is currently unless we explicitly display it.
+
+```
+. forvalues t = 2010/2017 {
+  2.     display `t'
+  3.     summarize gdp_per_capita if year == `t'
+  4. }
+2010
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        239       17122    18892.45    660.211   125140.8
+2011
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        242    17372.16    19354.81   682.4322   129349.9
+2012
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        239    17645.64    19386.14    706.798   125302.1
+2013
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        239    17833.08    19529.57    593.056   135318.8
+2014
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        238    17885.82    19371.79   597.1352   130755.2
+2015
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        237    18017.96     18936.6   621.5698   119872.6
+2016
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        237    18227.89    18957.92   642.8735   118222.4
+2017
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |        235    18567.77    19230.34     661.24     116932
+
+```
+{: .output}
+
+Note that the loop variable is a macro, not a scalar. This helps us write code where the loop variable is part of a variable name or is on the left-hand side.
 
 ```
 . forvalues i = 1/5 {
@@ -487,6 +570,25 @@ Note that the loop variable is a macro, not a scalar. This helps us write code a
 ```
 {: .output}
 
+> ## Challenge
+> Write a loop that display the first five square numbers. 
+> > ## Solution
+> > ```
+> > . forvalues i = 1/5 {
+> >   2.     display `i'^2
+> >   3. }
+> > 1
+> > 4
+> > 9
+> > 16
+> > 25
+> > ```
+> > {: .output}
+> {: .solution}
+{: .challenge}
+
+You can set the step size of the loop.
+
 Create an indicator variable for each decade.
 
 ```
@@ -500,44 +602,106 @@ The loop variable increases in step size 10. Note the use of a boolean formula. 
 
 ![Decade indicator variables]({{ "/img/decade-loop.png" | relative_url }})
 
+You can also loop over a list of arbitrary strings, but note the different syntax.
 
-## Advanced example of macro evaluation and for loops
 ```
-clear all
-import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
+. foreach X in apple banana carrot {
+  2.     display "`X'"
+  3. }
+apple
+banana
+carrot
+```
+{: .output}
 
-local merchandise_trade "TG.VAL.TOTL.GD.ZS"
-local life_expectancy "SP.DYN.LE00.IN"
-local gdp_per_capita "NY.GDP.PCAP.PP.KD"
-local population "SP.POP.TOTL" 
-local population_density "EN.POP.DNST"
+The loop variable is still a macro and is evaluated as part of the command.
+```
+. foreach X in apple banana carrot {
+  2.     display `X'
+  3. }
+apple not found
+r(111);
+```
+{: .error}
 
-local variables merchandise_trade life_expectancy gdp_per_capita population population_density
+The error is that in the first run, `X` evaluates to `apple`, and Stata would like to run `display apple`. There is no variable or scalar with the name `apple`, so we receive an error.
 
+Note that the error breaks the loop.
 
-tempvar sample_to_keep
-gen `sample_to_keep' = 0
-foreach X in `variables' {
-    replace `sample_to_keep' = 1 if indicatorcode == "``X''"
-    * note the double quote. `X' evaluates to merchandise_trade, ``X'' evaluates to `merchandise_trade' = TG.VAL.TOTL.GD.ZS 
+The separator in the list is the space. If one of your list elements has spaces, use double quotes.
+
+```
+. foreach X in apple banana carrot "dragon fruit" {
+  2.     display "`X'"
+  3. }
+apple
+banana
+carrot
+dragon fruit
+```
+{: .output}
+
+> ## Challenge
+> What would be the output of
+> ```
+> foreach X in apple banana carrot dragon fruit {
+>     display "`X'"  
+> }
+> ```
+> {: .source}
+> > ## Solution
+> > ```
+> > apple
+> > banana
+> > carrot
+> > dragon
+> > fruit
+> > ```
+> > {: .output}
+> {: .solution}
+{: .challenge}
+
+Repeat the creation of index variable for population.
+
+```
+local base_year 1991
+egen gdp_per_capita_`base_year' = mean(cond(year == `base_year', gdp_per_capita, .)), by(countrycode)
+generate gdp_per_capita_index = gdp_per_capita / gdp_per_capita_`base_year' * 100
+egen population_`base_year' = mean(cond(year == `base_year', population, .)), by(countrycode)
+generate population_index = population / gdp_per_capita_`base_year' * 100
+```
+{: .error}
+
+Copying and pasting are prone to errors. Not all will be easy to spot and fix.
+
+```
+foreach X in gdp_per_capita population {
+    egen `X'_`base_year' = mean(cond(year == `base_year', `X', .)), by(countrycode)
+    generate `X'_index = `X' / `X'_`base_year' * 100
 }
-keep if `sample_to_keep' == 1
-* this temporary variable will be deleted once the .do file stops
-
-reshape long v, i(countrycode indicatorcode) j(year)
-replace year = year - 5 + 1960
-generate str variable_name = ""
-foreach X in `variables' {
-    replace variable_name = "`X'" if indicatorcode == "``X''"
-    * note that the LHS is in single quotes, the RHS in double quotes
-}
-
-drop indicatorcode indicatorname
-reshape wide v, i(countrycode year) j(variable_name) string
-rename v* *
-save "data/WDI-select-variables.dta", replace
 ```
 {: .source}
+
+We can also loop over variables rather than arbitrary words.
+
+```
+foreach X of varlist gdp_per_capita population {
+    egen `X'_`base_year' = mean(cond(year == `base_year', `X', .)), by(countrycode)
+    generate `X'_index = `X' / `X'_`base_year' * 100
+}
+```
+{: .source}
+
+Use for loops to ensure consistency and to minimize the risk the erros, not to save typing. Note that X appears on both sides. It is a macro that is evaluated before the command is run, so it can become part of the variable name.
+
+```
+foreach X of varlist *_index {
+    generate log_`X' = log(`X' / 100)
+}
+```
+{: .source}
+
+You can reuse the loop variable later in different loops. Note the use of variable name wildcards.
 
 
 {% include links.md %}
