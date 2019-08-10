@@ -368,13 +368,13 @@ countryname     str52   %52s                  Country Name
 > generate `A' = `B'
 > ```
 > {: .source}
-> 
 > 1. Creates a variable called `A` with the value 4.
 > 2. Creates a variable called `a` with the value 4.
 > 3. Creates a variables called `A` with the value "B".
 > 4. Creates a variables called `a` with the value "B".
+>
 > > ## Solution
-> > 2.
+> > The correct is 2.
 > {: .solution}
 {: .challenge}
 
@@ -385,13 +385,13 @@ countryname     str52   %52s                  Country Name
 > generate `C' = `A' + `B'
 > ```
 > {: .source}
-> 
 > 1. Creates a variable called `c` with the value 4.
 > 2. Creates a variable called `c` with the value "AB".
 > 3. Creates a variables called `C` with the value 8.
 > 4. Creates a variables called `c` with the value 8.
+>
 > > ## Solution
-> > 4.
+> > The correct is 4.
 > {: .solution}
 {: .challenge}
 
