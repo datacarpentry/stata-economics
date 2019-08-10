@@ -26,8 +26,7 @@ Look for the indicator code of these variables and copy them into a text editor 
 
 ```
 import delimited "data/WDISeries.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear 
-sort indicatorname
-browse indicatorname seriescode 
+browse
 ```
 {: .source}
 
@@ -43,17 +42,17 @@ NARRATIVE: "and" and "or" and "=="
 
 > ## Challenge
 > Load the WDI dataset from `WDIData.csv`. 
-> Keep the variables "Merchandise trade (% of GDP)", "Life expectancy at birth, total (years)", "GDP per capita, PPP (constant 2011 international $)", "Population, total", "Population density (people per sq. km of land area)".
+> Keep the variables "Merchandise trade (% of GDP)", "GDP per capita, PPP (constant 2011 international $)", and "Population, total".
 >
 > > ## Solution
 > > ```
 > > import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
-> > keep if indicatorcode == "TG.VAL.TOTL.GD.ZS" | indicatorcode == "SP.DYN.LE00.IN" | indicatorcode == "NY.GDP.PCAP.PP.KD" | indicatorcode == "SP.POP.TOTL" | indicatorcode == "EN.POP.DNST"
+> > keep if indicatorcode == "TG.VAL.TOTL.GD.ZS" | indicatorcode == "NY.GDP.PCAP.PP.KD" | indicatorcode == "SP.POP.TOTL"
 > > ```
 > > {: .source}
 > > Whenever you are checking a variable against a list of admissible values, you can use the `inlist` function.
 > > ```
-> > keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "SP.DYN.LE00.IN", "NY.GDP.PCAP.PP.KD", "SP.POP.TOTL", "EN.POP.DNST")
+> > keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "NY.GDP.PCAP.PP.KD", "SP.POP.TOTL")
 > > ```
 > > {: .source}
 > {: .solution}
@@ -71,12 +70,12 @@ replace year = year - 5 + 1960
 ```
 . reshape long v, i(countrycode indicatorcode) j(year)
 (note: j = 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 3
- > 0 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 
- > 57 58 59 60 61 62 63 64)
+> 0 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 
+> 57 58 59 60 61 62 63 64)
 
 Data                               wide   ->   long
 -----------------------------------------------------------------------------
-Number of obs.                     1320   ->   79200
+Number of obs.                      792   ->   47520
 Number of variables                  64   ->       6
 j variable (60 values)                    ->   year
 xij variables:
@@ -85,7 +84,7 @@ xij variables:
 
 . replace year = year - 5 + 1960
 variable year was byte now int
-(79,200 real changes made)
+(47,520 real changes made)
 ```
 {: .output}
 
@@ -93,10 +92,8 @@ Create a new string variable `variable_name`. Fill it with more legible variable
 ```
 generate str variable_name = ""
 replace variable_name = "merchandise_trade" if indicatorcode == "TG.VAL.TOTL.GD.ZS"
-replace variable_name = "life_expectancy" if indicatorcode == "SP.DYN.LE00.IN"
 replace variable_name = "gdp_per_capita" if indicatorcode == "NY.GDP.PCAP.PP.KD"
 replace variable_name = "population" if indicatorcode == "SP.POP.TOTL" 
-replace variable_name = "population_density" if indicatorcode == "EN.POP.DNST"
 ```
 {: .source}
 
@@ -105,7 +102,7 @@ You will use the `reshape wide` command. The column names are in `variable_name`
 ```
 reshape wide v, i(countrycode year) j(variable_name) string
 ```
-{: .source}
+{: .error}
 This gives an error "variable indicatorcode not constant within countrycode year. variable indicatorname not constant within countrycode year". Variables that you are not reshaping should be constant within `i()`. Since `indicatorcode` and `indicatorname` are just alternative names for `variable_name`, we can safely drop them.
 ```
 drop indicatorcode indicatorname
@@ -113,17 +110,16 @@ reshape wide v, i(countrycode year) j(variable_name) string
 ```
 {: .source}
 ```
-(note: j = gdp_per_capita life_expectancy merchandise_trade population population_
- > density)
+(note: j = gdp_per_capita merchandise_trade population)
 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of obs.                    79200   ->   15840
-Number of variables                   5   ->       8
-j variable (5 values)     variable_name   ->   (dropped)
+Number of obs.                    47520   ->   15840
+Number of variables                   5   ->       6
+j variable (3 values)     variable_name   ->   (dropped)
 xij variables:
-                                      v   ->   vgdp_per_capita vlife_expectancy ..
- > . vpopulation_density
+                                      v   ->   vgdp_per_capita vmerchandise_trade 
+> vpopulation
 -----------------------------------------------------------------------------
 ```
 {: .output}
@@ -154,15 +150,13 @@ saveold "data/WDI-select-variables-13.dta", v(13) replace
 
 ```
 import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
-keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "SP.DYN.LE00.IN", "NY.GDP.PCAP.PP.KD", "SP.POP.TOTL", "EN.POP.DNST")
+keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "NY.GDP.PCAP.PP.KD", "SP.POP.TOTL")
 reshape long v, i(countrycode indicatorcode) j(year)
 replace year = year - 5 + 1960
 generate str variable_name = ""
 replace variable_name = "merchandise_trade" if indicatorcode == "TG.VAL.TOTL.GD.ZS"
-replace variable_name = "life_expectancy" if indicatorcode == "SP.DYN.LE00.IN"
 replace variable_name = "gdp_per_capita" if indicatorcode == "NY.GDP.PCAP.PP.KD"
 replace variable_name = "population" if indicatorcode == "SP.POP.TOTL" 
-replace variable_name = "population_density" if indicatorcode == "EN.POP.DNST"
 drop indicatorcode indicatorname
 reshape wide v, i(countrycode year) j(variable_name) string
 rename v* *
@@ -211,7 +205,7 @@ egen gdp_decade_mean = mean(gdp_per_capita), by(countrycode decade)
 > Aggregate the dataset by country and decade, keeping only the mean of each variable. Save this as `data/wdi_decades.dta`.
 > > ## Solution
 > > ```
-> > collapse (mean) gdp_per_capita life_expectancy merchandise_trade population population_density, by(countrycode decade)
+> > collapse (mean) gdp_per_capita merchandise_trade population, by(countrycode decade)
 > > save "data/wdi_decades.dta", replace
 > > ```
 > > {: .source}

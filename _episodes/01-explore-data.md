@@ -210,6 +210,10 @@ r(198);
 ```
 {: .error}
 
+FIXME: discuss variable abbreviation
+
+FIXME: variable name display long~name
+
 If you search `label variables Stata` on google, the fist link will direct you to Stata Manual.
 
 ![Google Stata Label]({{ "/img/google-label.png" | relative_url }})

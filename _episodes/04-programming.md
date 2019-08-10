@@ -391,7 +391,7 @@ countryname     str52   %52s                  Country Name
 > 4. Creates a variables called `c` with the value 8.
 >
 > > ## Solution
-> > The correct is 4.
+> > The correct is 4. ```A'`` evaluates to `a`, which is a variable with the value 4. ```B'`` evaluates to 4, so the variable `c` becomes 8.
 > {: .solution}
 {: .challenge}
 
