@@ -391,7 +391,7 @@ countryname     str52   %52s                  Country Name
 > 3. Creates a variables called `C` with the value 8.
 > 4. Creates a variables called `c` with the value 8.
 > > ## Solution
-> > 2.
+> > 4.
 > {: .solution}
 {: .challenge}
 
