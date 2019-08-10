@@ -349,7 +349,8 @@ FIXME: find a good use case for `update` option
 > Never do a many-to-many, `m:m` merge. It does not do what you expect. You probably want to do a `joinby` instead.
 {: .callout}
 
-FIXME: add `egen` examples
+FIXME: add `egen` examples, with formulas
+
 
 Before saving the final dataset a good practice is to compress the amount of memory used by your data using the `compress` command.
 

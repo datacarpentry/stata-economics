@@ -267,19 +267,134 @@ log close
 
 ## Scalars and macros
 
-FIXME: `help macro`
+Macros are useful for storing values and reusing them later. They are the most powerful feature of Stata programming.
 
-FIXME: illustrate macro evaluation
-
-NB: scalars may not be necessary, as all can be done with macros
+There are two types of macros, local and global. You will almost exclusively use local macros, so this is what we cover first.
 
 ```
-use "data/WDI-select-variables.dta", clear
-scalar begin_year = 1991
-scalar end_year = 2010
-keep if (year >= begin_year) & (year <= end_year) 
+. local begin_year 1991
+. local name value
+. display `begin_year'
+1991
+. display "`name'"
+value
 ```
-{: .source}
+{: .output}
+
+Use backticks and single quote to evalue a macro "name" to its "value."
+
+```
+. display `begin_year`
+`begin_year` invalid name
+r(198);
+
+. display 'begin_year'
+'begin_year' invalid name
+r(198);
+
+```
+{: .error}
+
+Macros are evaluated as part of the command. They are not a variable.
+
+```
+. local name value
+. display `name'
+value not found
+r(111);
+```
+{: .error}
+
+The second line evaluates to `display value` and Stata does not have any object called "value."
+
+Because macros are evaluated before a command is run, they can part of the command.
+```
+. local begin_year 1991
+. local outcome gdp_per_capita 
+. summarize `outcome' if year >= `begin_year'
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |      6,251    15331.78    17967.28   354.2845   135318.8
+
+. summarize gdp_per_capita if year >= 1991
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+gdp_per_ca~a |      6,251    15331.78    17967.28   354.2845   135318.8
+
+```
+{: .output}
+
+The last two lines do exactly the same.
+
+The macro can be any part of the command, you can attach it to variable names, for example.
+
+```
+. local entity country
+
+. describe `entity'code
+
+              storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------
+countrycode     str3    %9s                   Country Code
+
+. describe `entity'name
+
+              storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------
+countryname     str52   %52s                  Country Name
+
+```
+{: .output}
+
+> ## Gotcha
+> Stata does not stop if you use an undefined macro name. It simply uses an empty string for its value. Watch out for typos in macro names!
+> ```
+> . describe `enty'name
+> variable name not found
+> r(111);
+> ```
+> {: .error}
+{: .callout}
+
+> ## Challenge
+> What does the following code do?
+> ```
+> local A a
+> local B 4
+> generate `A' = `B'
+> ```
+> {: .source}
+> 
+> 1. Creates a variable called `A` with the value 4.
+> 2. Creates a variable called `a` with the value 4.
+> 3. Creates a variables called `A` with the value "B".
+> 4. Creates a variables called `a` with the value "B".
+> > ## Solution
+> > 2.
+> {: .solution}
+{: .output}
+
+> ## Challenge
+> After running the previous code, what does the following code do?
+> ```
+> local C c
+> generate `C' = `A' + `B'
+> ```
+> {: .source}
+> 
+> 1. Creates a variable called `c` with the value 4.
+> 2. Creates a variable called `c` with the value "AB".
+> 3. Creates a variables called `C` with the value 8.
+> 4. Creates a variables called `c` with the value 8.
+> > ## Solution
+> > 2.
+> {: .solution}
+{: .output}
+
 
 ```
 use "data/WDI-select-variables.dta", clear
@@ -325,7 +440,6 @@ You can only use a macro in this situation, not a scalar.
 > {: .solution}
 {: .challenge}
 
-GOTCHA: undefined macros evaluate as empty strings
 
 
 ## Temporary variables and files
