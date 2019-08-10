@@ -88,7 +88,7 @@ Next we will read the World Development Indicators dataset. The data is in `data
 > > |                            Missing       422,136
 > > +----------------------                -----------
 > > .             -9.0e+307                    422,136
-   (0 unique value)
+> >   (0 unique value)
 > > ```
 > > {: .output}
 > >
@@ -331,7 +331,7 @@ If the year is placed anywhere in the string, we can use [regular expressions](h
 
 > ## Challenge
 > Compare the number of missing values in the tables above. Why are they different? What does the regular expression do?
-
+>
 > > ## Solution
 > > The first method, `destring` forces all values with non-numerical entries to be missing. This includes entries like "2011. Population data compiled from administrative registers." The second method, converting the first four characters of the string to a number, can parse this entry as 2011 and these entries will not be missing.
 > {: .solution}
