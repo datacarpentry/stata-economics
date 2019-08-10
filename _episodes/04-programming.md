@@ -46,21 +46,22 @@ mkdir code
 ```
 . do code/read_wdi_variables.do
 
-. import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
+. import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("ut
+> f-8") clear
 (64 vars, 422,136 obs)
 
-. keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "SP.DYN.LE00.IN", "NY.GDP.PCAP.PP.KD", "
-> SP.POP.TOTL", "EN.POP.DNST")
-(420,816 observations deleted)
+. keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "NY.GDP.PCAP.PP.KD", "SP.POP.
+> TOTL")
+(421,344 observations deleted)
 
 . reshape long v, i(countrycode indicatorcode) j(year)
-(note: j = 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 
-> 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 6
-> 4)
+(note: j = 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 3
+> 0 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 
+> 57 58 59 60 61 62 63 64)
 
 Data                               wide   ->   long
 -----------------------------------------------------------------------------
-Number of obs.                     1320   ->   79200
+Number of obs.                      792   ->   47520
 Number of variables                  64   ->       6
 j variable (60 values)                    ->   year
 xij variables:
@@ -69,16 +70,14 @@ xij variables:
 
 . replace year = year - 5 + 1960
 variable year was byte now int
-(79,200 real changes made)
+(47,520 real changes made)
 
 . generate str variable_name = ""
-(79,200 missing values generated)
+(47,520 missing values generated)
 
-. replace variable_name = "merchandise_trade" if indicatorcode == "TG.VAL.TOTL.GD.ZS"
+. replace variable_name = "merchandise_trade" if indicatorcode == "TG.VAL.TOTL.GD.
+> ZS"
 variable variable_name was str1 now str17
-(15,840 real changes made)
-
-. replace variable_name = "life_expectancy" if indicatorcode == "SP.DYN.LE00.IN"
 (15,840 real changes made)
 
 . replace variable_name = "gdp_per_capita" if indicatorcode == "NY.GDP.PCAP.PP.KD"
@@ -87,23 +86,19 @@ variable variable_name was str1 now str17
 . replace variable_name = "population" if indicatorcode == "SP.POP.TOTL" 
 (15,840 real changes made)
 
-. replace variable_name = "population_density" if indicatorcode == "EN.POP.DNST"
-variable variable_name was str17 now str18
-(15,840 real changes made)
-
 . drop indicatorcode indicatorname
 
 . reshape wide v, i(countrycode year) j(variable_name) string
-(note: j = gdp_per_capita life_expectancy merchandise_trade population population_density)
+(note: j = gdp_per_capita merchandise_trade population)
 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of obs.                    79200   ->   15840
-Number of variables                   5   ->       8
-j variable (5 values)     variable_name   ->   (dropped)
+Number of obs.                    47520   ->   15840
+Number of variables                   5   ->       6
+j variable (3 values)     variable_name   ->   (dropped)
 xij variables:
-                                      v   ->   vgdp_per_capita vlife_expectancy ... vpopulati
-> on_density
+                                      v   ->   vgdp_per_capita vmerchandise_trade 
+> vpopulation
 -----------------------------------------------------------------------------
 
 . rename v* *
