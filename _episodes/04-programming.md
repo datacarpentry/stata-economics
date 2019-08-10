@@ -247,7 +247,7 @@ stata -b do code/read_wdi_variables.do
 
 > ## Challenge
 >
-> List three ways of running `read_data.do`.
+> List three ways of running `read_wdi_variables.do`.
 >
 > > ## Solution
 > > 1. From Stata: `do /home/user/dc-economics/code/read_wdi_variables.do`
@@ -406,6 +406,13 @@ save "data/WDI-select-variables.dta", replace
 {: .source}
 
 ## For loops
+
+FIXME: start with `forvalues`. even for `foreach` start with simpler
+
+FIXME: `help macro`
+
+FIXME: illustrate macro evaluation
+
 
 Repeat the creation of index variable for population.
 
