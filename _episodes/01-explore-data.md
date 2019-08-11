@@ -153,14 +153,14 @@ NARRATIVE: by group: command if, options
 > ## Never abbreviate
 > A quirky feature of Stata is that it lets you abbreviate everything: commands, variable names, even file names. Abbreviation might save you some typing, but destroys legibility of your code, so please think of your coauthors and your future self and never do it. 
 > ```
-> u data
+> u data, clear
 > g gdp_per_capita = 1
 > ren gdp gdp
 > ```
 > {: .source}
 > means the same as
 > ```
-> use "data.dta"
+> use "data.dta", clear
 > generate gdp_per_capita = 1
 > rename gdp_per_capita gdp
 > ```
@@ -389,5 +389,5 @@ FIXME: mvencode example with error
 
 {% include links.md %}
 
-Missing values are excluded from the statistical analyses by default; some commands will permit inclusion of missing values via options. Always be cautios when dealing with missing values and their replacement.  
+Missing values are excluded from the statistical analyses by default; some commands will permit inclusion of missing values via options. Always be cautious when dealing with missing values and their replacement.  
 

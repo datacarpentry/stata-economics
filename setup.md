@@ -21,7 +21,7 @@ To add StataMP to the path you should open the terminal and type
  
 $ sudo vi /etc/paths 
 
-and add /Applications/Stata/StataSE.app/Contents/MacOS/ to it. 
+and add /Applications/Stata/StataMP.app/Contents/MacOS/ to it. 
 
 Finally, close the terminal and reopen it. Once everything is set up, type Stata in your terminal to launch Stata.
 

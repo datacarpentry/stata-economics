@@ -110,7 +110,7 @@ import delimited "data/WDICountry.csv", varnames(1) clear
 ![Broken column]({{ "/img/csv-newline.png" | relative_url }})
 
 `"Central Bureau of Statistics and Central Bank of Aruba ; Source of population estimates: UN Population Division's World Population Prospects 2019 PROVISIONAL estimates. Not for circulation. Subject to change. Mining is included in agriculture\n 
-Electricty and gas includes manufactures of refined petroleoum products"`
+Electricty and gas includes manufactures of refined petroleum products"`
 
 FIXME: multiple lines instead of line break
 
