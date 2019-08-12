@@ -240,6 +240,14 @@ stata -b do code/read_wdi_variables.do
 ```
 {: language-bash}
 
+
+## Options
+
+The option -b will produce a ASCII log file saved in your current working directory. If you prefer a SMCL log you should use the -s option instead.
+If you want Stata to automatically exit after running the batch do-file, use -e. This last option becomes handy in case of an executable.
+If you don't declare any options, Stata will run in your terminal.
+
+
 > ## Challenge
 >
 > List three ways of running `read_wdi_variables.do`.
@@ -264,7 +272,9 @@ log close
 
 Macros are useful for storing values and reusing them later. They are the most powerful feature of Stata programming.
 
-There are two types of macros, local and global. You will almost exclusively use local macros, so this is what we cover first.
+There are two types of macros, local and global.  Local macros are valid only in a single
+execution of commands in do-files.  Global macros will persist until you delete them or the session is ended.
+We recommend the use of local macros and this is what we cover first.
 
 ```
 . local begin_year 1991
@@ -276,7 +286,7 @@ value
 ```
 {: .output}
 
-Use backticks and single quote to evalue a macro "name" to its "value."
+Use backticks and single quote to evaluate a macro "name" to its "value."
 
 ```
 . display `begin_year`
@@ -503,7 +513,7 @@ restore
 ```
 import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
 local gdp_per_capita "NY.GDP.PCAP.PP.KD"
-keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "SP.DYN.LE00.IN", `gdp_per_capita', "SP.POP.TOTL", "EN.POP.DNST")
+keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "SP.DYN.LE00.IN", "`gdp_per_capita'", "SP.POP.TOTL", "EN.POP.DNST")
 reshape long v, i(countrycode indicatorcode) j(year)
 replace year = year - 5 + 1960
 generate str variable_name = ""
@@ -801,7 +811,7 @@ foreach X of varlist gdp_per_capita population {
 ```
 {: .source}
 
-Use for loops to ensure consistency and to minimize the risk the erros, not to save typing. Note that X appears on both sides. It is a macro that is evaluated before the command is run, so it can become part of the variable name.
+Use for loops to ensure consistency and to minimize the risk the errors, not to save typing. Note that X appears on both sides. It is a macro that is evaluated before the command is run, so it can become part of the variable name.
 
 ```
 foreach X of varlist *_index {
@@ -810,7 +820,16 @@ foreach X of varlist *_index {
 ```
 {: .source}
 
+
 You can reuse the loop variable later in different loops. Note the use of variable name wildcards.
 
+```
+foreach X of varlist population* {
+	forvalues i = 1/5 {
+		generate `X'_`i'= `X'^`i'
+		label variable  `X'_`i' "`X', polynomial of order `i'"
+		}
+}
+```
 
 {% include links.md %}
