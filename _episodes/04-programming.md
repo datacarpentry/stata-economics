@@ -518,7 +518,7 @@ restore
 ```
 import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
 local gdp_per_capita "NY.GDP.PCAP.PP.KD"
-keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "SP.DYN.LE00.IN", `gdp_per_capita', "SP.POP.TOTL", "EN.POP.DNST")
+keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "SP.DYN.LE00.IN", "`gdp_per_capita'", "SP.POP.TOTL", "EN.POP.DNST")
 reshape long v, i(countrycode indicatorcode) j(year)
 replace year = year - 5 + 1960
 generate str variable_name = ""

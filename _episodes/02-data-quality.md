@@ -25,7 +25,7 @@ Next we will read the World Development Indicators dataset. The data is in `data
 > > ## Solution
 > > Load the data and launch a data browser.
 > > ```
-> > import delimited "data/WDIData.csv"
+> > import delimited "data/WDIData.csv", clear
 > > browse
 > > ```
 > > {: .source}
@@ -33,9 +33,9 @@ Next we will read the World Development Indicators dataset. The data is in `data
 > > ![Variable names are not read]({{ "/img/import-header.png" | relative_url }})
 > > This is because WDI uses years for variable names, but Stata does not allow purely numeric variable names.
 > > ![Variable names are not read]({{ "/img/import-header-2.png" | relative_url }})
-> > You can force Stata to use the values in row 1 as variable names.
+> > You can have Stata use the values in row 1 as variable names by using varnames option.
 > > ```
-> > import delimited "data/WDIData.csv", varnames(1) clear
+> > import delimited "data/WDIData.csv",  varnames(1) clear
 > > ```
 > > {: .source}
 > > But since 1960, 1961, etc., are not valid variable names, these will still be called `v5` through `v64`.
@@ -282,13 +282,14 @@ latestpopulationcensus: contains nonnumeric characters; censusyear generated as 
 ```
 {: .output}
 
-FIXME: regex may be an extra layer of complexity at this stage.
+FIXME: regex may be an extra layer of complexity at this stage. 
+Answer: I actually think it's something they should keep in mind. This dataset is relatively "clean" but in other cases the format of the date might not be very "convenient". And, I like the elegance of the subexpression but I think the smooth intro to regexp would be by saying that I'm looking for `\d\d\d\d` pattern in the string. Is there anyway this can be written more concisely? In Python you can do something like \d{4} to tell Python to look for 4 digits in the string. 
 
 If the year is placed anywhere in the string, we can use [regular expressions](https://en.wikipedia.org/wiki/Regular_expression) to extract the year in string format and convert the string to a numeric variable as we did above.
 
 
 ```
-. generate year_string = regexs(0) if regexm(latestpopulationcensus, "(19|20)[0-9][0-9]") 
+. generate year_string = regexs(0) if regexm(latestpopulationcensus, "[0-9][0-9][0-9][0-9]") 
 (46 missing values generated)
 
 . generate year = real(year_string)
@@ -333,10 +334,11 @@ If the year is placed anywhere in the string, we can use [regular expressions](h
 > Compare the number of missing values in the tables above. Why are they different? What does the regular expression do?
 >
 > > ## Solution
-> > The first method, `destring` forces all values with non-numerical entries to be missing. This includes entries like "2011. Population data compiled from administrative registers." The second method, converting the first four characters of the string to a number, can parse this entry as 2011 and these entries will not be missing.
+> > With the first method, `destring` and the option force we have forced all values with non-numerical entries to be missing. This includes entries like "2011. Population data compiled from administrative registers." The second method, converting the first four characters of the string to a number, can parse this entry as 2011 and these entries will not be missing. The third method, will match four digits in the string. Note that it will only grab the first four digits that it encounters, in this case it would be year 2015 for countrycode=="CHI", Channel Islands, and corresponds to Guernsey. In order to grab year 2011 which corresponds to Jersey, 2011 the regular expression needs to get modified.
 > {: .solution}
 {: .challenge}
 
+In general, we recommend against using `force` options with Stata commands as it might lead to errors. 
 
 {% include links.md %}
 

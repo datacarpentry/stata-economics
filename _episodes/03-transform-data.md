@@ -60,7 +60,7 @@ NARRATIVE: "and" and "or" and "=="
 
 Note that variable `v5` corresponds to year 1960, `v63` corresponds to year 2018. Reshape the data so that each year is in a separate row.
 
-Now let's reshape the data
+Now let's reshape the data.
 ```
 reshape long v, i(countrycode indicatorcode) j(year)
 replace year = year - 5 + 1960
@@ -367,7 +367,38 @@ Before saving the final dataset a good practice is to compress the amount of mem
 ```
 {: .output}
 
-FIXME: explain joinby
+The `joinby ` command leads to a data set containing each observation with a specific countrycode in the master to be paired with each observation with the same countrycode in the using. One simple way to see this is by simulating our toy data.
+
+
+
+```
+set seed 850112
+*generate using data
+clear
+set obs 4
+gen id = ceil(_n/2)
+gen x = runiform()
+save "data/test.dta", replace
+
+*generate master data
+clear
+set obs 6
+gen id = ceil(_n/2)
+gen x = rnormal(0,2)
+
+joinby id using "data/test.dta"
+
+erase "data/test.dta"
+
+```
+
+![Using Joinby]({{ "/img/using-joinby.png" | relative_url }}) ![Master Joinby]({{ "/img/master-joinby" | relative_url }})
+
+The final data created by `joinby` will be:
+
+![Final dataset joinby]({{ "/img/final-joinby.png" | relative_url }})
+
+
 
 NB: tempfiles are explained in episode 4
 
