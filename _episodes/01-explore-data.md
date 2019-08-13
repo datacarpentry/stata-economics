@@ -150,6 +150,8 @@ bysort contig: summarize dist if dist<1000, detail
 
 NARRATIVE: by group: command if, options
 
+FIXME: move this callout later
+
 > ## Never abbreviate
 > A quirky feature of Stata is that it lets you abbreviate everything: commands, variable names, even file names. Abbreviation might save you some typing, but destroys legibility of your code, so please think of your coauthors and your future self and never do it. 
 > ```

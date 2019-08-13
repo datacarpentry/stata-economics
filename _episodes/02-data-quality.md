@@ -156,6 +156,8 @@ latestpopulationcensus                                    Latest population cens
 
 From the examples, this looks like a numerical field, but is encoded as a 166-long string.
 
+FIXME: destring, assert -> error
+
 ```
 . tabulate latestpopulationcensus
 
@@ -241,6 +243,9 @@ latestpopulationcensus: contains nonnumeric characters; censusyear generated as 
 ```
 {: .output}
 
+FIXME: introduce 1 function at a time.
+FIXME: introduce a chain of functions
+
 ```
 . drop censusyear
 
@@ -281,6 +286,9 @@ latestpopulationcensus: contains nonnumeric characters; censusyear generated as 
 
 ```
 {: .output}
+
+FIXME: introduce different variable types
+FIXME: introduce `generate` more gently. show how entire column is changed?
 
 FIXME: regex may be an extra layer of complexity at this stage. 
 Answer: I actually think it's something they should keep in mind. This dataset is relatively "clean" but in other cases the format of the date might not be very "convenient". And, I like the elegance of the subexpression but I think the smooth intro to regexp would be by saying that I'm looking for `\d\d\d\d` pattern in the string. Is there anyway this can be written more concisely? In Python you can do something like \d{4} to tell Python to look for 4 digits in the string. 

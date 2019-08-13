@@ -58,6 +58,9 @@ NARRATIVE: "and" and "or" and "=="
 > {: .solution}
 {: .challenge}
 
+FIXME: help reshape, screenshot?
+FIXME: note, you cannot go back!
+
 Note that variable `v5` corresponds to year 1960, `v63` corresponds to year 2018. Reshape the data so that each year is in a separate row.
 
 Now let's reshape the data.
@@ -165,6 +168,10 @@ save "data/WDI-select-variables.dta", replace
 {: .source}
 
 In the next episode, we will learn how to better format and document this code and how to run it.
+
+FIXME: split here? new episode? header? before reshape episode? egen -> collapse -> reshape (losing data!)
+FIXME: merge into new episode. merge two nicely shaped "tidy" data tables https://www.stata.com/manuals13/u22.pdf
+FIXME: shall we teach join instead of merge?
 
 > ## Challenge
 > Drop data outside the 1990-2017 range. 

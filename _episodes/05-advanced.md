@@ -1,13 +1,17 @@
 ---
-title: "Effective Programming"
+title: "Advanced Programming Topics"
 teaching: 0
 exercises: 0
 questions:
 objectives:
 - Define and reuse global macros.
+- Understand the scope of local and global macros.
+- Divide your work into multiple .do files.
 - Use nested macros.
 - Use nested loops.
 - Reuse the results of other commands.
+- Merge update.
+- tempfile with append
 keypoints:
 - Use `return list` after a command to see what you can reuse.
 ---

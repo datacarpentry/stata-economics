@@ -240,13 +240,12 @@ stata -b do code/read_wdi_variables.do
 ```
 {: language-bash}
 
-
-## Options
-
 The option -b will produce a ASCII log file saved in your current working directory. If you prefer a SMCL log you should use the -s option instead.
 If you want Stata to automatically exit after running the batch do-file, use -e. This last option becomes handy in case of an executable.
 If you don't declare any options, Stata will run in your terminal.
 
+FIXME: demonsrate what happens. 
+FIXME: use -e instead of -b. https://www.stata.com/manuals/gswb.pdf
 
 > ## Challenge
 >
@@ -267,6 +266,8 @@ log using read_data.log, text replace
 log close
 ```
 {: .source}
+
+FIXME: can we do everything beyond this point in .do files?
 
 ## Scalars and macros
 
@@ -409,6 +410,7 @@ keep if (year >= `begin_year') & (year <= `end_year')
 ```
 {: .source}
 
+FIXME: move this to the `egen` episode?
 
 ```
 generate gdp_per_capita_1991 = cond(year == 1991, gdp_per_capita, .)
@@ -468,6 +470,8 @@ You can only use a macro in this situation, not a scalar.
 {: .output}
 
 `base_value` is a macro containing a uniquely generate variable name that can be used as a name for a temporary variable. The variable is not created, you have to do it yourself with `generate` or `egen`. Once your .do file concludes, the temporary variable is dropped.
+
+FIXME: add tempvar to a do file to get the most value
 
 
 Because Stata keeps only one dataset at a time in memory, you may need to save and load datasets frequently. Not all of these datasets will be needed later and you should not clutter your project folder.
