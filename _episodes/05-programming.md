@@ -401,30 +401,6 @@ keep if (year >= `begin_year') & (year <= `end_year')
 ```
 {: .source}
 
-FIXME: move this to the `egen` episode?
-
-```
-generate gdp_per_capita_1991 = cond(year == 1991, gdp_per_capita, .)
-egen mean_gdp_per_capita_1991 = mean(gdp_per_capita_1991), by(countrycode)
-browse countrycode year gdp_per_capita gdp_per_capita_1991 mean_gdp_per_capita_1991 
-```
-{: .source}
-
-![The egen-mean-cond pattern]({{ "/img/egen-mean-cond.png" | relative_url }})
-
-```
-egen gdp_per_capita_1991 = mean(cond(year == 1991, gdp_per_capita, .)), by(countrycode)  
-```
-{: .source}
-
-```
-local begin_year 1991
-egen gdp_per_capita_`begin_year' = mean(cond(year == `begin_year', gdp_per_capita, .)), by(countrycode)  
-```
-{: .source}
-
-You can only use a macro in this situation, not a scalar.
-
 > ## Challenge
 >
 > Create an index of GDP per capita for each country in each year, relative to a base year set in the local macro `base_year`. This index should take the value 100 in the base year.
