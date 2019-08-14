@@ -19,50 +19,28 @@ The "Edit environment variable" UI will appear.
 C:\Program Files (x86)\Stata15\
 5. Click OK till you exit from the system properties.
 
-After you did these steps Windows will search for executable(exe) files in this folder.
-From the Command Prompt(cmd) you could run the StataMP-64.exe if you type: StataMP-64.  
+After you did these steps Windows will search for executable(.exe) files in this folder.
 
 Your path could be different if you installed Stata to an other folder.
 Your Stata version could be different if you have an other edition of Stata. 
 For example you might have a single edition Stata which exe file's name is: StataSE-64.exe
 
-Temporary DOSKEY in Windows OS:
+Install and adjust Git Bash for Windows. 
 
-What is an "alias" in Linux OS is "doskey" in Windows OS.
-You can temporary replace a name of an exe inside cmd:
+1. Install Git for Windows (The Bash Shell) by the help of the Carpentries workshop template: 
 
-```
-DOSKEY stata=StataMP-64.exe $*
-```
-: .source}
+http://carpentries.github.io/workshop-template/
 
-This step already requires that you saved your Stata exe path in the system environment variables.
+You can also find a video tutorial on this page. 
 
-Permanent DOSKEY in Windows 10 OS:
+2. Run the Git Bash program. 
+3. Into Bash command line write `nano .bashrc`. 
+4. Inside the empty file write `alias stata='StataMP-64.exe'`.
+5. Press Ctrl+O then press enter to write out the file. Press Ctrl+X to exit from .bashrc. 
+6. You can check with `pwd` where are you know and where is your .bashrc file located. 
+7. When you rerun the Git Bash program and type `stata` the program will start automatically. 
 
-If you don't want to type in DOSKEY every time you run CMD you can make a permanent version of your aliases.
-
-1. Create an empty .cmd file for your DOSKEY commands. FE: "C:\Programs\aliases.cmd"
-HINT: You can make a txt file and replace the file extraction to .cmd
-2. Open the Start Search, type in "reg", and choose Registy Editor.
-3. Run regedit and go to HKEY_CURRENT_USER\Software\Microsoft\Command Processor
-4. Add String Value entry with the name AutoRun and the full path of your .cmd file. 
-FE: C:\Program Files (x86)\Stata15\
-5. From now on you can add paths, doskeys to your aliases.cmd file. 
-This AutoRun file will always execute when you start cmd. 
-
-```
-@echo off
-
-:: Temporary system path at cmd startup
-
-SET PATH=%PATH%;"C:\Program Files (x86)\Stata15\"
-
-:: Add to path by command
-
-DOSKEY stata=StataMP-64.exe $*
-```
-{: .source}
+With these steps we created a file where you can adjust your bash settings and also replaced the alias of Stata's executable. 
 
 ## Data resources
 ### Explicit open license
