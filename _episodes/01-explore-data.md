@@ -277,6 +277,7 @@ FIXME: move this challenge later
 > {: .solution}
 {: .challenge}
 
+FIXME: move missing values to data quality?
 
 > ## Challenge
 > Using the weighted distance between countries, count how many pairs of countries are farther than 15,000 km.
