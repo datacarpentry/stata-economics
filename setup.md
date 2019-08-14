@@ -1,33 +1,66 @@
 ---
 title: Setup
 ---
-This lesson uses the statistical package [Stata](https://www.stata.com/products/)[™](license.html). It has been tested on Stata 14.2 MultiProcessor, but it should work on most recent versions. If you do not have a Stata license, please let your instructor know so that they can request a [short-term training license](https://www.stata.com/customer-service/course-short-term-license/) for free.
 
-Download the [data repository](https://github.com/korenmiklos/dc-economics-data). (FIXME: create a figshare repository)
+## Install Stata
 
-FIXME: create a data folder with the data repository.
+This lesson uses the statistical package [Stata](https://www.stata.com/products/)[™](license.html). It has been tested on Stata 15.1 MultiProcessor, but it should work on most recent versions. If you do not have a Stata license, please let your instructor know so that they can request a [short-term training license](https://www.stata.com/customer-service/course-short-term-license/) for free.
+
+### Ubuntu
+Step-by-step installation on Ubuntu:
+- Go to https://download.stata.com/download/
+- Log in using your username and password
+- Click on your OS (64-bit Linux)
+- Download `Stata15Linux64.tar.gz`.
+- Open a terminal and navigate to the directory where your downloaded file is located (e.g. `cd ~/Downloads/`)
+- Get superuser rights (`sudo su`)
+- Create a new directory (e.g. `mkdir stata_install`)
+- Move the downloaded file to this new directory (`mv Stata15Linux64.tar.gz. stata_install/`)
+- Enter the directory (`cd stata_install`)
+- Extract the installation files using `tar xzf Stata15Linux64.tar.gz`
+- Create a directory for your stata installation (`mkdir /usr/local/stata15`)
+- Navigate to the stata directory (`cd /usr/local/stata15`)
+- Start the installation by executing the extracted install file (e.g. `/home/username/Downloads/stata_install/install`)
+- Whenever the installer asks if you want to proceed type "y" and press enter
+- Once the installation is done, type `./stinit` to activate your licence
+- Whenever it asks you if you want to continue, type "Y" and press enter
+- Enter the serial number provided and press enter
+- Enter the code and press enter
+- Enter the authorization and press enter
+- It should return "Good.  The serial number, code, and authorization make sense. Shall we continue?" Type Y and press enter.
+- When it asks for the first line, it should say "European Economic Association"
+- When it asks for the second line, it should say "Manchester, UK"
+- It will ask for confirmation. Type "Y" and press enter.
+- Try to start stata by `./xstata`. If it gives you the following error message (`./stata: error while loading shared libraries: libpng12.so.0: cannot open shared object file: No such file or directory`), continue with the steps below:
+
+- Issue the following commands one by one in your terminal window:
+```
+apt-get install zlib1g-dev
+wget http://mirrors.kernel.org/ubuntu/pool/main/libp/libpng/libpng12-0_1.2.54-1ubuntu1_amd64.deb
+dpkg -i libpng12-0_1.2.54-1ubuntu1_amd64.deb
+```
+
 
 ### Add Stata to the path so that `stata` can be called from the command line (Mac)
 
 If Stata is installed in /Applications/Stata/ the path to the Stata executable is 
 
-/Applications/Stata/StataSE.app/Contents/MacOS/ for StataSE 
+`/Applications/Stata/StataSE.app/Contents/MacOS/` for StataSE
 
 and
- /Applications/Stata/StataMP.app/Contents/MacOS/ for StataMP. 
+`/Applications/Stata/StataMP.app/Contents/MacOS/` for StataMP. 
 
  
 To add StataMP to the path you should open the terminal and type
  
-$ sudo vi /etc/paths 
+`sudo vi /etc/paths`
 
-and add /Applications/Stata/StataMP.app/Contents/MacOS/ to it. 
+and add `/Applications/Stata/StataMP.app/Contents/MacOS/` to it. 
 
 Finally, close the terminal and reopen it. Once everything is set up, type Stata in your terminal to launch Stata.
 
 
-FIXME: Add Stata to the path so that `stata` can be called from the command line (For Windows)
-
+### Windows
 
 Add executable folders to Windows 10 system environment variables path: 
 
@@ -61,6 +94,13 @@ You can also find a video tutorial on this page.
 7. When you rerun the Git Bash program and type `stata` the program will start automatically. 
 
 With these steps we created a file where you can adjust your bash settings and also replaced the alias of Stata's executable. 
+
+## Download the workshop data
+Download the [data repository](https://github.com/korenmiklos/dc-economics-data). (FIXME: create a figshare repository)
+
+FIXME: create a data folder with the data repository.
+
+
 
 ## Data resources
 ### Explicit open license
