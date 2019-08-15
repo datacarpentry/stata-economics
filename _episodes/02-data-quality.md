@@ -3,10 +3,10 @@ title: "Data Formats and Data Quality"
 teaching: 0
 exercises: 0
 questions:
-- "How do I read and write tabular data?"
+- "How do I read tabular data?"
 - "How does Stata handle missing values?"
 objectives:
-- "Import and export spreadsheet data."
+- "Import spreadsheet data."
 - "Convert strings to numerical variables."
 - "Deal with missing values."
 keypoints:
@@ -16,6 +16,7 @@ keypoints:
 - "Check CSV files for separator, variable names, and character encoding."
 ---
 
+## Read a .csv file
 
 Next we will read the World Development Indicators dataset. The data is in `data/WDIData.csv`. The other .csv files starting with `WDI` give some metadata. For example, `data/WDISeries.csv` describes the variables ("indicators" in World Bank speak), `data/WDICountry.csv` gives a codelist of countries, and `data/WDIFootnote.csv` includes footnotes.
 
@@ -35,9 +36,10 @@ Next we will read the World Development Indicators dataset. The data is in `data
 > > ![Variable names are not read]({{ "/img/import-header-2.png" | relative_url }})
 > > You can have Stata use the values in row 1 as variable names by using varnames option.
 > > ```
-> > import delimited "data/WDIData.csv",  varnames(1) clear
+> > import delimited "data/WDIData.csv", varnames(1) clear
 > > ```
 > > {: .source}
+> > Note that we are using multiple options for the command.
 > > But since 1960, 1961, etc., are not valid variable names, these will still be called `v5` through `v64`.
 > {: .solution}
 {: .challenge}
@@ -95,7 +97,7 @@ Next we will read the World Development Indicators dataset. The data is in `data
 > {: .solution}
 {: .challenge}
 
-
+Reading text data from .csv files can be even more challeging. Let us read the country names and characteristics.
 
 ```
 import delimited "data/WDICountry.csv", varnames(1) clear
@@ -107,12 +109,18 @@ import delimited "data/WDICountry.csv", varnames(1) clear
 ```
 {: .output}
 
+As always, we look at the data first.
+
 ![Broken column]({{ "/img/csv-newline.png" | relative_url }})
+
+There are some things that do not belong to the `countrycode` variable. Indeed they look like entire parts of a .csv line. 
+
+FIXME: use this file in shell lesson
+
+After going out to the shell and exploring the file there (for example, `head data/WDICountry.csv`), we will find a text variable is splt on multiple lines. This may strip up `import delimited`.
 
 `"Central Bureau of Statistics and Central Bank of Aruba ; Source of population estimates: UN Population Division's World Population Prospects 2019 PROVISIONAL estimates. Not for circulation. Subject to change. Mining is included in agriculture\n 
 Electricty and gas includes manufactures of refined petroleum products"`
-
-FIXME: multiple lines instead of line break
 
 ```
 . import delimited "data/WDICountry.csv", varnames(1) bindquotes(strict) clear
@@ -120,18 +128,24 @@ FIXME: multiple lines instead of line break
 ```
 {: .output}
 
-There are 5 fewer lines. 
+There are 5 fewer lines and the dataset looks fine.
 
 ![CSV correctly parsed]({{ "/img/csv-correct.png" | relative_url }})
 
-"Côte d'Ivoire" and "Curaçao" are misspelled.
+But browsing further down, we find "Côte d'Ivoire" and "Curaçao" are misspelled. 
 
 ![Wrong characters]({{ "/img/wrong-encoding.png" | relative_url }})
+
+The characters `Ã` and `Å` are often indicative that the [encoding of the text is UTF-8](https://en.wikipedia.org/wiki/UTF-8). We can set the encoding as an option to `import delimited`.
 
 ```
 import delimited "data/WDICountry.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
 ```
 {: .source}
+
+## Variable types 
+
+Now all variables are read, but are variables of the proper type?
 
 ```
 . codebook latestpopulationcensus 
@@ -156,7 +170,13 @@ latestpopulationcensus                                    Latest population cens
 
 From the examples, this looks like a numerical field, but is encoded as a 166-long string.
 
+FIXME: add a section on types: `byte`, `int`, `long` (sometimes you need to declare long), `str`
+FIXME: introduce `generate` more gently. show how entire column is changed?
+
+
 FIXME: destring, assert -> error
+
+What are the non-numeric values?
 
 ```
 . tabulate latestpopulationcensus
@@ -287,9 +307,6 @@ FIXME: introduce a chain of functions
 ```
 {: .output}
 
-FIXME: introduce different variable types
-FIXME: introduce `generate` more gently. show how entire column is changed?
-
 FIXME: regex may be an extra layer of complexity at this stage. 
 Answer: I actually think it's something they should keep in mind. This dataset is relatively "clean" but in other cases the format of the date might not be very "convenient". And, I like the elegance of the subexpression but I think the smooth intro to regexp would be by saying that I'm looking for `\d\d\d\d` pattern in the string. Is there anyway this can be written more concisely? In Python you can do something like \d{4} to tell Python to look for 4 digits in the string. 
 
@@ -347,6 +364,10 @@ If the year is placed anywhere in the string, we can use [regular expressions](h
 {: .challenge}
 
 In general, we recommend against using `force` options with Stata commands as it might lead to errors. 
+
+## Missing values
+
+FIXME: move missing value examples from Episode 1 and rewrite them for this dataset
 
 {% include links.md %}
 
