@@ -367,7 +367,162 @@ In general, we recommend against using `force` options with Stata commands as it
 
 ## Missing values
 
-FIXME: move missing value examples from Episode 1 and rewrite them for this dataset
+FIXME: rewrite examples for this dataset
+
+> ## Challenge
+> Load `data/dist_cepii.dta`. Explore the variable `distw` (weighted average distance between cities in the pair of countries).
+> 1. What is the unit of measurement?
+> 2. What is the smallest and largest value?
+> 3. In how many cases is this variable missing?
+> 
+> > ## Solution
+> > 1. `describe distw` gives you the variable label "weighted distance (pop-wt, km)". It is hence recorded in kilometers. This command also shows that the variable is _double_, not _integer_.
+> > 2. `summarize distw` shows that the distance varies between 0.995 and 19781.39 kilometers.
+> > 3. `inspect distw` shows that `distw` is missing in 2,215 cases. This command also gives you the minimum and maximum values.
+> {: .solution}
+{: .challenge}
+
+FIXME: move this challenge later
+
+> ## Challenge
+> Load `data/dist_cepii.dta`. Do you use `codebook` or `inspect` to check how many district countries are coded in `iso_d`?
+> > ## Solution
+> > ```
+> > codebook iso_d
+> > ```
+> > {: .source}
+> > ```
+> > ----------------------------------------------------------------------------------------------------------------------
+> > iso_d                                                                                                ISO3 alphanumeric
+> > ----------------------------------------------------------------------------------------------------------------------
+> > 
+> >                   type:  string (str3)
+> > 
+> >          unique values:  224                      missing "":  0/50,176
+> > 
+> >               examples:  "CPV"
+> >                          "HTI"
+> >                          "MRT"
+> >                          "SLV"
+> > ```
+> > {: .output}
+> > `inspect` only works for numeric variables.
+> > ```
+> > inspect iso_d
+> > ```
+> > {: .source}
+> > ```
+> > iso_d:  ISO3 alphanumeric                       Number of Observations
+> > -------------------------              ---------------------------------------
+> >                                              Total      Integers   Nonintegers
+> > |                            Negative            -             -             -
+> > |                            Zero                -             -             -
+> > |                            Positive            -             -             -
+> > |                                      -----------   -----------   -----------
+> > |                            Total               -             -             -
+> > |                            Missing        50,176
+> > +----------------------                -----------
+> > .             -9.0e+307                     50,176
+> >    (0 unique value)
+> > ```
+> > {: .output}
+> {: .solution}
+{: .challenge}
+
+FIXME: move missing values to data quality?
+
+> ## Challenge
+> Using the weighted distance between countries, count how many pairs of countries are farther than 15,000 km.
+> > ## Solution
+> > `count if distw > 15000 & !missing(distw)` gives you an answer of 5,070. If you use `count if distw > 15000`, you get 7,285. This is because Stata treats missing values as larger than any real number. It hence adds the 2,215 missing values.
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge
+> Using the weighted distance between countries, count how many pairs of countries are farther than 15,000 km.
+> > ## Solution
+> > `count if distw > 15000 & !missing(distw)` gives you an answer of 5,070. If you use `count if distw > 15000`, you get 7,285. This is because Stata treats missing values as larger than any real number. It hence adds the 2,215 missing values.
+> {: .solution}
+{: .challenge}
+
+> ## Gotcha
+> Missing values are greater than any number.
+{: .callout}
+
+> ## Challenge
+> Which of the following tells you how often the weighted distance is greater than the simple unweighted distance?
+> ```
+> count if dist < distw
+> count if dist - distw < 0
+> count if distw - dist > 0
+> ```
+> {: .source}
+> > ## Solution
+> > The second. When neither variable is missing, the three comparisons give the same answer. However, when `distw` has missing values, the first comparison evaluates to true, because missing values are greater than anything. The second comparison starts with a mathematical operation, which evaluates to missing and is hence *not* smaller than zero. 
+As this property of missing values is a common *gotcha*, it is recommended to always explicitly test for missing values.
+> > ```
+> > count if dist < distw & !missing(dist, distw)
+> > ```
+> > {: .source}
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge
+> Load `data/dist_cepii.dta`. Replace missing values in the variable `distw` with the mean of the variable.
+> > ## Solution
+> > ```
+> > . use "data/dist_cepii.dta", clear
+> > 
+> > . summarize distw, detail
+> > 
+> >                weighted distance (pop-wt, km)
+> > -------------------------------------------------------------
+> >       Percentiles      Smallest
+> >  1%     443.9466       .9951369
+> >  5%     1380.288       1.723628
+> > 10%     2258.153       2.225194       Obs              47,961
+> > 25%     4687.852       6.225999       Sum of Wgt.      47,961
+> > 
+> > 50%     8006.123                      Mean           8392.728
+> >                         Largest       Std. Dev.      4670.531
+> > 75%     11894.69       19735.32
+> > 90%     15155.13       19735.32       Variance       2.18e+07
+> > 95%     16614.14       19781.39       Skewness       .2676779
+> > 99%     18424.84       19781.39       Kurtosis       2.183358
+> > 
+> > . mvencode distw, mv(8392.728)
+> >        distw: 2215 missing values recoded
+> > 
+> > ```
+> > {: .output}
+> > In Episode 4, we will see how to reuse the results of a previous command (`summarize`) in the next one (`mvencode`) programmatically.
+> {: .solution}
+{: .challenge}
+
+FIXME: mvencode example with error
+
+> ## Challenge what happens when you use the mvencode command to replace missing values with a value that already exists?
+> > ## Solution
+> > You get an error message:
+> > [OUTPUT]
+> > To force the replacement of missing values with zero (which is an already existing value of `distw`), use `mvencode distw, mv(value) override`.
+> {: .solution}
+{: .challenge}
+
+> ## Challenge
+> Load `data/dist_cepii.dta`. If the variable `distw` is missing, replace it with the value from the variable `dist`.
+> > ## Solution
+> > ```
+> > use "data/dist_cepii.dta"
+> > replace distw = dist if missing(distw)
+> > ```
+> > {: .source}
+> {: .solution}
+{: .challenge}
+
+Missing values are excluded from the statistical analyses by default; some commands will permit inclusion of missing values via options. Always be cautious when dealing with missing values and their replacement.  
 
 {% include links.md %}
 

@@ -108,7 +108,7 @@ Sorted by:
 > The commands `keep` and `drop` irreversibly change the data in your memory. Only use them if your work is easy to reproduce if you make an error, such as right after loading a dataset.
 {: .callout}
 
-You can variable name wildcards with both commands (`drop latest*`).
+You can use variable name wildcards with both commands (`drop latest*`).
 
 To filter out observations, use `drop if` and `keep if`.
 
@@ -124,7 +124,7 @@ To filter out observations, use `drop if` and `keep if`.
 ```
 {: .output}
 
-The command is the same as `keep if !missing(incomegroup)`.
+The command is the same as `keep if !missing(incomegroup)`. The operator `!` stands for negation, "not missing."
 
 > ## Challenge
 > Keep countries with a population census more recent than 1999. How many countries have you dropped from the dataset?
@@ -193,7 +193,7 @@ egen average_census_decade = mean(int(censusyear/10)*10), by(region)
 ```
 {: .source}
 
-FIXME: change egen-mean-cond patterns to fit this data
+FIXME: all examples below should use the `WDICountry.csv` data
 ```
 generate gdp_per_capita_1991 = cond(year == 1991, gdp_per_capita, .)
 egen mean_gdp_per_capita_1991 = mean(gdp_per_capita_1991), by(countrycode)
@@ -226,16 +226,16 @@ egen gdp_per_capita_1991 = mean(cond(year == 1991, gdp_per_capita, .)), by(count
 > {: .solution}
 {: .challenge}
 
-> ## Challenge
-> Aggregate the dataset by country and decade, keeping only the mean of each variable. Save this as `data/wdi_decades.dta`.
-> > ## Solution
-> > ```
-> > collapse (mean) gdp_per_capita merchandise_trade population, by(countrycode decade)
-> > save "data/wdi_decades.dta", replace
-> > ```
-> > {: .source}
-> {: .solution}
-{: .challenge}
+Aggregate the dataset by country and decade, keeping only the mean of each variable. Save this as `data/wdi_decades.dta`.
+```
+collapse (mean) gdp_per_capita merchandise_trade population, by(countrycode decade)
+save "data/wdi_decades.dta", replace
+```
+{: .source}
+
+`collapse` can also use multiple groups, like `countrycode` and `decade`
+
+FIXME: add code examples: `(count) N = variable` and different stats `(count)` `(sum)` in one command
 
 > ## Gotcha
 > The command `collapse` creates a new, aggregated dataset in memory, and your old dataset will be gone without any warning. Use `collapse` with caution.
@@ -288,6 +288,12 @@ egen gdp_per_capita_1991 = mean(cond(year == 1991, gdp_per_capita, .)), by(count
 
 The WDI dataset you loaded in the previous episode has a strange shape. Variables are in separate rows, whereas years are in separate columns. This is the opposite of "[tidy data](http://dx.doi.org/10.18637/jss.v059.i10)," where each variable has its own column, and different observations such as different years are in separate rows. We will reshape the data in the tidy format.
 
+![help reshape]({{ "/img/help-reshape.png" | relative_url }})
+
+FIXME: introduce `reshape` through simple examples
+
+Note that `reshape` changes the dataset in memory and you cannot undo it. Make sure you know what you are doing.
+
 We first read metadata from `data/WDISeries.csv`. This file contains the indicator codes and long descriptions. 
 
 We will need the variables "Merchandise trade (% of GDP)", "Life expectancy at birth, total (years)", "GDP per capita, PPP (constant 2011 international $)", "Population, total", "Population density (people per sq. km of land area)".
@@ -302,11 +308,9 @@ browse
 
 ![Names and codes of indicators]({{ "/img/browse-indicators.png" | relative_url }})
 
-NARRATIVE: introduce `keep` and `drop`
-
 ![Do file editor]({{ "/img/do-file-editor.png" | relative_url }})
 
-NARRATIVE: "and" and "or" and "=="
+The operator `|` stands for "or," the operator `&` (not used here) stands for "and."
 
 ![Wrap lines]({{ "/img/wrap-lines.png" | relative_url }})
 
@@ -328,8 +332,6 @@ NARRATIVE: "and" and "or" and "=="
 > {: .solution}
 {: .challenge}
 
-FIXME: help reshape, screenshot?
-FIXME: note, you cannot go back!
 
 Note that variable `v5` corresponds to year 1960, `v63` corresponds to year 2018. Reshape the data so that each year is in a separate row.
 

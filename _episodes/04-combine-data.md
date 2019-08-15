@@ -10,7 +10,10 @@ keypoints:
 - "Create tidy data before merging."
 ---
 
-The command `merge` merges a dataset in memory (the "master" data) to another one on disk (the "using" data) by matching keys between the two datasets.
+The commands `append` and `merge` combine a dataset in memory (the "master" data) to another one on disk (the "using" data). `append` adds more observations, `merge` adds more variables by matching keys between the two datasets.
+
+![Combine data vertically or horizontally]({{ "/img/append-merge.png" | relative_url }}) 
+
 
 > ## Data in memory, data on disk
 > Stata is different from other popular statistical and data manipulation languages like R (Data Frame) and Python (Pandas) in that it can only hold one dataset in memory at a time. In most applications, you will work with multiple datasets, so you will need to `merge` them quite often. (Stata 16 will allow for multiple data frames in memory.)
@@ -101,10 +104,9 @@ FIXME: find a good use case for `update` option
 > Never do a many-to-many, `m:m` merge. It does not do what you expect. You probably want to do a `joinby` instead.
 {: .callout}
 
-FIXME: add `egen` examples, with formulas
-
-
 Before saving the final dataset a good practice is to compress the amount of memory used by your data using the `compress` command.
+
+FIXME: use different example
 
 ```
 . use "data/dist_cepii.dta", clear
@@ -125,42 +127,7 @@ Before saving the final dataset a good practice is to compress the amount of mem
 ```
 {: .output}
 
-The `joinby ` command leads to a data set containing each observation with a specific countrycode in the master to be paired with each observation with the same countrycode in the using. One simple way to see this is by simulating our toy data.
-
-
-FIXME: do not use random numbers
-FIXME: hide creation of sample data? save it in workshop folder instead
-
-```
-set seed 850112
-*generate using data
-clear
-set obs 4
-gen id = ceil(_n/2)
-gen x = runiform()
-save "data/test.dta", replace
-
-*generate master data
-clear
-set obs 6
-gen id = ceil(_n/2)
-gen x = rnormal(0,2)
-
-joinby id using "data/test.dta"
-
-erase "data/test.dta"
-
-```
-
-![Using Joinby]({{ "/img/using-joinby.png" | relative_url }}) 
-
-![Master Joinby]({{ "/img/master-joinby.png" | relative_url }})
-
-The final data created by `joinby` will be:
-
-![Final dataset joinby]({{ "/img/final-joinby.png" | relative_url }})
-
-
+NB: I removed `joinby`. `append` and `merge` will be enough.
 
 NB: tempfiles are explained in episode 4
 

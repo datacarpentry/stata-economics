@@ -33,6 +33,11 @@ mkdir code
 {: .source}
 
 ```
+do code/read_wdi_variables.do
+```
+{: .source}
+
+```
 . do code/read_wdi_variables.do
 
 . import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("ut
@@ -100,7 +105,7 @@ end of do-file
 ```
 {: .output}
 
-Run it again.
+The .do file is executed line by line and we see its output as Stata executes. Run it again.
 
 ```
 ...
@@ -120,6 +125,13 @@ Stata lets us know that the file already exists and is unwilling to replace it. 
 > # Exercise
 > Change the last line of the .do file to `save "data/WDI-select-variables.dta", replace` and rerun it.
 {: .challenge}
+
+> # Never execute just part of a .do file
+> ![Never do this]({{ "/img/not-by-part.png" | relative_url }}) 
+> The .do file editor lets you execute selected lines from your .do file. Never do this. You will not know what state your data is in before clicking that button and you may forget to execute the rest of your .do file. For example, you may omit a crucial `save` command and your data will be lost. Always execute your .do file in its entirety from the command line by running `do code/read_wdi_variables.do`.
+> 
+> If you are tempted to run your .do file by parts, it is a good indication that it is too long. Try breaking it up into multiple .do files.
+{: .callout}
 
 > ## Challenge
 >
