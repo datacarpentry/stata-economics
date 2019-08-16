@@ -9,10 +9,11 @@ objectives:
 - "Filter the rows and columns of your data using `drop` and `keep`."
 - "Calculate group statistics using `egen`."
 - "Aggregate your data using `collapse`."
-- "Change the way your data is organized using reshaping."
+- "Change the way your data is organized using `reshape`."
 keypoints:
 - "Drop unnessecary variables freely."
-- "Create tidy data before merging."
+- "Reshape your dataset to create tidy data."
+- "Use `egen` to save statistics to new columns, `collapse` to aggregate the entire dataset."
 ---
 
 ## Filter data
@@ -193,108 +194,162 @@ egen average_census_decade = mean(int(censusyear/10)*10), by(region)
 ```
 {: .source}
 
-FIXME: all examples below should use the `WDICountry.csv` data
-```
-generate gdp_per_capita_1991 = cond(year == 1991, gdp_per_capita, .)
-egen mean_gdp_per_capita_1991 = mean(gdp_per_capita_1991), by(countrycode)
-browse countrycode year gdp_per_capita gdp_per_capita_1991 mean_gdp_per_capita_1991 
-```
-{: .source}
-
-![The egen-mean-cond pattern]({{ "/img/egen-mean-cond.png" | relative_url }})
-
-```
-egen gdp_per_capita_1991 = mean(cond(year == 1991, gdp_per_capita, .)), by(countrycode)  
-```
-{: .source}
-
-
 > ## Challenge
-> Create a variable for the percentage deviation of GDP per capita from the decadal average. Show that its mean is zero. Why?
+> Create a variable for the differnce of `censusyear` from the average of the region. Show that its mean is zero. Why?
 > > ## Solution
 > > ```
-> > . gen relative_gdp = gdp_per_capita / gdp_decade_mean * 100 - 100
-> > (9,381 missing values generated)
-> >
-> > . summarize relative_gdp 
+> > . egen mean_censusyear = mean(censusyear), by(region)
+> > (46 missing values generated)
+> > 
+> > . generate difference_censusyear = censusyear - mean_censusyear 
+> > (47 missing values generated)
+> > 
+> > . summarize difference_censusyear 
 > > 
 > >     Variable |        Obs        Mean    Std. Dev.       Min        Max
 > > -------------+---------------------------------------------------------
-> > relative_gdp |      6,459   -7.32e-08    11.30361  -72.25054   175.2852
+> > difference~r |        216   -6.22e-06    6.809937  -64.14282   9.857178
 > > ```
 > > {: .output}
-> {: .solution}
-{: .challenge}
-
-Aggregate the dataset by country and decade, keeping only the mean of each variable. Save this as `data/wdi_decades.dta`.
-```
-collapse (mean) gdp_per_capita merchandise_trade population, by(countrycode decade)
-save "data/wdi_decades.dta", replace
-```
-{: .source}
-
-`collapse` can also use multiple groups, like `countrycode` and `decade`
-
-FIXME: add code examples: `(count) N = variable` and different stats `(count)` `(sum)` in one command
-
-> ## Gotcha
-> The command `collapse` creates a new, aggregated dataset in memory, and your old dataset will be gone without any warning. Use `collapse` with caution.
-{: .callout}
-
-> ## Challenge
-> Using the `wdi_decades.dta` dataset, calculate the ratio of GDP per capita to the average GDP per capita of that decade.
-> > ## Solution
-> > ```
-> > use "data/wdi_decades.dta", clear
-> > tempvar decade_gdp_average
-> > egen `decade_gdp_average' = mean(gdp_per_capita), by(decade)
-> > generate relative_gdp_per_capita = gdp_per_capita / `decade_gdp_average'
-> > ```
-> > {: .source}
-> > Note the verbose variable names, the use of `egen` and `tempvar`.
-> {: .solution}
-{: .challenge}
-
-
-> ## Challenge
-> What is the difference between `collapse (mean) average_distance = distw, by(iso_o)` and `egen average_distance = mean(distw), by(iso_o)`?
-> > ## Solution
-> > Both calculate the average `distw` by origin country code. `collapse` creates a new dataset with one row for each group (origin country code). `egen` keeps the original dataset, its rows and variables, and adds a new variable with the group average.
-> {: .solution}
-{: .challenge}
-
-
-> ## Challenge
-> Using the CEPII distance dataset, calculate for each country the average distance to other countries, naming this variable `average_distance`. Save the dataset as `data/average_distance.dta`.
-> > ## Solution
-> > ```
-> > use "data/dist_cepii.dta", clear
-> > collapse (mean) average_distance = distw, by(iso_o)
-> > save "data/average_distance.dta", replace
-> > ```
-> > {: .source}
-> > Because the dataset is symmetric, it does not matter whether you use origin (`iso_o`) or destination (`iso_d`) country.
-> {: .solution}
-{: .challenge}
-
-> ## Challenge
-> What is the difference between `collapse (mean) average_distance = distw, by(iso_o)` and `egen average_distance = mean(distw), by(iso_o)`?
-> > ## Solution
-> > Both calculate the average `distw` by origin country code. `collapse` creates a new dataset with one row for each group (origin country code). `egen` keeps the original dataset, its rows and variables, and adds a new variable with the group average.
+> > If we subtract the mean of a variable, the difference will be mean zero.
 > {: .solution}
 {: .challenge}
 
 ## Reshape data
 
-The WDI dataset you loaded in the previous episode has a strange shape. Variables are in separate rows, whereas years are in separate columns. This is the opposite of "[tidy data](http://dx.doi.org/10.18637/jss.v059.i10)," where each variable has its own column, and different observations such as different years are in separate rows. We will reshape the data in the tidy format.
+The WDI dataset in `data/WDIData.csv` has a strange shape. Variables are in separate rows, whereas years are in separate columns. This is the opposite of "[tidy data](http://dx.doi.org/10.18637/jss.v059.i10)," where each variable has its own column, and different observations such as different years are in separate rows. We will reshape the data in the tidy format.
 
 ![help reshape]({{ "/img/help-reshape.png" | relative_url }})
 
-FIXME: introduce `reshape` through simple examples
+To practice reshaping, load a somewhat precleaned subset of the WDI dataset from `data/gdp-wide.csv`. We will clean the original data ourselves later.
+```
+import delimited "data/gdp-wide.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
+browse
+```
+{: .source}
+
+![Data in the wide format]({{ "/img/gdp-wide.png" | relative_url }})
+
+This data is too "wide": column names contain information that we may want to work with. Let us `reshape long`.
+```
+. reshape long gdp, i(countrycode) j(year)
+(note: j = 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 20
+> 11 2012 2013 2014 2015 2016 2017)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                      264   ->    7392
+Number of variables                  30   ->       4
+j variable (28 values)                    ->   year
+xij variables:
+            gdp1990 gdp1991 ... gdp2017   ->   gdp
+-----------------------------------------------------------------------------
+```
+{: .output}
+
+The option `i()` lists variables that index observations (rows) with in the _wide_ dataset. Each observation is a country in this wide format, so `i(countrycode)`. We can have multiple variables inside `i()`, like `i(countrycode countryname)`. The option `j()` gives _one_ variable that indexes columns in the _wide_ format. Because `gdp1960`, ..., `gdp2017` correspond to different _years_, we call this variable `year`.
+
+The output of `reshape` is most helpful. We have more observations and fewer variables. We see that we created a new variable called `year` (from the option `j`) and `gdp1960`, ..., `gdp2017` became a single variable, `gdp`.
+
+![Data in the long format]({{ "/img/gdp-long.png" | relative_url }})
+
+How does `reshape` know to look for `gdp1960`, ..., `gdp2017`? Since we said `reshape long gdp, ...` it looks for variable names beginning with `gdp` and puts the remaining part of the variable name in the newly declared variable `year`. This is the most often used, default option, but we can also tell `reshape` what pattern to look for.
+
+To undo this reshape,
+```
+. reshape wide gdp, i(countrycode) j(year)
+(note: j = 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 20
+> 11 2012 2013 2014 2015 2016 2017)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                     7392   ->     264
+Number of variables                   4   ->      30
+j variable (28 values)             year   ->   (dropped)
+xij variables:
+                                    gdp   ->   gdp1990 gdp1991 ... gdp2017
+-----------------------------------------------------------------------------
+```
+{: .output}
+After a `reshape`, we can switch between the wide and long format more easily,
+```
+. reshape long
+(note: j = 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 20
+> 11 2012 2013 2014 2015 2016 2017)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                      264   ->    7392
+Number of variables                  30   ->       4
+j variable (28 values)                    ->   year
+xij variables:
+            gdp1990 gdp1991 ... gdp2017   ->   gdp
+-----------------------------------------------------------------------------
+```
+{: .output}
+
+Suppose we want to compare Euro area GDP to World GDP for each year. For this, it would be great if these two series would be in different variables. We need a `reshape wide`.
+```
+. keep if inlist(countrycode, "EMU", "WLD")
+(7,336 observations deleted)
+
+. reshape wide gdp, i(year) j(countrycode)
+variable countrycode is string; specify string option
+r(109);
+```
+{: .error}
+Ok, we can do that
+```
+. reshape wide gdp, i(year) j(countrycode) string
+(note: j = EMU WLD)
+variable countryname not constant within year
+    Your data are currently long.  You are performing a reshape wide.  You typed something like
+
+        . reshape wide a b, i(year) j(countrycode)
+
+    There are variables other than a, b, year, countrycode in your data.  They must be constant within year because
+    that is the only way they can fit into wide data without loss of information.
+
+    The variable or variables listed above are not constant within year.  Perhaps the values are in error.  Type
+    reshape error for a list of the problem observations.
+
+    Either that, or the values vary because they should vary, in which case you must either add the variables to the
+    list of xij variables to be reshaped, or drop them.
+r(9);
+```
+{: .error}
+The problem is that `countryname` also depends on `countrycode` and `reshape` does not know what to do with it. We can either reshape it, too, or drop it.
+```
+. reshape wide gdp countryname, i(year) j(countrycode) string
+(note: j = EMU WLD)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                       56   ->      28
+Number of variables                   4   ->       5
+j variable (2 values)       countrycode   ->   (dropped)
+xij variables:
+                                    gdp   ->   gdpEMU gdpWLD
+                            countryname   ->   countrynameEMU countrynameWLD
+-----------------------------------------------------------------------------
+```
+{: .output}
+
+![Data in the long format]({{ "/img/gdp-transposed.png" | relative_url }})
+
+> ## Challenge
+> Create a variable capturing the percentage deviation between Euro area GDP per capita and world GDP per capita.
+> > ## Solution
+> > ```
+> > generate relative_gdp = gdpEMU / gdpWLD * 100 - 100
+> > ```
+> > {: .source}
+> {: .solution}
+{: .challenge}
 
 Note that `reshape` changes the dataset in memory and you cannot undo it. Make sure you know what you are doing.
 
-We first read metadata from `data/WDISeries.csv`. This file contains the indicator codes and long descriptions. 
+To clean the actual WDI data, we first read metadata from `data/WDISeries.csv`. This file contains the indicator codes and long descriptions. 
 
 We will need the variables "Merchandise trade (% of GDP)", "Life expectancy at birth, total (years)", "GDP per capita, PPP (constant 2011 international $)", "Population, total", "Population density (people per sq. km of land area)".
 
@@ -332,7 +387,6 @@ The operator `|` stands for "or," the operator `&` (not used here) stands for "a
 > {: .solution}
 {: .challenge}
 
-
 Note that variable `v5` corresponds to year 1960, `v63` corresponds to year 2018. Reshape the data so that each year is in a separate row.
 
 Now let's reshape the data.
@@ -363,7 +417,7 @@ variable year was byte now int
 ```
 {: .output}
 
-Create a new string variable `variable_name`. Fill it with more legible variable names based on the WDI `indicatorcode`. It should take the values "merchandise_trade", "life_expectancy", "gdp_per_capita", "population", "population_density". 
+Create a new string variable `variable_name`. Fill it with more legible variable names based on the WDI `indicatorcode`. It should take the values "merchandise_trade", "gdp_per_capita", "population". 
 ```
 generate str variable_name = ""
 replace variable_name = "merchandise_trade" if indicatorcode == "TG.VAL.TOTL.GD.ZS"
@@ -425,6 +479,8 @@ save "data/WDI-select-variables.dta"
 
 ![Review command history]({{ "/img/command-history.png" | relative_url }})
 
+Commands that errored are red in the command history. Select the ones that we want to keep and send them to a .do file.
+
 ![Select commands to save as a .do file]({{ "/img/send-to-editor.png" | relative_url }})
 
 ```
@@ -443,7 +499,71 @@ save "data/WDI-select-variables.dta"
 ```
 {: .source}
 
-In the [Episode 5]({{ "/05-programming/" | relative_url }}), we will learn how to better format and document this code and how to run it.
+In [Episode 5]({{ "/05-programming/" | relative_url }}), we will learn how to better format and document this code and how to run it.
 
+## Aggregate entire datasets
+
+Aggregate the dataset by country and decade, keeping only the mean of each variable. Save this as `data/wdi_decades.dta`.
+```
+generate decade = int(year / 10) * 10
+collapse (mean) gdp_per_capita merchandise_trade population, by(countrycode decade)
+save "data/wdi_decades.dta"
+```
+{: .source}
+`collapse` can also use multiple groups, like `countrycode` and `decade`
+
+> ## Gotcha
+> The command `collapse` creates a new, aggregated dataset in memory, and your old dataset will be gone without any warning. You will typically use `collapse` in a .do file right before saving the dataset, to bring it to a desired format.
+{: .callout}
+
+Reload the data we have just destroyed and create different aggregate statistics
+```
+use "data/WDI-select-variables.dta", clear
+collapse (mean) average_gdp = gdp_per_capita (min) lowest_gdp = gdp_per_capita, by(countrycode)
+```
+{: .source}
+All of this can be done by `egen`. The main difference is that here we have only one observation by group. This is dangerous (we are destroying data), but can be useful when we create datasets to be used elsewhere. Aggregating across different units of observation (e.g., firms, industries, countries) is a common use case of `collapse`.
+
+> ## Challenge
+> Using the `wdi_decades.dta` dataset, calculate the ratio of GDP per capita to the average GDP per capita of that decade.
+> > ## Solution
+> > ```
+> > use "data/wdi_decades.dta", clear
+> > egen decade_gdp_average = mean(gdp_per_capita), by(decade)
+> > generate relative_gdp_per_capita = gdp_per_capita / `decade_gdp_average'
+> > ```
+> > {: .source}
+> > Note the verbose variable names, the use of `egen` and `tempvar`.
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge
+> What is the difference between `collapse (mean) average_distance = distw, by(iso_o)` and `egen average_distance = mean(distw), by(iso_o)`?
+> > ## Solution
+> > Both calculate the average `distw` by origin country code. `collapse` creates a new dataset with one row for each group (origin country code). `egen` keeps the original dataset, its rows and variables, and adds a new variable with the group average.
+> {: .solution}
+{: .challenge}
+
+
+> ## Challenge
+> Using the CEPII distance dataset, calculate for each country the average distance to other countries, naming this variable `average_distance`. Save the dataset as `data/average_distance.dta`.
+> > ## Solution
+> > ```
+> > use "data/dist_cepii.dta", clear
+> > collapse (mean) average_distance = distw, by(iso_o)
+> > save "data/average_distance.dta", replace
+> > ```
+> > {: .source}
+> > Because the dataset is symmetric, it does not matter whether you use origin (`iso_o`) or destination (`iso_d`) country.
+> {: .solution}
+{: .challenge}
+
+> ## Challenge
+> What is the difference between `collapse (mean) average_distance = distw, by(iso_o)` and `egen average_distance = mean(distw), by(iso_o)`?
+> > ## Solution
+> > Both calculate the average `distw` by origin country code. `collapse` creates a new dataset with one row for each group (origin country code). `egen` keeps the original dataset, its rows and variables, and adds a new variable with the group average.
+> {: .solution}
+{: .challenge}
 
 {% include links.md %}

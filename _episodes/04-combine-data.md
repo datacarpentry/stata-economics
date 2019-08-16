@@ -19,6 +19,8 @@ The commands `append` and `merge` combine a dataset in memory (the "master" data
 > Stata is different from other popular statistical and data manipulation languages like R (Data Frame) and Python (Pandas) in that it can only hold one dataset in memory at a time. In most applications, you will work with multiple datasets, so you will need to `merge` them quite often. (Stata 16 will allow for multiple data frames in memory.)
 {: .callout}
 
+FIXME: add `append` examples
+
 > ## Challenge
 > Load the decadal WDI data. Merge the average distance measure for each country. 
 > > ## Solution
