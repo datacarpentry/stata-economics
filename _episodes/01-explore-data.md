@@ -95,13 +95,11 @@ Let us look at our data first. This is the first thing you should after loading 
 ```
 browse
 ```
-{: .output}
+{: .source}
 
 ![Always look at your data]({{ "/img/browse.png" | relative_url }})
 
-Stata datasets are a table of "variables" and "observations." Variables have short (but hopefully descriptive) names with which we can refer to them. 
-
-We also see that Stata uses `.` for denoting missing values.
+Stata datasets are a table of "variables" and "observations." Variables have short (but hopefully descriptive) names with which we can refer to them. Observations are rows of the table, with values for each variable. Red values in the browser are strings. We also see that Stata uses `.` for denoting missing values.
 
 What do these variables mean? Can we use more verbose names for them?
 
@@ -160,8 +158,6 @@ generate távolság = dist
 
 FIXME: discuss variable abbreviation
 
-FIXME: variable name display long~name
-
 When displaying long (even less than 32 character) variable names, Stata often abbreviates `like~so`.
 ```
 . summarize comlang_ethno 
@@ -205,7 +201,7 @@ The `summarize` command displays summary statistics about a variable.
         dist |     50,176    8481.799    4703.571   .9951369   19951.16
 
 ```
-{. :output}
+{: .output}
 
 We can add options with a comma. For example, here is the option `detail`.
 
@@ -253,7 +249,7 @@ Note that here, because we have more space, the label of the variable is used, n
 ```
 {: .output}
 
-FIXME: illustrate how `if` selects rows, not columns
+Note that fewer observations are included because of the `if` clause. Also, as we would expect, all distances are less than 1,000km.
 
 The `if` clause can refer to any function of any other variable, even those that are not used in the command. Here we are summarizing distance for country pairs that are contiguous (share a common border). Note that both the mean and the median distance are much smaller.
 
@@ -305,6 +301,63 @@ Stata documentation is of really high quality. It gives plenty of examples and o
 
 ![Detailed formulas]({{ "/img/formulas.png" | relative_url }})
 
+> ## Challenge
+> Load `data/dist_cepii.dta`. Explore the variable `distw` (weighted average distance between cities in the pair of countries).
+> 1. What is the unit of measurement?
+> 2. What is the smallest and largest value?
+> 3. In how many cases is this variable missing?
+> 
+> > ## Solution
+> > 1. `describe distw` gives you the variable label "weighted distance (pop-wt, km)". It is hence recorded in kilometers. This command also shows that the variable is _double_, not _integer_.
+> > 2. `summarize distw` shows that the distance varies between 0.995 and 19781.39 kilometers.
+> > 3. `inspect distw` shows that `distw` is missing in 2,215 cases. This command also gives you the minimum and maximum values.
+> {: .solution}
+{: .challenge}
+
+> ## Challenge
+> Load `data/dist_cepii.dta`. Do you use `codebook` or `inspect` to check how many distinct countries are coded in `iso_d`?
+> > ## Solution
+> > ```
+> > codebook iso_d
+> > ```
+> > {: .source}
+> > ```
+> > ----------------------------------------------------------------------------------------------------------------------
+> > iso_d                                                                                                ISO3 alphanumeric
+> > ----------------------------------------------------------------------------------------------------------------------
+> > 
+> >                   type:  string (str3)
+> > 
+> >          unique values:  224                      missing "":  0/50,176
+> > 
+> >               examples:  "CPV"
+> >                          "HTI"
+> >                          "MRT"
+> >                          "SLV"
+> > ```
+> > {: .output}
+> > `inspect` only works for numeric variables.
+> > ```
+> > inspect iso_d
+> > ```
+> > {: .source}
+> > ```
+> > iso_d:  ISO3 alphanumeric                       Number of Observations
+> > -------------------------              ---------------------------------------
+> >                                              Total      Integers   Nonintegers
+> > |                            Negative            -             -             -
+> > |                            Zero                -             -             -
+> > |                            Positive            -             -             -
+> > |                                      -----------   -----------   -----------
+> > |                            Total               -             -             -
+> > |                            Missing        50,176
+> > +----------------------                -----------
+> > .             -9.0e+307                     50,176
+> >    (0 unique value)
+> > ```
+> > {: .output}
+> {: .solution}
+{: .challenge}
 
 
 {% include links.md %}
