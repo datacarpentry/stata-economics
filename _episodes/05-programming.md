@@ -120,7 +120,7 @@ r(602);
 ```
 {: .error}
 
-As in [Episode 3]({{ "/03-transform-data/" | relative_url }}), Stata is lets us know that the file already exists and is unwilling to replace it. As we are using a .do file to create this file, it is totally safe to overwrite. If we make an error, we can fix it and rerun `do code/read_wdi_variables.do`. That is the whole point of .do files; to make your work more reproducible.
+As in [Episode 3]({{ "/03-transform-data/" | relative_url }}), Stata lets us know that the file already exists and is unwilling to replace it. As we are using a .do file to create this file, it is totally safe to overwrite. If we make an error, we can fix it and rerun `do code/read_wdi_variables.do`. That is the whole point of .do files; to make your work more reproducible.
 
 > # Exercise
 > Change the last line of the .do file to `save "data/WDI-select-variables.dta", replace` and rerun it.
