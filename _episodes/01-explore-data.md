@@ -64,7 +64,7 @@ cd ..
 
 ![Open a Stata file]({{ "/img/open.png" | relative_url }})
 
-Everything we do pointing and clicking will leave a trace in the command line. This will help us write reproducible code later.
+Everything we do pointing and clicking leaves a trace in the command line. This will help us write reproducible code later.
 
 ```
 use "/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics/data/dist_cepii.dta"
@@ -91,7 +91,7 @@ use "/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics/data
 
 ## Variables
 
-Let us look at our data first. This is the first thing you should after loading a new Stata dataset.
+Let us look at our data first. This is the first thing to do after loading a new Stata dataset.
 ```
 browse
 ```
@@ -99,7 +99,7 @@ browse
 
 ![Always look at your data]({{ "/img/browse.png" | relative_url }})
 
-Stata datasets are a table of "variables" and "observations." Variables have short (but hopefully descriptive) names with which we can refer to them. Observations are rows of the table, with values for each variable. Red values in the browser are strings. We also see that Stata uses `.` for denoting missing values.
+Stata datasets are a table of "variables" and "observations." Variables have names with which we can refer to them. Good variable names are short and descriptive. Observations are rows of the table, with values for each variable. Red values in the browser are strings. We also see that Stata uses `.` for denoting missing values.
 
 What do these variables mean? Can we use more verbose names for them?
 
@@ -149,14 +149,27 @@ r(198);
 
 No, Stata variables can be at most 32 characters in length. This is why we have variable labels.
 
-Since Stata 14, you can use Unicode variable names, but please be gentle: your coauthors may not have the keyboard to type these names.
+Since Stata 14, you can use Unicode variable names, but please be gentle: your coauthors may not have the keyboard to type these names. 
 
 ```
-generate t√°vols√°g = dist
+generate távolság = dist
 ```
 {: .source}
 
-FIXME: discuss variable abbreviation
+Stata allows you to abbreviate the name of a variable to the shortest string of characters
+that uniquely identifies it.
+
+```
+. summarize comlang
+comlang ambiguous abbreviation
+r(111);
+
+. summarize comlang_o
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+ comlang_off |     50,176    .1743862     .379445          0          1
+```
 
 When displaying long (even less than 32 character) variable names, Stata often abbreviates `like~so`.
 ```
@@ -187,7 +200,7 @@ iso_o           str3    %9s                   ISO3166 alphanumeric code of origi
 ```
 {: .output}
 
-Labels help your coauthors (including your future self) make sense of what is in the variable. For example, that is how we learn that distance is measured in kilometers, not miles. Always use them.
+Labels help your coauthors, and your future self, make sense of what is in the variable. For example, that is how we learn that distance is measured in kilometers, not miles. Always use them.
 
 ## Command syntax
 
@@ -283,15 +296,19 @@ You really can use any function after `if`. This is an easy way to do something 
 -------------+---------------------------------------------------------
         dist |     50,176    8481.799    4703.571   .9951369   19951.16
 
+. set seed 17082019
 . summarize dist if uniform() < 0.10
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-        dist |      5,066    8513.141    4747.091    3.79869   19904.45
+        dist |      5,006    8420.376    4743.775   .9951369   19710.32
+
 ```
 {: .output}
 
 The function `uniform()` returns uniform random numbers between 0 and 1, so the above takes a 10 percent random sample from our observations.
+Set the seed in order to get the same sample and results every time.  If you do not set the seed, Stata will start its algorithm with the seed 123456789. 
+
 
 ![Getting help]({{ "/img/help-summarize.png" | relative_url }})
 

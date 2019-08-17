@@ -418,52 +418,6 @@ generate censusyear = real(substr(latestpopulationcensus, 1, 4))
 {: .challenge}
 
 
-> ## Regular expressions to the rescue
-> If the year is placed anywhere in the string, we can use [regular expressions](https://en.wikipedia.org/wiki/Regular_expression) to extract the year in string format and convert the string to a numeric variable as we did above. Regular expressions describe arbitrary patterns in text and are very powerful to extract data from text. 
->
-> ```
-> . generate year_string = regexs(0) if regexm(latestpopulationcensus, "[0-9][0-9][0-9][0-9]") 
-> (46 missing values generated)
-> 
-> . generate year = real(year_string)
-> (46 missing values generated)
-> 
-> . 
-> . tabulate year, missing
-> 
->        year |      Freq.     Percent        Cum.
-> ------------+-----------------------------------
->        1943 |          1        0.38        0.38
->        1979 |          1        0.38        0.76
->        1984 |          2        0.76        1.52
->        1987 |          1        0.38        1.90
->        1989 |          1        0.38        2.28
->        1997 |          1        0.38        2.66
->        2001 |          1        0.38        3.04
->        2002 |          2        0.76        3.80
->        2003 |          2        0.76        4.56
->        2004 |          2        0.76        5.32
->        2005 |          2        0.76        6.08
->        2006 |          3        1.14        7.22
->        2007 |          3        1.14        8.37
->        2008 |          7        2.66       11.03
->        2009 |         12        4.56       15.59
->        2010 |         41       15.59       31.18
->        2011 |         56       21.29       52.47
->        2012 |         18        6.84       59.32
->        2013 |          7        2.66       61.98
->        2014 |         11        4.18       66.16
->        2015 |         14        5.32       71.48
->        2016 |         13        4.94       76.43
->        2017 |         11        4.18       80.61
->        2018 |          5        1.90       82.51
->           . |         46       17.49      100.00
-> ------------+-----------------------------------
->       Total |        263      100.00
-> ```
-> {: .output}
-{: .callout}
-
 > ## Challenge
 > Extract the national accounts base year as a number from the text variable `nationalaccountsbaseyear`.
 > > ## Solution
@@ -636,10 +590,28 @@ Missing values are excluded from the statistical analyses by default; some comma
 > > . replace national_accounts_base_year = real(substr(nationalaccountsreferenceyear, 1, 4)) if missing(national_accounts_base_year) & !missing(nationalaccountsreferenceyear)
 > > (65 real changes made)
 > > ```
-> > {: .outpuit}
+> > {: .output}
 > {: .solution}
 {: .challenge}
 
+
+
+> # Callout
+> ## Regular expressions to the rescue
+> If the year is placed anywhere in the string, we can use [regular expressions](https://en.wikipedia.org/wiki/Regular_expression) to extract the year in string format and convert the string to a numeric variable as we did above. Regular expressions describe arbitrary patterns in text and are very powerful to extract data from text. 
+>
+> ```
+> . generate year_string = regexs(0) if regexm( sourceofmostrecentincomeandexpen, "[0-9][0-9][0-9][0-9]") 
+> (46 missing values generated)
+> 
+> . generate year_income = real(year_string)
+> (46 missing values generated)
+> 
+> . browse year_string year sourceofmostrecentincomeandexpen
+> ```
+> > ![Regexp Browse]({{ "/img/RegExp.png" | relative_url }})
+> {: .output}
+{: .callout}
 
 {% include links.md %}
 
