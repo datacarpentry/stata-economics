@@ -463,14 +463,14 @@ A quick `browse` confirms that the data is in the tidy format.
 Time to save our data. Stata 16, Stata 15, and Stata 14 share the same format, so you can just go ahead and save the data using the `save` command.
 
 ```
-save "data/WDI-select-variables.dta"
+save "data/WDI-select-variables.dta", replace
 ```
 {: .source}
 
 > # Callout
 > To save a dataset in Stata 14, Stata 15, or Stata 16 so that it can be used in Stata 13, use the `saveold` command. 
 > ```
-> saveold "data/WDI-select-variables-13.dta", v(13) 
+> saveold "data/WDI-select-variables-13.dta", replace v(13) 
 > ```
 > {: .source}
 >

@@ -604,7 +604,7 @@ Missing values are excluded from the statistical analyses by default; some comma
 > . generate year_string = regexs(0) if regexm( sourceofmostrecentincomeandexpen, "[0-9][0-9][0-9][0-9]") 
 > (46 missing values generated)
 > 
-> . generate year_income = real(year_string)
+> . generate year = real(year_string)
 > (46 missing values generated)
 > 
 > . browse year_string year sourceofmostrecentincomeandexpen
