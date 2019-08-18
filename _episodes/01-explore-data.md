@@ -99,7 +99,8 @@ browse
 
 ![Always look at your data]({{ "/img/browse.png" | relative_url }})
 
-Stata datasets are a table of "variables" and "observations." Variables have names with which we can refer to them. Good variable names are short and descriptive. Observations are rows of the table, with values for each variable. Red values in the browser are strings. We also see that Stata uses `.` for denoting missing values.
+Stata datasets are a table of "variables" and "observations." Variables have names with which we can refer to them. Observations are rows of the table, with values for each variable. Red values in the browser are strings. We also see that Stata uses `.` for denoting missing values.
+
 
 What do these variables mean? Can we use more verbose names for them?
 
@@ -147,7 +148,21 @@ r(198);
 ```
 {: .error}
 
-No, Stata variables can be at most 32 characters in length. This is why we have variable labels.
+> ## Variable names
+> Good variable names are short and descriptive. In Stata, variable names can include letters, digits, and underscores but they cannot start with a digit and are case sensitive. Variables can be at most 32 characters in length. 
+{: .callout}
+
+Variables are generated with the `generate` command and are assigned a value using `=`. 
+
+```
+.generate missing_distw=1
+```
+
+You can replace the values of an existing variable using command `replace`. 
+
+```
+. replace missing_distw=0 
+```
 
 Since Stata 14, you can use Unicode variable names, but please be gentle: your coauthors may not have the keyboard to type these names. 
 
@@ -156,32 +171,37 @@ generate t‡vols‡g = dist
 ```
 {: .source}
 
-Stata allows you to abbreviate the name of a variable to the shortest string of characters
-that uniquely identifies it.
+Stata allows you to abbreviate the name of a variable to the shortest string of characters that uniquely identifies it.
 
 ```
-. summarize comlang
+. describe comlang
 comlang ambiguous abbreviation
 r(111);
 
-. summarize comlang_o
+. describe comlang_o
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
--------------+---------------------------------------------------------
- comlang_off |     50,176    .1743862     .379445          0          1
+              storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------------------
+comlang_off     byte    %8.0g                 1 for common official of primary language
+
 ```
 
 When displaying long (even less than 32 character) variable names, Stata often abbreviates `like~so`.
 ```
-. summarize comlang_ethno 
+. describe comlang_ethno 
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
--------------+---------------------------------------------------------
-comlang_et~o |     50,176    .1691645    .3749009          0          1
+              storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------------------
+comlang_ethno   byte    %8.0g                 1 if a language is spoken by at least 9% of the
+                                                population in both countries
+
 ```
 {: .output}
 
-If you search `label variables Stata` on google, the fist link will direct you to Stata Manual.
+To avoid using long variable names, you can shorten them and provide a more detailed description about the variable using variable labels.
+If you don't know or recall a command in Stata, you can always google something related and most certainly you will find answers to your questions. For example, if you search `label variables Stata` on google, the fist link that will show up is the official Stata Manual.
 
 ![Google Stata Label]({{ "/img/google-label.png" | relative_url }})
 
@@ -200,7 +220,7 @@ iso_o           str3    %9s                   ISO3166 alphanumeric code of origi
 ```
 {: .output}
 
-Labels help your coauthors, and your future self, make sense of what is in the variable. For example, that is how we learn that distance is measured in kilometers, not miles. Always use them.
+Labels help your coauthors, including your future self, make sense of what is in the variable. For example, that is how we learn that distance is measured in kilometers, not miles. Always use them.
 
 ## Command syntax
 
