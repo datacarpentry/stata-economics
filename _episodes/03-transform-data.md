@@ -109,7 +109,8 @@ Sorted by:
 > The commands `keep` and `drop` irreversibly change the data in your memory. Only use them if your work is easy to reproduce if you make an error, such as right after loading a dataset.
 {: .callout}
 
-You can use variable name wildcards with both commands (`drop latest*`).
+You can use variable name wildcards with both commands (`drop latest*`). Similarly, you can use the `-` character to keep or drop variables in the dataset. Stata will keep, or drop, all variables starting with the variable to the left of the `-` and ending with the variable to the right of the `-`.
+ 
 
 To filter out observations, use `drop if` and `keep if`.
 
@@ -467,10 +468,30 @@ save "data/WDI-select-variables.dta"
 ```
 {: .source}
 
+Load the saved data and generate a dummy variable that takes value one if the `gdp_per_capita` is higher than the mean.
+```
+gen high_gdp_per capita=(gdp_per_capita >=15453.68 ) if !missing(gdp_per_capita)
+```
+Now try to save the same data file again. If you do this, Stata will give a warning that the file already exist.
+
+```
+...
+
+. save "data/WDI-select-variables.dta"
+file data/WDI-select-variables.dta already exists
+r(602);
+
+end of do-file
+
+r(602);
+```
+Use replace if you would like to overwrite an existing dataset. 
+
+
 > # Callout
 > To save a dataset in Stata 14, Stata 15, or Stata 16 so that it can be used in Stata 13, use the `saveold` command. 
 > ```
-> saveold "data/WDI-select-variables-13.dta", v(13) 
+> saveold "data/WDI-select-variables-13.dta", replace v(13) 
 > ```
 > {: .source}
 >
@@ -513,7 +534,7 @@ save "data/wdi_decades.dta"
 `collapse` can also use multiple groups, like `countrycode` and `decade`
 
 > ## Gotcha
-> The command `collapse` creates a new, aggregated dataset in memory, and your old dataset will be gone without any warning. You will typically use `collapse` in a .do file right before saving the dataset, to bring it to a desired format.
+> The command `collapse` creates a new, aggregated dataset in memory, and your old dataset will be gone without any warning. You will typically use `collapse` and save the collapsed data in a new data file or replace an old one. When working on a dataset you are working with the dataset in `Stata` memory, not with the data file itself. Important note: there is no way to recover an original file once you overwrite it. Always retain a copy of the original dataset in a separate folder.
 {: .callout}
 
 Reload the data we have just destroyed and create different aggregate statistics

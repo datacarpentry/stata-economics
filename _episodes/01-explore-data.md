@@ -64,7 +64,7 @@ cd ..
 
 ![Open a Stata file]({{ "/img/open.png" | relative_url }})
 
-Everything we do pointing and clicking will leave a trace in the command line. This will help us write reproducible code later.
+Everything we do pointing and clicking leaves a trace in the command line. This will help us write reproducible code later.
 
 ```
 use "/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics/data/dist_cepii.dta"
@@ -91,7 +91,7 @@ use "/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics/data
 
 ## Variables
 
-Let us look at our data first. This is the first thing you should after loading a new Stata dataset.
+Let us look at our data first. This is the first thing to do after loading a new Stata dataset.
 ```
 browse
 ```
@@ -99,7 +99,8 @@ browse
 
 ![Always look at your data]({{ "/img/browse.png" | relative_url }})
 
-Stata datasets are a table of "variables" and "observations." Variables have short (but hopefully descriptive) names with which we can refer to them. Observations are rows of the table, with values for each variable. Red values in the browser are strings. We also see that Stata uses `.` for denoting missing values.
+Stata datasets are a table of "variables" and "observations." Variables have names with which we can refer to them. Observations are rows of the table, with values for each variable. Red values in the browser are strings. We also see that Stata uses `.` for denoting missing values.
+
 
 What do these variables mean? Can we use more verbose names for them?
 
@@ -147,28 +148,60 @@ r(198);
 ```
 {: .error}
 
-No, Stata variables can be at most 32 characters in length. This is why we have variable labels.
+> ## Variable names
+> Good variable names are short and descriptive. In Stata, variable names can include letters, digits, and underscores but they cannot start with a digit and are case sensitive. Variables can be at most 32 characters in length. 
+{: .callout}
 
-Since Stata 14, you can use Unicode variable names, but please be gentle: your coauthors may not have the keyboard to type these names.
+Variables are generated with the `generate` command and are assigned a value using `=`. 
 
 ```
-generate t√°vols√°g = dist
+.generate missing_distw=1
+```
+
+You can replace the values of an existing variable using command `replace`. 
+
+```
+. replace missing_distw=0 
+```
+
+Since Stata 14, you can use Unicode variable names, but please be gentle: your coauthors may not have the keyboard to type these names. 
+
+```
+generate távolság = dist
 ```
 {: .source}
 
-FIXME: discuss variable abbreviation
+Stata allows you to abbreviate the name of a variable to the shortest string of characters that uniquely identifies it.
+
+```
+. describe comlang
+comlang ambiguous abbreviation
+r(111);
+
+. describe comlang_o
+
+              storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------------------
+comlang_off     byte    %8.0g                 1 for common official of primary language
+
+```
 
 When displaying long (even less than 32 character) variable names, Stata often abbreviates `like~so`.
 ```
-. summarize comlang_ethno 
+. describe comlang_ethno 
 
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
--------------+---------------------------------------------------------
-comlang_et~o |     50,176    .1691645    .3749009          0          1
+              storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------------------
+comlang_ethno   byte    %8.0g                 1 if a language is spoken by at least 9% of the
+                                                population in both countries
+
 ```
 {: .output}
 
-If you search `label variables Stata` on google, the fist link will direct you to Stata Manual.
+To avoid using long variable names, you can shorten them and provide a more detailed description about the variable using variable labels.
+If you don't know or recall a command in Stata, you can always google something related and most certainly you will find answers to your questions. For example, if you search `label variables Stata` on google, the fist link that will show up is the official Stata Manual.
 
 ![Google Stata Label]({{ "/img/google-label.png" | relative_url }})
 
@@ -187,7 +220,7 @@ iso_o           str3    %9s                   ISO3166 alphanumeric code of origi
 ```
 {: .output}
 
-Labels help your coauthors (including your future self) make sense of what is in the variable. For example, that is how we learn that distance is measured in kilometers, not miles. Always use them.
+Labels help your coauthors, including your future self, make sense of what is in the variable. For example, that is how we learn that distance is measured in kilometers, not miles. Always use them.
 
 ## Command syntax
 
@@ -283,15 +316,19 @@ You really can use any function after `if`. This is an easy way to do something 
 -------------+---------------------------------------------------------
         dist |     50,176    8481.799    4703.571   .9951369   19951.16
 
+. set seed 17082019
 . summarize dist if uniform() < 0.10
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-        dist |      5,066    8513.141    4747.091    3.79869   19904.45
+        dist |      5,006    8420.376    4743.775   .9951369   19710.32
+
 ```
 {: .output}
 
 The function `uniform()` returns uniform random numbers between 0 and 1, so the above takes a 10 percent random sample from our observations.
+Set the seed in order to get the same sample and results every time.  If you do not set the seed, Stata will start its algorithm with the seed 123456789. 
+
 
 ![Getting help]({{ "/img/help-summarize.png" | relative_url }})
 

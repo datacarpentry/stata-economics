@@ -15,7 +15,7 @@ The commands `append` and `merge` combine a dataset in memory (the "master" data
 ![Combine data vertically or horizontally]({{ "/img/append-merge.png" | relative_url }}) 
 
 > ## Data in memory, data on disk
-> Stata is different from other popular statistical and data manipulation languages like R (Data Frame) and Python (Pandas) in that it can only hold one dataset in memory at a time. In most applications, you will work with multiple datasets, so you will need to `merge` them quite often. (Stata 16 will allow for multiple data frames in memory.)
+> Stata is different from other popular statistical and data manipulation languages like R (Data Frame) and Python (Pandas) in that it can only hold one dataset in memory at a time. In most applications, you will work with multiple datasets, so you will need to `merge` them quite often. Stata 16 allows for multiple data frames in memory.
 {: .callout}
 
 The command `append` is used to combine datasets with the same columns, each representing a different set of observations. A common use case is combining large datasets broken into smaller chunks.
@@ -189,33 +189,6 @@ FIXME: find a good use case for `update` option
 > ## Gotcha
 > Never do a many-to-many, `m:m` merge. It does not do what you expect. You probably want to do a `joinby` instead.
 {: .callout}
-
-Before saving the final dataset a good practice is to compress the amount of memory used by your data using the `compress` command.
-
-FIXME: use different example
-
-```
-. use "data/dist_cepii.dta", clear
-
-. egen average_distance = mean(distw), by(iso_o)
-(1120 missing values generated)
-.
-. rename iso_o countrycode 
-
-. joinby countrycode using "data/wdi_decades.dta"
-
-. 
-. compress
-  variable decade was float now int
-  variable population was double now long
-  variable countryname was str52 now str30
-  (34,947,584 bytes saved)
-```
-{: .output}
-
-NB: I removed `joinby`. `append` and `merge` will be enough.
-
-NB: tempfiles are explained in episode 4
 
 
 {% include links.md %}
