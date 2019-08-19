@@ -68,7 +68,7 @@ Sorted by:
 ```
 {: .output}
 
-We will not use most of them, so let's drop them.
+We will not use most of them, so let's `drop` them.
 
 ```
 drop specialnotes
@@ -80,7 +80,7 @@ drop alphacode currencyunit
 ```
 {: .source}
 
-In fact, we will keep fewer than we drop.
+In fact, we will `keep` fewer than we `drop`. There is a separate command for this complementary operation.
 ```
 . keep countrycode shortname region incomegroup censusyear 
 
@@ -109,9 +109,8 @@ Sorted by:
 > The commands `keep` and `drop` irreversibly change the data in your memory. Only use them if your work is easy to reproduce if you make an error, such as right after loading a dataset.
 {: .callout}
 
-You can use variable name wildcards with both commands (`drop latest*`). Similarly, you can use the `-` character to keep or drop variables in the dataset. Stata will keep, or drop, all variables starting with the variable to the left of the `-` and ending with the variable to the right of the `-`.
+You can use variable name wildcards with both commands (`drop latest*`). Similarly, you can use the `-` character to keep or drop variables in the dataset. Stata will `keep`, or `drop`, all variables starting with the variable to the left of the `-` and ending with the variable to the right of the `-`.
  
-
 To filter out observations, use `drop if` and `keep if`.
 
 ```
@@ -125,6 +124,7 @@ To filter out observations, use `drop if` and `keep if`.
   217
 ```
 {: .output}
+There are 46 fewer observations than before.
 
 The command is the same as `keep if !missing(incomegroup)`. The operator `!` stands for negation, "not missing."
 
@@ -170,9 +170,9 @@ Sorted by:
 ```
 {: .output}
 
-This creates new variables with the aggregated statistic.
+The command `egen` creates new variables with aggregated statistics.
 
-There are many functions to be used in `egen`, `count`, `min`, `max`, `sum` and `mean` are the most commonly used.
+There are many functions to be used in `egen`; `count`, `min`, `max`, `sum` and `mean` are the most commonly used.
 
 You can group by multiple variables.
 ```
@@ -196,7 +196,7 @@ egen average_census_decade = mean(int(censusyear/10)*10), by(region)
 {: .source}
 
 > ## Challenge
-> Create a variable for the differnce of `censusyear` from the average of the region. Show that its mean is zero. Why?
+> Create a variable for the difference of `censusyear` from the average of the region. Show that its mean is zero. Why?
 > > ## Solution
 > > ```
 > > . egen mean_censusyear = mean(censusyear), by(region)
@@ -223,6 +223,7 @@ The WDI dataset in `data/WDIData.csv` has a strange shape. Variables are in sepa
 ![help reshape]({{ "/img/help-reshape.png" | relative_url }})
 
 To practice reshaping, load a somewhat precleaned subset of the WDI dataset from `data/gdp-wide.csv`. We will clean the original data ourselves later.
+
 ```
 import delimited "data/gdp-wide.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
 browse
@@ -232,6 +233,7 @@ browse
 ![Data in the wide format]({{ "/img/gdp-wide.png" | relative_url }})
 
 This data is too "wide": column names contain information that we may want to work with. Let us `reshape long`.
+
 ```
 . reshape long gdp, i(countrycode) j(year)
 (note: j = 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 20
@@ -248,9 +250,9 @@ xij variables:
 ```
 {: .output}
 
-The option `i()` lists variables that index observations (rows) with in the _wide_ dataset. Each observation is a country in this wide format, so `i(countrycode)`. We can have multiple variables inside `i()`, like `i(countrycode countryname)`. The option `j()` gives _one_ variable that indexes columns in the _wide_ format. Because `gdp1960`, ..., `gdp2017` correspond to different _years_, we call this variable `year`.
+The option `i()` lists variables that index observations (rows) within the _wide_ dataset. Each observation is a country in this wide format, so we use `i(countrycode)`. We can have multiple variables inside `i()`, like `i(countrycode countryname)`. The option `j()` gives _one_ variable that indexes columns in the _wide_ format. Because `gdp1960`, ..., `gdp2017` correspond to different _years_, we call this variable `year`.
 
-The output of `reshape` is most helpful. We have more observations and fewer variables. We see that we created a new variable called `year` (from the option `j`) and `gdp1960`, ..., `gdp2017` became a single variable, `gdp`.
+The output of `reshape` is most helpful. After a `reshape long`, we have more observations and fewer variables. We see that we created a new variable called `year` (from the option `j`) and `gdp1960`, ..., `gdp2017` became a single variable, `gdp`.
 
 ![Data in the long format]({{ "/img/gdp-long.png" | relative_url }})
 
@@ -476,8 +478,6 @@ generate high_gdp_per_capita = (gdp_per_capita >= 15453.68) if !missing(gdp_per_
 Now try to save the same data file again. If you do this, Stata will give a warning that the file already exist.
 
 ```
-...
-
 . save "data/WDI-select-variables.dta"
 file data/WDI-select-variables.dta already exists
 r(602);
@@ -486,6 +486,7 @@ end of do-file
 
 r(602);
 ```
+{: .error}
 Use the `replace` option if you would like to overwrite an existing dataset. 
 
 
@@ -504,6 +505,7 @@ Use the `replace` option if you would like to overwrite an existing dataset.
 Commands that errored are red in the command history. Select the ones that we want to keep and send them to a .do file.
 
 ![Select commands to save as a .do file]({{ "/img/send-to-editor.png" | relative_url }})
+
 
 ```
 import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
@@ -535,7 +537,7 @@ save "data/wdi_decades.dta"
 `collapse` can also use multiple groups, like `countrycode` and `decade`
 
 > ## Gotcha
-> The command `collapse` creates a new, aggregated dataset in memory, and your old dataset will be gone without any warning. You will typically use `collapse` and save the collapsed data in a new data file or replace an old one. When working on a dataset you are working with the dataset in�`Stata` memory, not with the data file itself. Important note: there is no way to recover an original file once you overwrite it. Always retain a copy of the original dataset in a separate folder.
+> The command `collapse` creates a new, aggregated dataset in memory, and your old dataset will be gone without any warning. You will typically use `collapse` and save the collapsed data in a new data file or replace an old one. When working on a dataset you are working with the dataset in `Stata` memory, not with the data file itself. Important note: there is no way to recover an original file once you overwrite it. Always retain a copy of the original dataset.
 {: .callout}
 
 Reload the data we have just destroyed and create different aggregate statistics

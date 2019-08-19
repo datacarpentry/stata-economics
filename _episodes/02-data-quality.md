@@ -20,29 +20,24 @@ keypoints:
 
 Next we will read the World Development Indicators dataset. The data is in `data/WDIData.csv`. The other .csv files starting with `WDI` give some metadata. For example, `data/WDISeries.csv` describes the variables ("indicators" in World Bank speak), `data/WDICountry.csv` gives a codelist of countries, and `data/WDIFootnote.csv` includes footnotes.
 
-> ## Challenge
-> Import the World Development Indicator dataset from .csv format using the command `import delimited data/WDIData.csv`. What goes wrong and how can you fix it?
-> 
-> > ## Solution
-> > Load the data and launch a data browser.
-> > ```
-> > import delimited "data/WDIData.csv", clear
-> > browse
-> > ```
-> > {: .source}
-> > You find that the variables are named `v1` through `v64` and the first row contains the actual variable names. 
-> > ![Variable names are not read]({{ "/img/import-header.png" | relative_url }})
-> > This is because WDI uses years for variable names, but Stata does not allow purely numeric variable names.
-> > ![Variable names are not read]({{ "/img/import-header-2.png" | relative_url }})
-> > You can have Stata use the values in row 1 as variable names by using varnames option.
-> > ```
-> > import delimited "data/WDIData.csv", varnames(1) clear
-> > ```
-> > {: .source}
-> > Note that we are using multiple options for the command.
-> > But since 1960, 1961, etc., are not valid variable names, these will still be called `v5` through `v64`.
-> {: .solution}
-{: .challenge}
+Import the World Development Indicator dataset from .csv format using the command `import delimited data/WDIData.csv`. 
+Load the data and launch a data browser.
+```
+import delimited "data/WDIData.csv", clear
+browse
+```
+{: .source}
+You find that the variables are named `v1` through `v64` and the first row contains the actual variable names. 
+![Variable names are not read]({{ "/img/import-header.png" | relative_url }})
+This is because WDI uses years for variable names, but Stata does not allow purely numeric variable names.
+![Variable names are not read]({{ "/img/import-header-2.png" | relative_url }})
+You can have Stata use the values in row 1 as variable names by using varnames option.
+```
+import delimited "data/WDIData.csv", varnames(1) clear
+```
+{: .source}
+Note that we are using multiple options for the command.
+But since 1960, 1961, etc., are not valid variable names, these will still be called `v5` through `v64`.
 
 > ## Challenge
 > Explore the variables `v5`, `v63` and `v64`. Which years do they correspond to? Do they have missing values?
@@ -97,7 +92,7 @@ Next we will read the World Development Indicators dataset. The data is in `data
 > {: .solution}
 {: .challenge}
 
-Reading text data from .csv files can be even more challeging. Let us read the country names and characteristics.
+Reading text data from .csv files can be even more challenging. Let us read the country names and characteristics.
 
 ```
 import delimited "data/WDICountry.csv", varnames(1) clear
@@ -117,10 +112,12 @@ There are some things that do not belong to the `countrycode` variable. Indeed t
 
 FIXME: use this file in shell lesson
 
-After going out to the shell and exploring the file there (for example, `head data/WDICountry.csv`), we will find a text variable is splt on multiple lines. This may strip up `import delimited`.
+After going out to the shell and exploring the file there (for example, `head data/WDICountry.csv`), we will find a text variable is split on multiple lines. This may trip up `import delimited`.
 
+The following .csv cell, within double quotes, is spread across multiple lines.
 `"Central Bureau of Statistics and Central Bank of Aruba ; Source of population estimates: UN Population Division's World Population Prospects 2019 PROVISIONAL estimates. Not for circulation. Subject to change. Mining is included in agriculture\n 
 Electricty and gas includes manufactures of refined petroleum products"`
+We can tell `import delimited` to always looking for a closing quote before starting a new line with the `bindquotes` option.
 
 ```
 . import delimited "data/WDICountry.csv", varnames(1) bindquotes(strict) clear
@@ -136,12 +133,13 @@ But browsing further down, we find "Côte d'Ivoire" and "Curaçao" are misspelle
 
 ![Wrong characters]({{ "/img/wrong-encoding.png" | relative_url }})
 
-The characters `Ã` and `Å` are often indicative that the [encoding of the text is UTF-8](https://en.wikipedia.org/wiki/UTF-8). We can set the encoding as an option to `import delimited`.
+The characters `Ã` and `Å` are often indicative that the [encoding of the text is UTF-8](https://en.wikipedia.org/wiki/UTF-8). We can set the encoding as an option to `import delimited`. The default encoding is `latin1`.
 
 ```
 import delimited "data/WDICountry.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
 ```
 {: .source}
+Checking "Côte d'Ivoire" and "Curaçao," we find the correct characters. The options `varnames(1) bindquotes(strict) encoding("utf-8")` are almost always necessary to properly read .csv files.
 
 ## Variable types 
 
@@ -230,7 +228,7 @@ generate byte low_income = (incomegroup == "Low income")
 ```
 {: .source}
 
-Beware of long integers, such as numerical identifiers. These may easily be greater than 32,740 and have to be declared to be long.
+Beware of long integers, such as numerical identifiers. These may easily be greater than 32,740 and have to be declared as `long`.
 
 ```
 generate long identifier = 12345678
@@ -419,7 +417,7 @@ generate censusyear = real(substr(latestpopulationcensus, 1, 4))
 
 
 > ## Challenge
-> Extract the national accounts base year as a number from the text variable `nationalaccountsbaseyear`.
+> Extract the national accounts base year as a number from the text variable `nationalaccountsbaseyear`. Use the first two and the last two digits so that "2008/09" is read as 2009. There is a function `length()` which returns the length of a string.
 > > ## Solution
 > > 
 > > ```
@@ -466,7 +464,7 @@ generate censusyear = real(substr(latestpopulationcensus, 1, 4))
 > > ----------------------------------------+-----------------------------------
 > >                                   Total |        206      100.00
 > > 
-> > . generate national_accounts_base_year = real(substr(nationalaccountsbaseyear, 1, 4))
+> > . generate national_accounts_base_year = real(substr(nationalaccountsbaseyear, 1, 2) + substr(nationalaccountsbaseyear, length(nationalaccountsbaseyear) - 1, 2))
 > > (123 missing values generated)
 > > 
 > > . tabulate national_accounts_base_year, missing
@@ -479,7 +477,7 @@ generate censusyear = real(substr(latestpopulationcensus, 1, 4))
 > >        1974 |          1        0.38        0.76
 > >        1984 |          1        0.38        1.14
 > >        1985 |          1        0.38        1.52
-> >        1986 |          1        0.38        1.90
+> >        1987 |          1        0.38        1.90
 > >        1990 |          4        1.52        3.42
 > >        1992 |          1        0.38        3.80
 > >        1994 |          1        0.38        4.18
@@ -487,22 +485,23 @@ generate censusyear = real(substr(latestpopulationcensus, 1, 4))
 > >        1997 |          2        0.76        5.32
 > >        1998 |          1        0.38        5.70
 > >        1999 |          2        0.76        6.46
-> >        2000 |         10        3.80       10.27
-> >        2001 |          2        0.76       11.03
-> >        2002 |          3        1.14       12.17
-> >        2003 |          1        0.38       12.55
-> >        2004 |          5        1.90       14.45
-> >        2005 |         11        4.18       18.63
-> >        2006 |         16        6.08       24.71
-> >        2007 |         15        5.70       30.42
-> >        2008 |          3        1.14       31.56
-> >        2009 |          7        2.66       34.22
-> >        2010 |         25        9.51       43.73
-> >        2011 |          7        2.66       46.39
-> >        2012 |          5        1.90       48.29
-> >        2013 |          5        1.90       50.19
-> >        2014 |          4        1.52       51.71
-> >        2015 |          4        1.52       53.23
+> >        2000 |          9        3.42        9.89
+> >        2001 |          2        0.76       10.65
+> >        2002 |          2        0.76       11.41
+> >        2003 |          2        0.76       12.17
+> >        2004 |          5        1.90       14.07
+> >        2005 |          9        3.42       17.49
+> >        2006 |         18        6.84       24.33
+> >        2007 |         15        5.70       30.04
+> >        2008 |          2        0.76       30.80
+> >        2009 |          7        2.66       33.46
+> >        2010 |         26        9.89       43.35
+> >        2011 |          5        1.90       45.25
+> >        2012 |          7        2.66       47.91
+> >        2013 |          5        1.90       49.81
+> >        2014 |          4        1.52       51.33
+> >        2015 |          4        1.52       52.85
+> >        2016 |          1        0.38       53.23
 > >           . |        123       46.77      100.00
 > > ------------+-----------------------------------
 > >       Total |        263      100.00
@@ -593,25 +592,6 @@ Missing values are excluded from the statistical analyses by default; some comma
 > > {: .output}
 > {: .solution}
 {: .challenge}
-
-
-
-> # Callout
-> ## Regular expressions to the rescue
-> If the year is placed anywhere in the string, we can use [regular expressions](https://en.wikipedia.org/wiki/Regular_expression) to extract the year in string format and convert the string to a numeric variable as we did above. Regular expressions describe arbitrary patterns in text and are very powerful to extract data from text. 
->
-> ```
-> . generate year_string = regexs(0) if regexm( sourceofmostrecentincomeandexpen, "[0-9][0-9][0-9][0-9]") 
-> (46 missing values generated)
-> 
-> . generate year = real(year_string)
-> (46 missing values generated)
-> 
-> . browse year_string year sourceofmostrecentincomeandexpen
-> ```
-> > ![Regexp Browse]({{ "/img/RegExp.png" | relative_url }})
-> {: .output}
-{: .callout}
 
 {% include links.md %}
 

@@ -165,7 +165,7 @@ Your .do file begins with loading a dataset and ends with saving one. It leaves 
 > 
 > The goal of these rules is that you can unambiguously answer the question "how was this data file created?" You will pose this question countless times even if you work by yourself. 
 >
-> Under these rules, most of your .do files will begin with `use ..., clear` and end with `save ..., replace`. You have automated your work and should not be afraid to use the options `clear` and `replace`.
+> Under these rules, most of your .do files will begin with `use ..., clear` and end with `save ..., replace`. You have automated your work and should not be afraid to use the options `clear` and `replace`. You will also use "destructive" commands like `keep`, `drop`, `collapse` and `reshape` more freely.
 {: .discussion}
 
 > ## Challenge

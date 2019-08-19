@@ -58,6 +58,7 @@ We can use multiple commands inside the loop.
 You can use the loop variable in any command, in any place.
 
 ```
+. use "data/WDI-select-variables.dta", clear
 . forvalues t = 2010/2017 {
   2.    summarize gdp_per_capita if year == `t'
   3. }
