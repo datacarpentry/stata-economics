@@ -470,8 +470,9 @@ save "data/WDI-select-variables.dta"
 
 Load the saved data and generate a dummy variable that takes value one if the `gdp_per_capita` is higher than the mean.
 ```
-gen high_gdp_per capita=(gdp_per_capita >=15453.68 ) if !missing(gdp_per_capita)
+generate high_gdp_per_capita = (gdp_per_capita >= 15453.68) if !missing(gdp_per_capita)
 ```
+{: .source}
 Now try to save the same data file again. If you do this, Stata will give a warning that the file already exist.
 
 ```
@@ -485,7 +486,7 @@ end of do-file
 
 r(602);
 ```
-Use replace if you would like to overwrite an existing dataset. 
+Use the `replace` option if you would like to overwrite an existing dataset. 
 
 
 > # Callout
@@ -534,7 +535,7 @@ save "data/wdi_decades.dta"
 `collapse` can also use multiple groups, like `countrycode` and `decade`
 
 > ## Gotcha
-> The command `collapse` creates a new, aggregated dataset in memory, and your old dataset will be gone without any warning. You will typically use `collapse` and save the collapsed data in a new data file or replace an old one. When working on a dataset you are working with the dataset inÊ`Stata` memory, not with the data file itself. Important note: there is no way to recover an original file once you overwrite it. Always retain a copy of the original dataset in a separate folder.
+> The command `collapse` creates a new, aggregated dataset in memory, and your old dataset will be gone without any warning. You will typically use `collapse` and save the collapsed data in a new data file or replace an old one. When working on a dataset you are working with the dataset inï¿½`Stata` memory, not with the data file itself. Important note: there is no way to recover an original file once you overwrite it. Always retain a copy of the original dataset in a separate folder.
 {: .callout}
 
 Reload the data we have just destroyed and create different aggregate statistics

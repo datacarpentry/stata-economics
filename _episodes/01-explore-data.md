@@ -155,19 +155,19 @@ r(198);
 Variables are generated with the `generate` command and are assigned a value using `=`. 
 
 ```
-.generate missing_distw=1
+generate missing_distw = 1
 ```
-
+{: .source}
 You can replace the values of an existing variable using command `replace`. 
 
 ```
-. replace missing_distw=0 
+replace missing_distw = 0 
 ```
-
+{: .source}
 Since Stata 14, you can use Unicode variable names, but please be gentle: your coauthors may not have the keyboard to type these names. 
 
 ```
-generate távolság = dist
+generate t√°vols√°g = dist
 ```
 {: .source}
 
