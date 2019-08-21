@@ -27,7 +27,7 @@ Sometimes you will need to do repetitive tasks in the process of data manipulati
 ```
 {: .output}
 
-You should always place the curly braces to oepn and close the loop. The indentation is optional, but helps read your code better, especially with nested loops.
+You should always place the curly braces to open and close the loop. The indentation is optional, but helps read your code better, especially with nested loops.
 
 ```
 . forvalues i = 1/5
