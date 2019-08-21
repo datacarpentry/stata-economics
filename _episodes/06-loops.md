@@ -55,11 +55,41 @@ We can use multiple commands inside the loop.
 ```
 {: .output}
 
+## Challenge
+
+What would be the output of
+
+```
+forvalues i = 0/5 {
+	display `i', 5 `i'
+      }
+```
+
+{: .source}
+
+> ## Solution
+>
+> ```
+> 0 0
+> 1 1
+> 2 2
+> 3 3
+> 4 4
+> 5 5
+> ```
+>
+> {: .output}
+> {: .solution}
+> {: .challenge}
+
+
+
 You can use the loop variable in any command, in any place.
 
 ```
-. use "data/WDI-select-variables.dta", clear
-. forvalues t = 2010/2017 {
+. use /data/WDI-select-variables.dta", clear
+
+.forvalues t = 2010/2017 {
   2.    summarize gdp_per_capita if year == `t'
   3. }
 
@@ -207,8 +237,8 @@ The loop variable increases in step size 10. Note the use of a boolean formula. 
 You can also loop over a list of arbitrary strings, but note the different syntax.
 
 ```
-. foreach X in apple banana carrot {
-  2.     display "`X'"
+. foreach fruit in apple banana carrot {
+  2.     display "`fruit'"
   3. }
 apple
 banana
@@ -216,25 +246,28 @@ carrot
 ```
 {: .output}
 
+ Note that loop variable is given the name `fruit`. We can choose any name we want for the looping variables. We might have named it  `elephant`  and the loop would still work, as long as we correctly invoke the variable inside the loop:
+
 The loop variable is still a macro and is evaluated as part of the command.
+
 ```
-. foreach X in apple banana carrot {
-  2.     display `X'
+. foreach fruit in apple banana carrot {
+  2.     display `fruit'
   3. }
 apple not found
 r(111);
 ```
 {: .error}
 
-The error is that in the first run, `X` evaluates to `apple`, and Stata would like to run `display apple`. There is no variable or scalar with the name `apple`, so we receive an error.
+The error is that in the first run, `fruit` evaluates to `apple`, and Stata would like to run `display apple`. There is no variable or scalar with the name `apple`, so we receive an error.
 
 Note that the error breaks the loop.
 
 The separator in the list is the space. If one of your list elements has spaces, use double quotes.
 
 ```
-. foreach X in apple banana carrot "dragon fruit" {
-  2.     display "`X'"
+. foreach fruit in apple banana carrot "dragon fruit" {
+  2.     display "`fruit'"
   3. }
 apple
 banana
@@ -246,8 +279,8 @@ dragon fruit
 > ## Challenge
 > What would be the output of
 > ```
-> foreach X in apple banana carrot dragon fruit {
->     display "`X'"  
+> foreach fruit in apple banana carrot dragon fruit {
+>     display "`fruit'"  
 > }
 > ```
 > {: .source}
@@ -263,6 +296,38 @@ dragon fruit
 > {: .solution}
 {: .challenge}
 
+
+
+## Challenge
+
+What would be the output of
+
+```
+ foreach fruit in apple banana carrot {
+     display "`fruit's with `fruit's"
+ }
+```
+
+{: .source}
+
+> ## Solution
+>
+> ```
+> .  foreach fruit in apple banana carrot {
+>   2.      display "`fruit's with `fruit's"
+>   3.  }
+> apples with apples
+> bananas with bananas
+> carrots with carrots
+> 
+> ```
+>
+> {: .output}
+> {: .solution}
+> {: .challenge}
+
+
+
 Repeat the creation of index variable for population.
 
 ```
@@ -277,9 +342,10 @@ generate population_index = population / gdp_per_capita_`base_year' * 100
 Copying and pasting are prone to errors. Not all will be easy to spot and fix.
 
 ```
-foreach X in gdp_per_capita population {
-    egen `X'_`base_year' = mean(cond(year == `base_year', `X', .)), by(countrycode)
-    generate `X'_index = `X' / `X'_`base_year' * 100
+local base_year 1991
+foreach var in gdp_per_capita population {
+    egen `var'_`base_year' = mean(cond(year == `base_year', `var', .)), by(countrycode)
+    generate `var'_indevar = `var' / `var'_`base_year' * 100
 }
 ```
 {: .source}
@@ -287,18 +353,18 @@ foreach X in gdp_per_capita population {
 We can also loop over variables rather than arbitrary words.
 
 ```
-foreach X of varlist gdp_per_capita population {
-    egen `X'_`base_year' = mean(cond(year == `base_year', `X', .)), by(countrycode)
-    generate `X'_index = `X' / `X'_`base_year' * 100
+foreach var of varlist gdp_per_capita population {
+    egen `var'_`base_year' = mean(cond(year == `base_year', `var', .)), by(countrycode)
+    generate `var'_index = `var' / `var'_`base_year' * 100
 }
 ```
 {: .source}
 
-Use for loops to ensure consistency and to minimize the risk the errors, not to save typing. Note that X appears on both sides. It is a macro that is evaluated before the command is run, so it can become part of the variable name.
+Use for loops to ensure consistency and to minimize the risk the errors, not to save typing. Note that `var' appears on both sides. It is a macro that is evaluated before the command is run, so it can become part of the variable name.
 
 ```
-foreach X of varlist *_index {
-    generate log_`X' = log(`X' / 100)
+foreach var of varlist *_index {
+    generate log_`var' = log(`var' / 100)
 }
 ```
 {: .source}
