@@ -12,6 +12,7 @@ keypoints:
 ---
 
 ## For loops
+Sometimes you will need to do repetitive tasks in the process of data manipulation and analysis. Loops are a way to avoid repeating the same code multiple times.
 
 ```
 . forvalues i = 1/5 {
@@ -26,7 +27,7 @@ keypoints:
 ```
 {: .output}
 
-You should always place the curly braces like this. The indentation is optional, but helps read your code better, especially with nested loops.
+You should always place the curly braces to oepn and close the loop. The indentation is optional, but helps read your code better, especially with nested loops.
 
 ```
 . forvalues i = 1/5
@@ -55,33 +56,25 @@ We can use multiple commands inside the loop.
 ```
 {: .output}
 
-## Challenge
-
-What would be the output of
-
-```
-forvalues i = 0/5 {
-	display `i', 5 `i'
-      }
-```
-
-{: .source}
-
-> ## Solution
->
+> ## Challenge
+> What would be the output of
 > ```
-> 0 0
-> 1 1
-> 2 2
-> 3 3
-> 4 4
-> 5 5
+> forvalues i = 0/4 {
+>     display `i', 5*`i'  
+> }
 > ```
->
-> {: .output}
+> {: .source}
+> > ## Solution
+> > ```
+> > 0 0
+> > 1 1
+> > 2 2
+> > 4 4
+> > fruit
+> > ```
+> > {: .output}
 > {: .solution}
-> {: .challenge}
-
+{: .challenge}
 
 
 You can use the loop variable in any command, in any place.
@@ -246,7 +239,7 @@ carrot
 ```
 {: .output}
 
- Note that loop variable is given the name `fruit`. We can choose any name we want for the looping variables. We might have named it  `elephant`  and the loop would still work, as long as we correctly invoke the variable inside the loop:
+ Note that loop variable is given the name `fruit`. We can choose any name we want for the looping variables. We might have named it  `unicorn`  and the loop would still work, as long as we correctly invoke the variable inside the loop:
 
 The loop variable is still a macro and is evaluated as part of the command.
 
@@ -297,35 +290,25 @@ dragon fruit
 {: .challenge}
 
 
-
-## Challenge
-
-What would be the output of
-
-```
- foreach fruit in apple banana carrot {
-     display "`fruit's with `fruit's"
- }
-```
-
-{: .source}
-
-> ## Solution
->
-> ```
-> .  foreach fruit in apple banana carrot {
->   2.      display "`fruit's with `fruit's"
->   3.  }
-> apples with apples
-> bananas with bananas
-> carrots with carrots
-> 
-> ```
->
-> {: .output}
+> ## Challenge
+> What would be the output of
+>```
+>foreach fruit in apple banana carrot {
+>    display "`fruit' with `fruit's"
+>}
+>```
+> > ## Solution
+> > ```
+>> .  foreach fruit in apple banana carrot {
+>>   2.      display "`fruit's with `fruit's"
+>>   3.  }
+>> apples with apples
+>> bananas with bananas
+>> carrots with carrots
+> > ```
+> > {: .output}
 > {: .solution}
-> {: .challenge}
-
+{: .challenge}
 
 
 Repeat the creation of index variable for population.
