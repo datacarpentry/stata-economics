@@ -67,10 +67,10 @@ We can use multiple commands inside the loop.
 > > ## Solution
 > > ```
 > > 0 0
-> > 1 1
-> > 2 2
-> > 4 4
-> > fruit
+> > 1 5
+> > 2 10
+> > 3 15
+> > 4 20
 > > ```
 > > {: .output}
 > {: .solution}
