@@ -18,6 +18,8 @@ keypoints:
 
 ## Filter data
 
+FIXME: introduce `if` for all commands, including those not changing data. relate to command suyntax in eps 1
+
 There are many variables in our dataset loaded from `data/WDICountry.csv`.
 ```
 . describe
@@ -143,6 +145,9 @@ The command is the same as `keep if !missing(incomegroup)`. The operator `!` sta
 ## Aggregate data
 
 Calculate the number of countries in each income group and their average census year.
+
+FIXME: `egen` stands for extended generate
+
 ```
 . egen n_country = count(countrycode), by(incomegroup)
 . egen average_census_year = mean(censusyear), by(incomegroup)
@@ -195,6 +200,10 @@ egen average_census_decade = mean(int(censusyear/10)*10), by(region)
 ```
 {: .source}
 
+NB: this may be tricky to follow because of ordering
+
+FIXME: add challenge to practice nesting
+
 > ## Challenge
 > Create a variable for the difference of `censusyear` from the average of the region. Show that its mean is zero. Why?
 > > ## Solution
@@ -216,7 +225,11 @@ egen average_census_decade = mean(int(censusyear/10)*10), by(region)
 > {: .solution}
 {: .challenge}
 
+FIXME: why `collapse` does not follow here?
+
 ## Reshape data
+
+FIXME: motivate `reshape`. what kind of calculations can i do in either shape? for example, plotting a line graph or merging other annual data such as price index, requires long format. 
 
 The WDI dataset in `data/WDIData.csv` has a strange shape. Variables are in separate rows, whereas years are in separate columns. This is the opposite of "[tidy data](http://dx.doi.org/10.18637/jss.v059.i10)," where each variable has its own column, and different observations such as different years are in separate rows. We will reshape the data in the tidy format.
 

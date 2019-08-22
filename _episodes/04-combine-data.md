@@ -20,6 +20,9 @@ The commands `append` and `merge` combine a dataset in memory (the "master" data
 
 The command `append` is used to combine datasets with the same columns, each representing a different set of observations. A common use case is combining large datasets broken into smaller chunks.
 
+FIXME: create small data chunks
+FIXME: do this after loop episode?
+
 To practice appending, first create two smaller datasets.
 ```
 use "data/WDI-select-variables.dta", clear
@@ -106,6 +109,8 @@ Variables that have the same name are combined as expected. Because `old_data` i
 We can also see the edge of the two datasets: the master data ends with "Zimbabwe," the using data starts with "Aruba." (Usually this will not be as obvious.)
 
 Because `append` can be used to combine many small chunks of files, we will return to it when discussing automating repetitive tasks with loops.
+
+FIXME: when manual, when loop?
 
 ## Merge
 Load the decadal WDI data. Merge the average distance measure for each country. 

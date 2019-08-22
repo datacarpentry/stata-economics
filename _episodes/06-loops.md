@@ -315,4 +315,6 @@ foreach X of varlist population* {
 }
 ```
 
+FIXME: connect `foreach` examples to WDI data cleaning to create an advanced .do file?
+
 {% include links.md %}

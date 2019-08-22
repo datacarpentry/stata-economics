@@ -36,7 +36,8 @@ You can have Stata use the values in row 1 as variable names by using varnames o
 import delimited "data/WDIData.csv", varnames(1) clear
 ```
 {: .source}
-Note that we are using multiple options for the command.
+We are using multiple options for the command. Note that there are one fewer observations than before; the first row is now read as variable names, not as an observation.
+
 But since 1960, 1961, etc., are not valid variable names, these will still be called `v5` through `v64`.
 
 > ## Challenge
