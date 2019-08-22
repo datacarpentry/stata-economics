@@ -292,11 +292,12 @@ dragon fruit
 
 > ## Challenge
 > What would be the output of
->```
->foreach fruit in apple banana carrot {
->    display "`fruit' with `fruit's"
->}
->```
+> ```
+> foreach fruit in apple banana carrot {
+>     display "`fruit's with `fruit's"
+> }
+> ```
+> {: .source}
 > > ## Solution
 > > ```
 >> .  foreach fruit in apple banana carrot {
@@ -357,10 +358,10 @@ You can reuse the loop variable later in different loops. Note the use of variab
 
 ```
 foreach X of varlist population* {
-	forvalues i = 1/5 {
-		generate `X'_`i'= `X'^`i'
-		label variable  `X'_`i' "`X', polynomial of order `i'"
-		}
+    forvalues i = 1/5 {
+        generate `X'_`i'= `X'^`i'
+        label variable  `X'_`i' "`X', polynomial of order `i'"
+    }
 }
 ```
 
