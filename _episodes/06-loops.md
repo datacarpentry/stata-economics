@@ -12,7 +12,22 @@ keypoints:
 ---
 
 ## For loops
-Sometimes you will need to do repetitive tasks in the process of data manipulation and analysis. Loops are a way to avoid repeating the same code multiple times.
+Sometimes you will need to do repetitive tasks in the process of data manipulation and analysis. For example, you might want to summarize `gdp_per_capita`, for each year in your dataset. You may be tempted to write something like this:
+
+```
+. use /data/WDI-select-variables.dta", clear
+.summarize gdp_per_capita if year == 2010
+.summarize gdp_per_capita if year == 2011
+.summarize gdp_per_capita if year == 2012
+.summarize gdp_per_capita if year == 2013
+.summarize gdp_per_capita if year == 2014
+.summarize gdp_per_capita if year == 2015
+.summarize gdp_per_capita if year == 2016
+.summarize gdp_per_capita if year == 2017
+```
+{: .output}
+
+This is approach is not great in case you would like to look at all years in the dataset, or change time-period of interest. Loops are a way to avoid repeating the same code multiple times.
 
 ```
 . forvalues i = 1/5 {
@@ -27,7 +42,13 @@ Sometimes you will need to do repetitive tasks in the process of data manipulati
 ```
 {: .output}
 
-You should always place the curly braces to open and close the loop. The indentation is optional, but helps read your code better, especially with nested loops.
+You should always place the curly braces to open and close the loop.  
+i). the open brace must appear on the same line as the `for` statement;
+ii). nothing may follow the open brace except comments; 
+iii). the first command to be executed must appear on a new line;
+iv). the close brace must appear on a line by itself.
+
+In `Stata`, the indentation is optional, but helps read your code better, especially with nested loops.
 
 ```
 . forvalues i = 1/5
@@ -56,32 +77,9 @@ We can use multiple commands inside the loop.
 ```
 {: .output}
 
-> ## Challenge
-> What would be the output of
-> ```
-> forvalues i = 0/4 {
->     display `i', 5*`i'  
-> }
-> ```
-> {: .source}
-> > ## Solution
-> > ```
-> > 0 0
-> > 1 5
-> > 2 10
-> > 3 15
-> > 4 20
-> > ```
-> > {: .output}
-> {: .solution}
-{: .challenge}
-
-
-You can use the loop variable in any command, in any place.
+You can use the loop variable in any command, in any place. 
 
 ```
-. use /data/WDI-select-variables.dta", clear
-
 .forvalues t = 2010/2017 {
   2.    summarize gdp_per_capita if year == `t'
   3. }
@@ -120,7 +118,7 @@ gdp_per_ca~a |        235    18567.77    19230.34     661.24     116932
 ```
 {: .output}
 
-The loop variable is not displayed, so we may not know where the loop is currently unless we explicitly display it.
+The loop variable is not displayed, so we may not know where the loop is currently unless we explicitly ask `Stata` to display it.
 
 ```
 . forvalues t = 2010/2017 {
@@ -212,7 +210,38 @@ Note that the loop variable is a macro, not a scalar. This helps us write code w
 > {: .solution}
 {: .challenge}
 
-You can set the step size of the loop.
+You can set the step size of the loop. In this case, we have a start, a step size in round brackets, and an end number. 
+
+```
+. forvalues i = 1(1)5 {
+  2.     display `i'
+  3. }
+1
+2
+3
+4
+5
+
+```
+
+> ## Challenge
+> What would be the output of
+> ```
+> forvalues i = 0(2)4 {
+>     display `i', 5*`i'  
+> }
+> ```
+> {: .source}
+> > ## Solution
+> > ```
+> > 0 0
+> > 2 10
+> > 4 20
+> > ```
+> > {: .output}
+> {: .solution}
+{: .challenge}
+
 
 Create an indicator variable for each decade.
 
@@ -239,9 +268,7 @@ carrot
 ```
 {: .output}
 
- Note that loop variable is given the name `fruit`. We can choose any name we want for the looping variables. We might have named it  `unicorn`  and the loop would still work, as long as we correctly invoke the variable inside the loop:
-
-The loop variable is still a macro and is evaluated as part of the command.
+ Note that loop variable is given the name `fruit`. We can choose any name we want for the looping variables. We might have named it  `unicorn`  and the loop would still work, as long as we correctly invoke the variable inside the loop. The loop variable is still a macro and is evaluated as part of the command.
 
 ```
 . foreach fruit in apple banana carrot {
@@ -272,8 +299,8 @@ dragon fruit
 > ## Challenge
 > What would be the output of
 > ```
-> foreach fruit in apple banana carrot dragon fruit {
->     display "`fruit'"  
+> foreach element in apple banana carrot dragon fruit {
+>     display "`element'"  
 > }
 > ```
 > {: .source}
@@ -292,12 +319,11 @@ dragon fruit
 
 > ## Challenge
 > What would be the output of
-> ```
-> foreach fruit in apple banana carrot {
->     display "`fruit's with `fruit's"
-> }
-> ```
-> {: .source}
+>```
+>foreach fruit in apple banana carrot {
+>    display "`fruit's with `fruit's"
+>}
+>```
 > > ## Solution
 > > ```
 >> .  foreach fruit in apple banana carrot {
@@ -357,11 +383,11 @@ foreach var of varlist *_index {
 You can reuse the loop variable later in different loops. Note the use of variable name wildcards.
 
 ```
-foreach X of varlist population* {
-    forvalues i = 1/5 {
-        generate `X'_`i'= `X'^`i'
-        label variable  `X'_`i' "`X', polynomial of order `i'"
-    }
+foreach var of varlist population* {
+	forvalues i = 1/5 {
+		generate `var'_`i'= `var'^`i'
+		label variable  `var'_`i' "`var', polynomial of order `i'"
+		}
 }
 ```
 
