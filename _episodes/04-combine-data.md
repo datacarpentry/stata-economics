@@ -20,29 +20,12 @@ The commands `append` and `merge` combine a dataset in memory (the "master" data
 
 The command `append` is used to combine datasets with the same columns, each representing a different set of observations. A common use case is combining large datasets broken into smaller chunks.
 
-FIXME: create small data chunks
-FIXME: do this after loop episode?
-
-To practice appending, first create two smaller datasets.
-```
-use "data/WDI-select-variables.dta", clear
-keep if year == 1990
-generate old_data = 1
-save "data/gdp1990.dta"
-
-use "data/WDI-select-variables.dta", clear
-keep if year == 2017
-generate new_data = 1
-save "data/gdp2017.dta"
-```
-{: .source}
-
+Load GDP data from the annual files `data/gdp1990.dta`, `data/gdp1991.dta`, etc.
 ```
 use "data/gdp1990.dta", clear
 describe
-append using "data/gdp2017.dta"
+append using "data/gdp1991.dta"
 describe
-summarize old_data new_data
 ```
 {: .source}
 
@@ -53,64 +36,66 @@ summarize old_data new_data
 
 Contains data from data/gdp1990.dta
   obs:           264                          
- vars:             7                          16 Aug 2019 15:04
- size:        22,440                          
-----------------------------------------------------------------------------------------------------------------------
+ vars:             2                          22 Aug 2019 13:39
+ size:         2,904                          
+--------------------------------------------------------------------------------------
               storage   display    value
 variable name   type    format     label      variable label
-----------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 countrycode     str3    %9s                   Country Code
-year            int     %9.0g                 
 gdp_per_capita  double  %8.0g                 gdp_per_capita v
-merchandise_t~e double  %8.0g                 merchandise_trade v
-population      double  %8.0g                 population v
-countryname     str52   %52s                  Country Name
-old_data        float   %9.0g                 
-----------------------------------------------------------------------------------------------------------------------
-Sorted by: countrycode  year
+--------------------------------------------------------------------------------------
+Sorted by: countrycode
 
-. append using "data/gdp2017.dta"
+. append using "data/gdp1991.dta"
 
 . describe
 
 Contains data from data/gdp1990.dta
   obs:           528                          
- vars:             8                          16 Aug 2019 15:04
- size:        46,992                          
-----------------------------------------------------------------------------------------------------------------------
+ vars:             2                          22 Aug 2019 13:39
+ size:         5,808                          
+--------------------------------------------------------------------------------------
               storage   display    value
 variable name   type    format     label      variable label
-----------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 countrycode     str3    %9s                   Country Code
-year            int     %9.0g                 
 gdp_per_capita  double  %8.0g                 gdp_per_capita v
-merchandise_t~e double  %8.0g                 merchandise_trade v
-population      double  %8.0g                 population v
-countryname     str52   %52s                  Country Name
-old_data        float   %9.0g                 
-new_data        float   %9.0g                 
-----------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 Sorted by: 
      Note: Dataset has changed since last saved.
 
-. summarize old_data new_data
-
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
--------------+---------------------------------------------------------
-    old_data |        264           1           0          1          1
-    new_data |        264           1           0          1          1
 ```
 {: .output}
 
-Variables that have the same name are combined as expected. Because `old_data` is only defined in the master dataset, its values are filled with missing value for the remaining observations. Similarly, `new_data` is only defined for those observations that come from the using dataset.
+Note that the files does not contain a year variable, so we would not know which observation is coming from which year. We modify the code to create a variable called `year`.
+```
+use "data/gdp1990.dta", clear
+generate year = 1990
+append using "data/gdp1991.dta"
+```
+{: .source}
+Looking at the data, we see that variables that have the same name are combined as expected. 
 
 ![ZWE to ABW]({{ "/img/append.png" | relative_url }}) 
 
 We can also see the edge of the two datasets: the master data ends with "Zimbabwe," the using data starts with "Aruba." (Usually this will not be as obvious.)
 
-Because `append` can be used to combine many small chunks of files, we will return to it when discussing automating repetitive tasks with loops.
+Because the variable `year` was not defined in `gdp1991.dta`, its values are missing for observations that comes from this file. This suggest that we can update the year based on missing values. Our final combination code will look like this.
 
-FIXME: when manual, when loop?
+```
+use "data/gdp1990.dta", clear
+generate year = 1990
+append using "data/gdp1991.dta"
+replace year = 1991 if missing(year)
+append using "data/gdp1992.dta"
+replace year = 1992 if missing(year)
+...
+```
+{: .source}
+All this repetition of years makes our code prone to errors. We will automate this process in the next Episode.
+
+FIXME: it may make sense to move this episode to *after* the loops
 
 ## Merge
 Load the decadal WDI data. Merge the average distance measure for each country. 
