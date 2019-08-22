@@ -171,7 +171,7 @@ generate távolság = dist
 ```
 {: .source}
 
-Stata allows you to abbreviate the name of a variable to the shortest string of characters that uniquely identifies it.
+Stata allows you to abbreviate the name of a variable to the shortest string of characters that uniquely identifies it. 
 
 ```
 . describe comlang
@@ -187,25 +187,48 @@ comlang_off     byte    %8.0g                 1 for common official of primary l
 
 ```
 
-When displaying long (even less than 32 character) variable names, Stata often abbreviates `like~so`.
+You could refer to all variables that start with `dist` by using wildcard patterns:  `*`  that matches zero or more characters, or `?`, that matches any one character.
+
 ```
-. describe comlang_ethno 
+ describe dist*
 
               storage   display    value
 variable name   type    format     label      variable label
 ----------------------------------------------------------------------------------------------
-comlang_ethno   byte    %8.0g                 1 if a language is spoken by at least 9% of the
-                                                population in both countries
+dist            float   %9.0g                 simple distance (most populated cities, km)
+distcap         float   %9.0g                 simple distance between capitals (capitals, km)
+distw           double  %9.0g                 weighted distance (pop-wt, km)
+distwces        double  %9.0g                 weighted distance (pop-wt, km) CES distances
+                                                with theta=-1
+
+
+. describe dist?
+
+              storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------------------
+distw           double  %9.0g                 weighted distance (pop-wt, km)
+
+. 
+```
+
+
+
+When displaying long variable names, Stata often abbreviates `like~so`.
+
+```
+. summarize comlang_ethno 
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+comlang_et~o |     50,176    .1691645    .3749009          0          1
 
 ```
 {: .output}
 
-To avoid using long variable names, you can shorten them and provide a more detailed description about the variable using variable labels.
-If you don't know or recall a command in Stata, you can always google something related and most certainly you will find answers to your questions. For example, if you search `label variables Stata` on google, the fist link that will show up is the official Stata Manual.
+To avoid using long variable names, you can shorten them and provide a more detailed description about the variable using variable labels. Labels help your coauthors, including your future self, make sense of what is in the variable. For example, that is how we learn that distance is measured in kilometers, not miles. Always use them.
 
-![Google Stata Label]({{ "/img/google-label.png" | relative_url }})
 
-![Manual Stata Label]({{ "/img/help-label.png" | relative_url }})
 
 ```
 . label variable iso_o "ISO3166 alphanumeric code of origin country"
@@ -218,9 +241,14 @@ variable name   type    format     label      variable label
 iso_o           str3    %9s                   ISO3166 alphanumeric code of origin country
 
 ```
-{: .output}
 
-Labels help your coauthors, including your future self, make sense of what is in the variable. For example, that is how we learn that distance is measured in kilometers, not miles. Always use them.
+If you don't know or recall a command in Stata, searching the Internet will almost always turn out useful. For example, if you search `label variables Stata`, the fist link that will show up is the official Stata Manual.
+
+![Google Stata Label]({{ "/img/google-label.png" | relative_url }})
+
+![Manual Stata Label]({{ "/img/help-label.png" | relative_url }})
+
+
 
 ## Command syntax
 
