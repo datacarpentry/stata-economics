@@ -93,7 +93,10 @@ But since 1960, 1961, etc., are not valid variable names, these will still be ca
 > {: .solution}
 {: .challenge}
 
-Reading text data from .csv files can be even more challenging. Let us read the country names and characteristics.
+Reading text data from .csv files can be even more challenging. Let us read the country names and characteristics. This is what the file should look like.
+
+![.csv file in LibreOffice]({{ "/img/utf-8-csv.png" | relative_url }})
+
 
 ```
 import delimited "data/WDICountry.csv", varnames(1) clear
@@ -110,8 +113,6 @@ As always, we look at the data first.
 ![Broken column]({{ "/img/csv-newline.png" | relative_url }})
 
 There are some things that do not belong to the `countrycode` variable. Indeed they look like entire parts of a .csv line. 
-
-FIXME: use this file in shell lesson
 
 After going out to the shell and exploring the file there (for example, `head data/WDICountry.csv`), we will find a text variable is split on multiple lines. This may trip up `import delimited`.
 
