@@ -96,25 +96,8 @@ You can also find a video tutorial on this page.
 With these steps we created a file where you can adjust your bash settings and also replaced the alias of Stata's executable. 
 
 ## Download the workshop data
-Download the [data repository](https://github.com/korenmiklos/dc-economics-data). (FIXME: create a figshare repository)
-
-FIXME: create a data folder with the data repository.
-
-
-
-## Data resources
-### Explicit open license
-- https://datahub.io/core
-- https://github.com/AidData-WM/public_datasets/
-- https://data.worldbank.org/
-- https://opentender.eu/de/download
-- https://offeneregister.de/#download
-- http://www.macrohistory.net/data/
-
-### Needs work on licensing
-- http://www.cepii.fr/CEPII/en/bdd_modele/presentation.asp?id=6
-- https://www.nber.org/data/
-
-- http://opendatahandbook.org/
+1. Download the [data package](https://zenodo.org/record/3375649/files/dc-economics-data.zip?download=1) from Zenodo.
+2. Create a new directory you are going to use at the workshop.
+3. Unzip the .zip file into this directory. You should see the files, `LICENSE.md` and `README.md`, as well as directoris `data` and `doc`. 
 
 {% include links.md %}
