@@ -170,8 +170,6 @@ By default, each row gets a merge code, saved in a new variable called `_merge`.
 
 Since `merge` displays the distribution of merge codes, we often do not need to save it directly. `merge m:1 iso_o using "data/average_distance.dta", keep(master match) nogenerate`
 
-FIXME: find a good use case for `update` option 
-
 > ## One to many, many to one
 > We have seen a many-to-one `m:1` merge, where the "master" data has many rows with the same key, the "using" data has only one row for each key value. One-to-many `1:m` are exactly the flipside of this, with the role of "master" and "using" data reversed. 
 {: .callout}
