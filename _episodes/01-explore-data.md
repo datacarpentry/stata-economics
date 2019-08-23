@@ -12,6 +12,9 @@ objectives:
 keypoints:
 - "Always write out filename extensions to avoid confusion."
 - "Always use forward slash `/` in path names."
+- "Use short and descriptive variable names."
+- "Label your variables."
+
 ---
 
 ![The Stata interface]({{ "/img/interface.png" | relative_url }})
@@ -178,6 +181,13 @@ Stata allows you to abbreviate the name of a variable to the shortest string of 
 comlang ambiguous abbreviation
 r(111);
 
+```
+{: .error}
+
+The error occurs because two variables have the same abbreviation, `comlang`, in common. If you instead ask Stata to do the following
+
+```
+
 . describe comlang_o
 
               storage   display    value
@@ -186,8 +196,8 @@ variable name   type    format     label      variable label
 comlang_off     byte    %8.0g                 1 for common official of primary language
 
 ```
-
-You could refer to all variables that start with `dist` by using wildcard patterns:  `*`  that matches zero or more characters, or `?`, that matches any one character.
+Stata will describe the variable. If you would like to know if variables in your dataset have a common abbreviation, you can use wildcards.
+For example, you could refer to all variables that start with `dist` by using wildcard pattern:  `*`  that matches zero or more characters or `?` that matches exactly one character.
 
 ```
  describe dist*
@@ -213,8 +223,7 @@ distw           double  %9.0g                 weighted distance (pop-wt, km)
 ```
 
 
-
-When displaying long variable names, Stata often abbreviates `like~so`.
+When displaying long variable names, some Stata commands will abbreviate the variable name using `~`. 
 
 ```
 . summarize comlang_ethno 
@@ -225,6 +234,8 @@ comlang_et~o |     50,176    .1691645    .3749009          0          1
 
 ```
 {: .output}
+
+In many cases it would be hard for use to understand what variables we are dealing with. 
 
 To avoid using long variable names, you can shorten them and provide a more detailed description about the variable using variable labels. Labels help your coauthors, including your future self, make sense of what is in the variable. For example, that is how we learn that distance is measured in kilometers, not miles. Always use them.
 
@@ -288,7 +299,7 @@ We can add options with a comma. For example, here is the option `detail`.
 
 Note that here, because we have more space, the label of the variable is used, not its short name.
 
-(Almost) every command can be run on a subset of observations, selected by an `if` clause.
+(Almost) every command can be run on a subset of observations, selected by an `if` condition. An if condition consists of the word `if` followed by some condition that is either true or false.
 
 ```
 . summarize dist if dist < 1000, detail
@@ -310,9 +321,9 @@ Note that here, because we have more space, the label of the variable is used, n
 ```
 {: .output}
 
-Note that fewer observations are included because of the `if` clause. Also, as we would expect, all distances are less than 1,000km.
+Note that fewer observations are included because of the `if` condition. Also, as we would expect, all distances are less than 1,000km.
 
-The `if` clause can refer to any function of any other variable, even those that are not used in the command. Here we are summarizing distance for country pairs that are contiguous (share a common border). Note that both the mean and the median distance are much smaller.
+The `if` condition can refer to any function of any other variable, even those that are not used in the command. Here we are summarizing distance for country pairs that are contiguous (share a common border). Note that both the mean and the median distance are much smaller.
 
 ```
 . summarize dist if contig == 1, detail
