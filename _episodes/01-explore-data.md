@@ -239,6 +239,24 @@ In many cases it would be hard for use to understand what variables we are deali
 
 To avoid using long variable names, you can shorten them and provide a more detailed description about the variable using variable labels. Labels help your coauthors, including your future self, make sense of what is in the variable. For example, that is how we learn that distance is measured in kilometers, not miles. Always use them.
 
+> ## Never abbreviate
+> A quirky feature of Stata is that it lets you abbreviate everything: commands, variable names, even file names. Abbreviation might save you some typing, but destroys legibility of your code, so please think of your coauthors and your future self and never do it. 
+> ```
+> u data, clear
+> g gdp_per_capita = 1
+> ren gdp gdp
+> ```
+> {: .source}
+> means the same as
+> ```
+> use "data.dta", clear
+> generate gdp_per_capita = 1
+> rename gdp_per_capita gdp
+> ```
+> {: .source}
+> but the latter is much more explicit. The built-in editor of Stata 16 offers [tab completion](https://www.stata.com/new-in-stata/do-file-editor-autocompletion/) so you don't even have to type to write out the full command and variable names.
+{: .callout}
+
 
 
 ```
