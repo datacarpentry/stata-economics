@@ -182,6 +182,8 @@ comlang ambiguous abbreviation
 r(111);
 
 ```
+{: .error}
+
 The error occurs because two variables have the same abbreviation, `comlang`, in common. If you instead ask Stata to do the following
 
 ```

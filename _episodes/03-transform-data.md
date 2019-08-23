@@ -490,12 +490,14 @@ r(602);
 Use the `replace` option if you would like to overwrite an existing dataset. 
 
 
-> # Callout
+> ## Save old
 > To save a dataset in Stata 14, Stata 15, or Stata 16 so that it can be used in Stata 13, use the `saveold` command. 
+{: .callout}
+
 > ```
 > saveold "data/WDI-select-variables-13.dta", replace v(13) 
 > ```
-> {: .source}
+
 >
 > Note, however, that string variables (and labels) do not allow for Unicode characters before Version 14. If you work with non-latin characters, it is highly recommended to use Stata 14 or later.
 {: .callout}
@@ -583,11 +585,6 @@ All of this can be done by `egen`. The main difference is that here we have only
 > {: .solution}
 {: .challenge}
 
-> ## Challenge
-> What is the difference between `collapse (mean) average_distance = distw, by(iso_o)` and `egen average_distance = mean(distw), by(iso_o)`?
-> > ## Solution
-> > Both calculate the average `distw` by origin country code. `collapse` creates a new dataset with one row for each group (origin country code). `egen` keeps the original dataset, its rows and variables, and adds a new variable with the group average.
-> {: .solution}
-{: .challenge}
+
 
 {% include links.md %}
