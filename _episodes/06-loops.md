@@ -212,17 +212,17 @@ Note that the loop variable is a macro, not a scalar. This helps us write code w
 
 
 > ## Challenge
-> Write a do-file named "append-gdp-all.do" that contains a appends all data which name matches the pattern gdp`year'.dta. Generate a variable called year that records the gdp year as indicated in the name of the file. Label the variables accordingly. Save the final dataset as gdp1990-2017.dta".
+> Write a do-file named "append-gdp-all.do" that appends all data which name matches the pattern gdp`year'.dta. Generate a variable called year that records the gdp year as indicated in the name of the file. Label the variables accordingly. Save the final dataset as gdp1990-2017.dta".
 > > ## Solution
 > > ```
-> > use "gdp1990.dta", clear
+> > use "data/gdp1990.dta", clear
 > > generate year=1990
 > > label variable gdp_per_capita "GDP per capita"
 > > label variable year "Year"
 > >  forvalues year = 1991/2017 {
-> >      append using "gdp`year'.dta"
+> >      append using "data/gdp`year'.dta"
 > >      replace year=`year' if missing(year)
-> >  save "gdp1990-2017.dta", replace
+> >  save "data/gdp1990-2017.dta", replace
 > >  }
 > > ```
 > > {: .output}
@@ -404,10 +404,10 @@ You can reuse the loop variable later in different loops. Note the use of variab
 
 ```
 foreach var of varlist population* {
-	forvalues i = 1/5 {
-		generate `var'_`i'= `var'^`i'
-		label variable  `var'_`i' "`var', polynomial of order `i'"
-		}
+  forvalues i = 1/5 {
+    generate `var'_`i'= `var'^`i'
+    label variable  `var'_`i' "`var', polynomial of order `i'"
+    }
 }
 ```
 
