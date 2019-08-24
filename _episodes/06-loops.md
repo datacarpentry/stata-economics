@@ -194,7 +194,7 @@ Note that the loop variable is a macro, not a scalar. This helps us write code w
 {: .output}
 
 > ## Challenge
-> Write a loop that display the first five square numbers. 
+> Write a loop that displays the first five square numbers. 
 > > ## Solution
 > > ```
 > > . forvalues i = 1/5 {
@@ -209,6 +209,26 @@ Note that the loop variable is a macro, not a scalar. This helps us write code w
 > > {: .output}
 > {: .solution}
 {: .challenge}
+
+
+> ## Challenge
+> Write a do-file named "append-gdp-all.do" that contains a appends all data which name matches the pattern gdp`year'.dta. Generate a variable called year that records the gdp year as indicated in the name of the file. Label the variables accordingly. Save the final dataset as gdp1990-2017.dta".
+> > ## Solution
+> > ```
+> > use "gdp1990.dta", clear
+> > generate year=1990
+> > label variable gdp_per_capita "GDP per capita"
+> > label variable year "Year"
+> >  forvalues year = 1991/2017 {
+> >      append using "gdp`year'.dta"
+> >      replace year=`year' if missing(year)
+> >  save "gdp1990-2017.dta", replace
+> >  }
+> > ```
+> > {: .output}
+> {: .solution}
+{: .challenge}
+
 
 You can set the step size of the loop. In this case, we have a start, a step size in round brackets, and an end number. 
 
@@ -390,7 +410,5 @@ foreach var of varlist population* {
 		}
 }
 ```
-
-FIXME: connect `foreach` examples to WDI data cleaning to create an advanced .do file?
 
 {% include links.md %}
