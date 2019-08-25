@@ -26,7 +26,7 @@ How do you find your current working directory? Check the bottom line of the Sta
 > ## Backward or forward?
 > On a Windows machine, Stata will display your working directory with a backslash (`\`) separating its components, like
 > `C:\Users\koren\Dropbox\teaching\courses\2019\carpentries\stata-economics`.
-> You should still refer to directories using a forward slash (`/`) to stay compatible with other platforms. The forward slash is understood by all three major platforms, whereas the backslash has a special meaning on Unix and Mac.
+> Refer to directories using a forward slash (`/`) to stay compatible with other platforms. The forward slash is understood by all three major platforms, whereas the backslash has a special meaning on Unix and Mac.
 {: .callout}
 
 ```
@@ -223,7 +223,7 @@ distw           double  %9.0g                 weighted distance (pop-wt, km)
 ```
 
 
-When displaying long variable names, some Stata commands will abbreviate the variable name using `~`. 
+When displaying long variable names, some Stata commands will abbreviate the variable name using `~`, making it hard to understand what variables we are dealing with. 
 
 ```
 . summarize comlang_ethno 
@@ -235,7 +235,6 @@ comlang_et~o |     50,176    .1691645    .3749009          0          1
 ```
 {: .output}
 
-In many cases it would be hard for use to understand what variables we are dealing with. 
 
 To avoid using long variable names, you can shorten them and provide a more detailed description about the variable using variable labels. Labels help your coauthors, including your future self, make sense of what is in the variable. For example, that is how we learn that distance is measured in kilometers, not miles. Always use them.
 

@@ -98,6 +98,6 @@ With these steps we created a file where you can adjust your bash settings and a
 ## Download the workshop data
 1. Download the [data package](https://zenodo.org/record/3375649/files/dc-economics-data.zip?download=1) from Zenodo.
 2. Create a new directory you are going to use at the workshop.
-3. Unzip the .zip file into this directory. You should see the files, `LICENSE.md` and `README.md`, as well as directoris `data` and `doc`. 
+3. Unzip the .zip file into this directory. You should see the files, `LICENSE.md` and `README.md`, as well as directories `data` and `doc`. 
 
 {% include links.md %}
