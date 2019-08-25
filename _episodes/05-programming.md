@@ -161,7 +161,7 @@ There are relative paths in `read_wdi_variables.do`, so it matters which working
 
 Your .do file begins with loading a dataset and ends with saving one. It leaves no other trace.
 
-> ## Happy Together... <dd> &#127925 </dd> 
+> ## Happy Together...
 > Always assume that mistakes will happen and you should be prepared to minimize them. 
 > 1. Never modify the raw data files. Save the results of your data cleaning in a new file.
 > 2. Every data file is created by a script. Convert your interactive data cleaning session to a .do file.
@@ -512,7 +512,7 @@ countryname     str52   %52s                  Country Name
 > 4. Creates a variables called `c` with the value 8.
 >
 > > ## Solution
-> > The correct is 4. ``A'`` evaluates to `a`, which is a variable with the value 4. ```B'`` evaluates to 4, so the variable `c` becomes 8.
+> > The correct is 4. ``A'`` evaluates to `a`, which is a variable with the value 4. `B' evaluates to 4, so the variable `c` becomes 8.
 > {: .solution}
 {: .challenge}
 
