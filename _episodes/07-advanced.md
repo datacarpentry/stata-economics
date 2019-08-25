@@ -148,7 +148,7 @@ save "data/WDI-select-variables.dta", replace
 ```
 {: .source}
 
-Many times you may need to type the same commands when and do repetitive tasks in the process of data manipulation. For example, you need to use lines 5-8 in `read_wdi_variables.do` also in another do-file. Rather than copy-pasting these lines of code, you can create a new do-file, say named `generate_variable_name.do` which is called from `read_wdi_variables.do` as well as the other do-file.
+Many times you may need to type the same commands when and do repetitive tasks in the process of data manipulation. For example, you need to use lines 5-8 in `read_wdi_variables.do` also in another .do. Rather than copy-pasting these lines of code, you can create a new .do named `generate_variable_name.do` which is called from `read_wdi_variables.do` as well as the other .do.
 
 `generate_variable_name.do` will contain the following lines of code
 
@@ -161,7 +161,7 @@ replace variable_name = "population" if indicatorcode == "SP.POP.TOTL"
 replace variable_name = "population_density" if indicatorcode == "EN.POP.DNST"
 ```
 
-Hence, the `read_wdi_variables.do` will look like
+WHhereas `read_wdi_variables.do` will look like
 
 
 ```
@@ -170,7 +170,7 @@ keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "NY.GDP.PCAP.PP.KD", "SP.POP.
 reshape long v, i(countrycode indicatorcode) j(year)
 replace year = year - 5 + 1960
 
-do generate_variable_name.do
+do code/generate_variable_name.do
 
 drop indicatorcode indicatorname
 reshape wide v, i(countrycode year) j(variable_name) string

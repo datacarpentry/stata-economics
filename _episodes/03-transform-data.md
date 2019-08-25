@@ -537,7 +537,7 @@ replace variable_name = "population" if indicatorcode == "SP.POP.TOTL"
 drop indicatorcode indicatorname
 reshape wide v, i(countrycode year) j(variable_name) string
 rename v* *
-save "data/WDI-select-variables.dta", replace
+save "data/WDI-select-variables.dta"
 ```
 {: .source}
 
