@@ -93,9 +93,8 @@ replace year = 1992 if missing(year)
 ...
 ```
 {: .source}
-All this repetition of years makes our code prone to errors. We will automate this process in the next Episode.
+All this repetition of years makes our code prone to errors. We will automate this process in [Episode 6]({{ "/06-loops/" | relative_url }}) 
 
-FIXME: it may make sense to move this episode to *after* the loops
 
 ## Merge
 Load the decadal WDI data. Merge the average distance measure for each country. 
@@ -168,11 +167,24 @@ By default, each row gets a merge code, saved in a new variable called `_merge`.
 ```
 {: .output}
 
-Since `merge` displays the distribution of merge codes, we often do not need to save it directly. `merge m:1 iso_o using "data/average_distance.dta", keep(master match) nogenerate`
+Since `merge` displays the distribution of merge codes, we often do not need to save it directly. `merge m:1 iso_o using "data/average_distance.dta", keep(master match) nogenerate`. As many Stata commands,  `merge` allows several options to be combined.
 
 > ## One to many, many to one
 > We have seen a many-to-one `m:1` merge, where the "master" data has many rows with the same key, the "using" data has only one row for each key value. One-to-many `1:m` are exactly the flipside of this, with the role of "master" and "using" data reversed. 
 {: .callout}
+
+> ## Challenge
+> Use "data/average_distance.dta" and merge the data with "data/gdp2017.dta"
+> > ## Solution
+> > ```
+> > . use "data/average_distance.dta", clear
+> > rename iso_o countrycode
+>>  merge 1:1 countrycode using "data/gdp2017.dta", keep(match) nogenerate
+> > ```
+> > {: .output}
+> > Note the missing values. There are eight countries dropped in total.
+> {: .solution}
+{: .challenge}
 
 > ## Gotcha
 > Never do a many-to-many, `m:m` merge. It does not do what you expect. You probably want to do a `joinby` instead.

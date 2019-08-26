@@ -144,7 +144,41 @@ drop indicatorcode indicatorname
 reshape wide v, i(countrycode year) j(variable_name) string
 rename v* *
 save "data/WDI-select-variables.dta", replace
+
 ```
 {: .source}
+
+Many times you may need to type the same commands when and do repetitive tasks in the process of data manipulation. For example, you need to use lines 5-8 in `read_wdi_variables.do` also in another .do. Rather than copy-pasting these lines of code, you can create a new .do named `generate_variable_name.do` which is called from `read_wdi_variables.do` as well as the other .do.
+
+`generate_variable_name.do` will contain the following lines of code
+
+```
+generate str variable_name = ""
+replace variable_name = "merchandise_trade" if indicatorcode == "TG.VAL.TOTL.GD.ZS"
+replace variable_name = "life_expectancy" if indicatorcode == "SP.DYN.LE00.IN"
+replace variable_name = "gdp_per_capita" if indicatorcode == "`gdp_per_capita'"
+replace variable_name = "population" if indicatorcode == "SP.POP.TOTL" 
+replace variable_name = "population_density" if indicatorcode == "EN.POP.DNST"
+```
+
+WHhereas `read_wdi_variables.do` will look like
+
+
+```
+import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
+keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "NY.GDP.PCAP.PP.KD", "SP.POP.TOTL")
+reshape long v, i(countrycode indicatorcode) j(year)
+replace year = year - 5 + 1960
+
+do code/generate_variable_name.do
+
+drop indicatorcode indicatorname
+reshape wide v, i(countrycode year) j(variable_name) string
+rename v* *
+save "data/WDI-select-variables.dta", replace
+```
+
+
+
 
 {% include links.md %}

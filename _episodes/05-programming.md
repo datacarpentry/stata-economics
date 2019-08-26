@@ -121,9 +121,15 @@ r(602);
 
 As in [Episode 3]({{ "/03-transform-data/" | relative_url }}), Stata lets us know that the file already exists and is unwilling to replace it. As we are using a .do file to create this file, it is totally safe to overwrite. If we make an error, we can fix it and rerun `do code/read_wdi_variables.do`. That is the whole point of .do files; to make your work more reproducible.
 
-> # Exercise
 > Change the last line of the .do file to `save "data/WDI-select-variables.dta", replace` and rerun it.
-{: .challenge}
+
+...
+
+. save "data/WDI-select-variables.dta", replace
+file data/WDI-select-variables.dta saved
+
+```
+
 
 > # Never execute just part of a .do file
 > ![Never do this]({{ "/img/not-by-part.png" | relative_url }}) 
@@ -155,7 +161,7 @@ There are relative paths in `read_wdi_variables.do`, so it matters which working
 
 Your .do file begins with loading a dataset and ends with saving one. It leaves no other trace.
 
-> ## House rules for code and data to live happily together
+> ## Happy Together...
 > Always assume that mistakes will happen and you should be prepared to minimize them. 
 > 1. Never modify the raw data files. Save the results of your data cleaning in a new file.
 > 2. Every data file is created by a script. Convert your interactive data cleaning session to a .do file.
@@ -177,6 +183,7 @@ Your .do file begins with loading a dataset and ends with saving one. It leaves 
 > save "data/WDI-select-variables.dta", replace
 > ```
 > {: .error}
+
 > > ## Solution
 > > There is no error in the .do file but it save two different versions of `WDI-select-variables.dta` under the same name. You cannot be sure which version the data file has. For example, if the command `rename v* *` fails with an error, the .dta file will contain the variable names `vgdp_per_capita` etc, and you will be surprised.
 > {: .solution}
@@ -490,8 +497,11 @@ countryname     str52   %52s                  Country Name
 {: .challenge}
 
 > ## Challenge
-> After running the previous code, what does the following code do?
+> What does the following code do?
 > ```
+> local A a
+> local B 4
+> generate `A' = `B'
 > local C c
 > generate `C' = `A' + `B'
 > ```
@@ -502,7 +512,7 @@ countryname     str52   %52s                  Country Name
 > 4. Creates a variables called `c` with the value 8.
 >
 > > ## Solution
-> > The correct is 4. XXXXX ``A'`` evaluates to `a`, which is a variable with the value 4. ```B'`` evaluates to 4, so the variable `c` becomes 8.
+> > The correct is 4. ``A'`` evaluates to `a`, which is a variable with the value 4. `B' evaluates to 4, so the variable `c` becomes 8.
 > {: .solution}
 {: .challenge}
 
@@ -517,10 +527,12 @@ keep if (year >= `begin_year') & (year <= `end_year')
 
 > ## Challenge
 >
-> Create an index of GDP per capita for each country in each year, relative to a base year set in the local macro `base_year`. This index should take the value 100 in the base year.
+> Use "data/WDI-select-variables.dta" and create an index of GDP per capita for each country in each year, relative to year base year 2000. Store base > year in a local macro that is calle `base_year`. This index should take the value 100 in the base year.
 >
 > > ## Solution
 > > ```
+> > use  "data/wdi_data.dta", clear
+> > local base_year 2000
 > > egen gdp_per_capita_`base_year' = mean(cond(year == `base_year', gdp_per_capita, .)), by(countrycode)
 > > generate gdp_per_capita_index = gdp_per_capita / gdp_per_capita_`base_year' * 100
 > > ```

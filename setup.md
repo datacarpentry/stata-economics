@@ -6,8 +6,23 @@ title: Setup
 
 This lesson uses the statistical package [Stata](https://www.stata.com/products/)[™](license.html). It has been tested on Stata 15.1 MultiProcessor, but it should work on most recent versions. If you do not have a Stata license, please let your instructor know so that they can request a [short-term training license](https://www.stata.com/customer-service/course-short-term-license/) for free.
 
-### Ubuntu
-Step-by-step installation on Ubuntu:
+### Windows
+Step-by-step installation on Windows:
+- Go to https://download.stata.com/download/
+- Log in using your username and password
+- Click on your OS (64-bit Windows)
+- Download and launch the installer.
+- Once the installation is done, start Stata from the Start Menu. The first time you do this, you will have to activate your licence.
+- Enter the serial number provided and press enter
+- Enter the code and press enter
+- Enter the authorization and press enter
+- It should return "Good.  The serial number, code, and authorization make sense. Shall we continue?" Type Y and press enter.
+- When it asks for the first line, it should say "European Economic Association"
+- When it asks for the second line, it should say "Manchester, UK"
+- It will ask for confirmation. Type "Y" and press enter.
+
+### Linux
+Step-by-step installation on Linux:
 - Go to https://download.stata.com/download/
 - Log in using your username and password
 - Click on your OS (64-bit Linux)
@@ -40,25 +55,23 @@ wget http://mirrors.kernel.org/ubuntu/pool/main/libp/libpng/libpng12-0_1.2.54-1u
 dpkg -i libpng12-0_1.2.54-1ubuntu1_amd64.deb
 ```
 
+### Mac
+Step-by-step installation on Mac:
+- Go to https://download.stata.com/download/
+- Log in using your username and password
+- Click on your OS (Mac)
+- Download and launch the installer.
+- Once the installation is done, start Stata from the Start Menu. The first time you do this, you will have to activate your licence.
+- Enter the serial number provided and press enter
+- Enter the code and press enter
+- Enter the authorization and press enter
+- It should return "Good.  The serial number, code, and authorization make sense. Shall we continue?" Type Y and press enter.
+- When it asks for the first line, it should say "European Economic Association"
+- When it asks for the second line, it should say "Manchester, UK"
+- It will ask for confirmation. Type "Y" and press enter.
 
-### Add Stata to the path so that `stata` can be called from the command line (Mac)
 
-If Stata is installed in /Applications/Stata/ the path to the Stata executable is 
-
-`/Applications/Stata/StataSE.app/Contents/MacOS/` for StataSE
-
-and
-`/Applications/Stata/StataMP.app/Contents/MacOS/` for StataMP. 
-
- 
-To add StataMP to the path you should open the terminal and type
- 
-`sudo vi /etc/paths`
-
-and add `/Applications/Stata/StataMP.app/Contents/MacOS/` to it. 
-
-Finally, close the terminal and reopen it. Once everything is set up, type Stata in your terminal to launch Stata.
-
+## Add Stata to the path so that `stata` can be called from the command line
 
 ### Windows
 
@@ -95,26 +108,23 @@ You can also find a video tutorial on this page.
 
 With these steps we created a file where you can adjust your bash settings and also replaced the alias of Stata's executable. 
 
+### Mac
+
+If Stata is installed in /Applications/Stata/ the path to the Stata executable is `/Applications/Stata/StataSE.app/Contents/MacOS/` for Stata Special Edition and `/Applications/Stata/StataMP.app/Contents/MacOS/` for Stata MultiProcessing. 
+
+ To add StataSE to the path you should open the terminal and type
+ 
+`sudo vi /etc/paths`
+
+and add `/Applications/Stata/StataSE.app/Contents/MacOS/` to it. 
+
+Finally, close the terminal and reopen it. Once everything is set up, type `stata` in your terminal to launch Stata.
+
+### Linux
+
 ## Download the workshop data
-Download the [data repository](https://github.com/korenmiklos/dc-economics-data). (FIXME: create a figshare repository)
-
-FIXME: create a data folder with the data repository.
-
-
-
-## Data resources
-### Explicit open license
-- https://datahub.io/core
-- https://github.com/AidData-WM/public_datasets/
-- https://data.worldbank.org/
-- https://opentender.eu/de/download
-- https://offeneregister.de/#download
-- http://www.macrohistory.net/data/
-
-### Needs work on licensing
-- http://www.cepii.fr/CEPII/en/bdd_modele/presentation.asp?id=6
-- https://www.nber.org/data/
-
-- http://opendatahandbook.org/
+1. Download the [data package](https://zenodo.org/record/3375649/files/dc-economics-data.zip?download=1) from Zenodo.
+2. Create a new directory you are going to use at the workshop.
+3. Unzip the .zip file into this directory. You should see the files, `LICENSE.md` and `README.md`, as well as directories `data` and `doc`. 
 
 {% include links.md %}

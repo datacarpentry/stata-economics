@@ -173,7 +173,7 @@ Note that the loop variable is a macro, not a scalar. This helps us write code w
 
 ```
 . forvalues i = 1/5 {
-  2.     generate gdp_`i' = gdp_per_capita^`i'
+  2.     generate gdp_per_capita_`i' = gdp_per_capita^`i'
   3. }
 (9,381 missing values generated)
 (9,381 missing values generated)
@@ -181,7 +181,7 @@ Note that the loop variable is a macro, not a scalar. This helps us write code w
 (9,381 missing values generated)
 (9,381 missing values generated)
 
-. su gdp_?
+. summarize gdp_?
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
@@ -190,11 +190,12 @@ Note that the loop variable is a macro, not a scalar. This helps us write code w
        gdp_3 |      6,459    3.13e+13    1.38e+14   4.45e+07   2.48e+15
        gdp_4 |      6,459    2.33e+18    1.49e+19   1.58e+10   3.35e+20
        gdp_5 |      6,459    2.06e+23    1.71e+24   5.58e+12   4.54e+25
+
 ```
 {: .output}
 
 > ## Challenge
-> Write a loop that display the first five square numbers. 
+> Write a loop that displays the first five square numbers. 
 > > ## Solution
 > > ```
 > > . forvalues i = 1/5 {
@@ -209,6 +210,26 @@ Note that the loop variable is a macro, not a scalar. This helps us write code w
 > > {: .output}
 > {: .solution}
 {: .challenge}
+
+
+> ## Challenge
+> Write a do-file named "append-gdp-all.do" that appends all data which name matches the pattern gdp`year'.dta. Generate a variable called year that records the gdp year as indicated in the name of the file. Label the variables accordingly. Save the final dataset as gdp1990-2017.dta".
+> > ## Solution
+> > ```
+> > use "data/gdp1990.dta", clear
+> > generate year = 1990
+> > label variable gdp_per_capita "GDP per capita"
+> > label variable year "Year"
+> >  forvalues year = 1991/2017 {
+> >      append using "data/gdp`year'.dta"
+> >      replace year = `year' if missing(year)
+> >  save "data/gdp1990-2017.dta", replace
+> >  }
+> > ```
+> > {: .output}
+> {: .solution}
+{: .challenge}
+
 
 You can set the step size of the loop. In this case, we have a start, a step size in round brackets, and an end number. 
 
@@ -384,13 +405,11 @@ You can reuse the loop variable later in different loops. Note the use of variab
 
 ```
 foreach var of varlist population* {
-	forvalues i = 1/5 {
-		generate `var'_`i'= `var'^`i'
-		label variable  `var'_`i' "`var', polynomial of order `i'"
-		}
+  forvalues i = 1/5 {
+    generate `var'_`i'= `var'^`i'
+    label variable  `var'_`i' "`var', polynomial of order `i'"
+    }
 }
 ```
-
-FIXME: connect `foreach` examples to WDI data cleaning to create an advanced .do file?
 
 {% include links.md %}

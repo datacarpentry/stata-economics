@@ -549,7 +549,7 @@ Aggregate the dataset by country and decade, keeping only the mean of each varia
 ```
 generate decade = int(year / 10) * 10
 collapse (mean) gdp_per_capita merchandise_trade population, by(countrycode decade)
-save "data/wdi_decades.dta"
+save "data/wdi_decades.dta", replace
 ```
 {: .source}
 `collapse` can also use multiple groups, like `countrycode` and `decade`
@@ -572,10 +572,9 @@ All of this can be done by `egen`. The main difference is that here we have only
 > > ```
 > > use "data/wdi_decades.dta", clear
 > > egen decade_gdp_average = mean(gdp_per_capita), by(decade)
-> > generate relative_gdp_per_capita = gdp_per_capita / `decade_gdp_average'
+> > generate relative_gdp_per_capita = gdp_per_capita / decade_gdp_average
 > > ```
 > > {: .source}
-> > Note the verbose variable names, the use of `egen` and `tempvar`.
 > {: .solution}
 {: .challenge}
 
