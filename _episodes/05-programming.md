@@ -123,13 +123,12 @@ As in [Episode 3]({{ "/03-transform-data/" | relative_url }}), Stata lets us kno
 
 > Change the last line of the .do file to `save "data/WDI-select-variables.dta", replace` and rerun it.
 
+```
 ...
-
 . save "data/WDI-select-variables.dta", replace
 file data/WDI-select-variables.dta saved
-
 ```
-
+{: .source}
 
 > # Never execute just part of a .do file
 > ![Never do this]({{ "/img/not-by-part.png" | relative_url }}) 
