@@ -491,7 +491,7 @@ For strings, the empty string is treated as missing value.
 {: .challenge}
 
 > ## Challenge
-> Which of the following tells you how many countries have more recent population census than trade data?
+> Which of the following tells you how many countries have more recent trade data than population census?
 > ```
 > count if censusyear < latesttradedata
 > count if censusyear - latesttradedata < 0
