@@ -346,7 +346,7 @@ generate censusyear = real(substr(latestpopulationcensus, 1, 4))
 
 
 > ## Challenge
-> Extract the national accounts base year as a number from the text variable `nationalaccountsbaseyear`. Use the first two and the last two digits so that "2008/09" is read as 2009. There is a function `length()` which returns the length of a string.
+> Extract the national accounts base year as a number from the text variable `nationalaccountsbaseyear`. Use the first two and the last two digits so that "2008/09" is read as 2009. The function `substring(x, -2, 2)` selects the last two characters of a string `x`.
 > > ## Solution
 > > 
 > > ```
@@ -393,7 +393,7 @@ generate censusyear = real(substr(latestpopulationcensus, 1, 4))
 > > ----------------------------------------+-----------------------------------
 > >                                   Total |        206      100.00
 > > 
-> > . generate national_accounts_base_year = real(substr(nationalaccountsbaseyear, 1, 2) + substr(nationalaccountsbaseyear, length(nationalaccountsbaseyear) - 1, 2))
+> > . generate national_accounts_base_year = real(substr(nationalaccountsbaseyear, 1, 2) + substr(nationalaccountsbaseyear, -2, 2))
 > > (123 missing values generated)
 > > 
 > > . tabulate national_accounts_base_year, missing
