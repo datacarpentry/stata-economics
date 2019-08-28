@@ -1,7 +1,7 @@
 ---
 title: "Read and Explore Data"
-teaching: 0
-exercises: 0
+teaching: 40
+exercises: 10
 questions:
 - "How can I explore my data?"
 - "How does Stata deal with variable names it doesn't like?"
