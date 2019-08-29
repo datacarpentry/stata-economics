@@ -1,7 +1,7 @@
 ---
 title: "Repeat Tasks with Loops"
-teaching: 0
-exercises: 0
+teaching: 30
+exercises: 10
 questions:
 - "How can I minimize bugs in my code?"
 objectives:

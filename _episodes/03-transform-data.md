@@ -1,7 +1,7 @@
 ---
 title: "Transform Data"
-teaching: 0
-exercises: 0
+teaching: 40
+exercises: 25
 questions:
 - "What is tidy data?"
 - "How do I transfrom the data to the shape I need?"
