@@ -131,6 +131,52 @@ Your .do file begins with loading a dataset and ends with saving one. It leaves 
 > {: .solution}
 {: .challenge}
 
+## Break up your work (optional)
+
+We are loading a dataset from the web. For larger datasets, this can be frustratingly slow and we do not want to redo it every time we change something in our .do file. We can put this step in a separate .do file.
+
+The `copy` command is similar to the Shell command `cp` in that `copy x y` copies a file from location `x` to location `y`. But Stata's copy command has the added feature that it can also copy from a URL.
+
+```
+mkdir "data/raw"
+copy "https://raw.githubusercontent.com/korenmiklos/dc-economics-data/master/data/web/gdp.csv" "data/raw/gdp.csv"
+```
+{: .source}
+
+Keep raw data separate from data that you are working on to make sure you do not accidentally overwrite it. Even though you are only running this `copy` command once, add it to a .do file. This is a record of what you did: where you downloaded the data from and where you put it.
+
+> ## Challenge
+> Create two .do files, `read_gdp.do` and `reshape_gdp.do` to create a local copy of the GDP data and to reshape and save it, respectively.
+> > ## Solution
+> > The content of `code/read_gdp.do`:
+> > ```
+> > copy "https://raw.githubusercontent.com/korenmiklos/dc-economics-data/master/data/web/gdp.csv" "data/raw/gdp.csv"
+> > ```
+> > {: .source}
+> > (Note the `mkdir` is not included.) The content of `code/reshape_gdp.do`:
+> > ```
+> > import delimited "data/raw/gdp.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
+> > reshape long gdp, i(countrycode) j(year)
+> > rename gdp gdp_per_capita
+> > save "data/derived/gdp_per_capita.dta"
+> > ```
+> > {: .source}
+> {: .solution}
+{: .challenge}
+
+When you change something in your data cleaning (for example, you add variable labels), you only have to rerun the second .do file.
+
+If you have many .do files (you should!), you should note the order in which they have to be run. One way to do that is to create a "master" .do file, which calls every other .do file. This also shows your coauthor how to run your code. For example, the master .do file below makes it explicit that `read_gdp.do` and `reshape_gdp.do` expect to be run from outside the `code` folder. You can also note it in a comment.
+
+```
+* run this from the main project folder, one level up from data/ and code/
+do code/read_gdp.do
+do code/reshape_gdp.do
+```
+{: .source}
+
+Another useful convention is to number your .do files in the order in which they run, `01_read_gdp.do`, `02_reshape_gdp.do`. This is super helpful to get a quick overview of how to run your code, but does not quite substitute for a master .do file and comments. 
+
 ## Scalars and macros
 
 Macros are useful for storing values and reusing them later. They are the most powerful feature of Stata programming.
