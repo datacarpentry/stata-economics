@@ -173,7 +173,7 @@ Note that the loop variable is a macro, not a scalar. This helps us write code w
 
 ```
 . forvalues i = 1/5 {
-  2.     generate gdp_`i' = gdp_per_capita^`i'
+  2.     generate gdp_per_capita_`i' = gdp_per_capita^`i'
   3. }
 (9,381 missing values generated)
 (9,381 missing values generated)
@@ -181,7 +181,7 @@ Note that the loop variable is a macro, not a scalar. This helps us write code w
 (9,381 missing values generated)
 (9,381 missing values generated)
 
-. su gdp_?
+. summarize gdp_?
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
@@ -190,6 +190,7 @@ Note that the loop variable is a macro, not a scalar. This helps us write code w
        gdp_3 |      6,459    3.13e+13    1.38e+14   4.45e+07   2.48e+15
        gdp_4 |      6,459    2.33e+18    1.49e+19   1.58e+10   3.35e+20
        gdp_5 |      6,459    2.06e+23    1.71e+24   5.58e+12   4.54e+25
+
 ```
 {: .output}
 
@@ -216,12 +217,12 @@ Note that the loop variable is a macro, not a scalar. This helps us write code w
 > > ## Solution
 > > ```
 > > use "data/gdp1990.dta", clear
-> > generate year=1990
+> > generate year = 1990
 > > label variable gdp_per_capita "GDP per capita"
 > > label variable year "Year"
 > >  forvalues year = 1991/2017 {
 > >      append using "data/gdp`year'.dta"
-> >      replace year=`year' if missing(year)
+> >      replace year = `year' if missing(year)
 > >  save "data/gdp1990-2017.dta", replace
 > >  }
 > > ```
