@@ -1,7 +1,7 @@
 ---
 title: "Repeat Tasks with Loops"
-teaching: 0
-exercises: 0
+teaching: 30
+exercises: 10
 questions:
 - "How can I minimize bugs in my code?"
 objectives:
@@ -15,7 +15,7 @@ keypoints:
 Sometimes you will need to do repetitive tasks in the process of data manipulation and analysis. For example, you might want to summarize `gdp_per_capita`, for each year in your dataset. You may be tempted to write something like this:
 
 ```
-. use /data/WDI-select-variables.dta", clear
+. use "data/derived/gdp_per_capita.dta", clear
 .summarize gdp_per_capita if year == 2010
 .summarize gdp_per_capita if year == 2011
 .summarize gdp_per_capita if year == 2012
@@ -212,7 +212,7 @@ Note that the loop variable is a macro, not a scalar. This helps us write code w
 {: .challenge}
 
 
-> ## Challenge
+> ## Challenge (optional)
 > Write a do-file named "append-gdp-all.do" that appends all data which name matches the pattern gdp`year'.dta. Generate a variable called year that records the gdp year as indicated in the name of the file. Label the variables accordingly. Save the final dataset as gdp1990-2017.dta".
 > > ## Solution
 > > ```
