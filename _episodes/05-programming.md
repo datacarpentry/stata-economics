@@ -90,7 +90,7 @@ file data/derived/gdp_per_capita.dta saved
 {: .callout}
 
 > ## Challenge
-> Change you current working directory to `/home/user/dc-economics/data`. How can you run the .do file at `/home/user/dc-economics/code/read_reshape_gdp.do`?
+> Change your current working directory to `/home/user/dc-economics/data`. How can you run the .do file at `/home/user/dc-economics/code/read_reshape_gdp.do`?
 >
 > > ## Solution
 > > You can run the .do file with its relative path, `do "../code/read_reshape_gdp.do"`. However, the last command uses a relative path, `data/derived/gdp_per_capita.dta`. Starting from the current directory, it would save the dataset under `data/data/derived/gdp_per_capita.dta`, a nonexistent directory! Change to the upper level directory first.
