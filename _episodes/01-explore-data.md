@@ -385,6 +385,24 @@ You really can use any function after `if`. This is an easy way to do something 
 The function `uniform()` returns uniform random numbers between 0 and 1, so the above takes a 10 percent random sample from our observations.
 Set the seed in order to get the same sample and results every time.  If you do not set the seed, Stata will start its algorithm with the seed 123456789. 
 
+The `inspect` command displays a different type of summary than summarize command provided. Relevant only for numeric variables.
+
+```
+inspect dist
+dist:  simple distance (most	populated	c              Number of Observations
+			
+		                                             Total      Integers   Nonintegers
+    #	                         Negative             -             -             -
+    #   #	                     Zero	                -             -             -
+#   #   #	                     Positive	        50,176           26        50,150
+#   #   #   #	                              	-----------   -----------   ----------
+#   #   #   #	                 Total	          50,176           26        50,150
+#   #   #   #  #	             Missing	           -
++----------------------		                    -----------
+.9951369       19951.16		                      50,176
+(More than 99 unique values)
+```
+{: .output}
 
 ![Getting help]({{ "/img/help-summarize.png" | relative_url }})
 
