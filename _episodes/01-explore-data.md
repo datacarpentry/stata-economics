@@ -389,16 +389,16 @@ The `inspect` command displays a different type of summary than summarize comman
 
 ```
 inspect dist
-dist:  simple distance (most	populated	c              Number of Observations
+dist:  simple distance                                      Number of Observations
 			
-		                                             Total      Integers   Nonintegers
-    #	                         Negative             -             -             -
-    #   #	                     Zero	                -             -             -
-#   #   #	                     Positive	        50,176           26        50,150
-#   #   #   #	                              	-----------   -----------   ----------
-#   #   #   #	                 Total	          50,176           26        50,150
-#   #   #   #  #	             Missing	           -
-+----------------------		                    -----------
+		                                      Total        Integers   Nonintegers
+    #	                         Negative               -              -           -
+    #   #	                 Zero	                -              -           -
+#   #   #	                 Positive	      50,176           26        50,150
+#   #   #   #	                              	   -----------   -----------   ----------
+#   #   #   #	                 Total	              50,176           26        50,150
+#   #   #   #  #	         Missing	        -
++----------------------		                   -----------
 .9951369       19951.16		                      50,176
 (More than 99 unique values)
 ```
