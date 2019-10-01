@@ -485,6 +485,8 @@ For strings, the empty string is treated as missing value.
 > {: .output}
 {: .callout}
 
+`Count` counts the number of observations specified after a conditional statement. No varlists or string variables allowed. If nothing specified after count it displays the total number of observations in the dataset.
+
 > ## Challenge
 > Count how many countries have had their population census later than 2008.
 > > ## Solution
