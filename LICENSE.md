@@ -4,7 +4,8 @@ title: "Licenses"
 ---
 ## Instructional Material
 
-All Software Carpentry and Data Carpentry instructional material is
+With the exception of screenshots of the Stata documentation, all lesson material
+is
 made available under the [Creative Commons Attribution
 license][cc-by-human]. The following is a human-readable summary of
 (and not a substitute for) the [full legal text of the CC BY 4.0
@@ -43,6 +44,9 @@ Notices:
   permissions necessary for your intended use. For example, other
   rights such as publicity, privacy, or moral rights may limit how you
   use the material.
+
+Stata screenshots are used with the permission of StataCorp
+LLC. All rights reserved.
 
 ## Software
 
