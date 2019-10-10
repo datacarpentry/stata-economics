@@ -18,7 +18,7 @@ keypoints:
 
 ## Filter data
 
-There are many variables in our dataset loaded from `data/WDICountry.csv`.
+There are many variables in our dataset loaded from `data/raw/worldbank/WDICountry.csv`.
 ```
 . describe
 
