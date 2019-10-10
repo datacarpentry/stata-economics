@@ -18,7 +18,7 @@ keypoints:
 
 ## Read a .csv file
 
-Next we will read the World Development Indicators dataset. The data is in `data/WDIData.csv`. The other .csv files starting with `WDI` give some metadata. For example, `data/WDISeries.csv` describes the variables ("indicators" in World Bank speak), `data/WDICountry.csv` gives a codelist of countries, and `data/WDIFootnote.csv` includes footnotes.
+Next we will read the World Development Indicators dataset. The data is in `data/raw/worldbank/WDIData.csv`.The other .csv files starting with `WDI` give some metadata. For example, `data/raw/worldbank/WDISeries.csv` describes the variables ("indicators" in World Bank speak), `data/raw/worldbank/WDICountry.csv` gives a codelist of countries, and `data/raw/worldbank/WDIFootnote.csv` includes footnotes.
 
 Reading text data from .csv files can be even more challenging. Let us read the country names and characteristics. This is what the file should look like.
 
@@ -26,11 +26,11 @@ Reading text data from .csv files can be even more challenging. Let us read the 
 
 
 ```
-import delimited "data/WDICountry.csv", varnames(1) clear
+import delimited "data/raw/worldbank/WDICountry.csv", varnames(1) clear
 ```
 {: .source}
 ```
-. import delimited "data/WDICountry.csv", varnames(1) clear
+. import delimited "data/raw/worldbank/WDICountry.csv", varnames(1) clear
 (31 vars, 268 obs)
 ```
 {: .output}
@@ -41,7 +41,7 @@ As always, we look at the data first.
 
 There are some things that do not belong to the `countrycode` variable. Indeed they look like entire parts of a .csv line. 
 
-After going out to the shell and exploring the file there (for example, `head data/WDICountry.csv`), we will find a text variable is split on multiple lines. This may trip up `import delimited`.
+After going out to the shell and exploring the file there (for example, `head data/raw/worldbank/WDICountry.csv`), we will find a text variable is split on multiple lines. This may trip up `import delimited`.
 
 The following .csv cell, within double quotes, is spread across multiple lines.
 `"Central Bureau of Statistics and Central Bank of Aruba ; Source of population estimates: UN Population Division's World Population Prospects 2019 PROVISIONAL estimates. Not for circulation. Subject to change. Mining is included in agriculture\n 
@@ -49,7 +49,7 @@ Electricty and gas includes manufactures of refined petroleum products"`
 We can tell `import delimited` to always looking for a closing quote before starting a new line with the `bindquotes` option.
 
 ```
-. import delimited "data/WDICountry.csv", varnames(1) bindquotes(strict) clear
+. import delimited "data/raw/worldbank/WDICountry.csv", varnames(1) bindquotes(strict) clear
 (31 vars, 263 obs)
 ```
 {: .output}
@@ -65,7 +65,7 @@ But browsing further down, we find "Côte d'Ivoire" and "Curaçao" are misspelle
 The characters `Ã` and `Å` are often indicative that the [encoding of the text is UTF-8](https://en.wikipedia.org/wiki/UTF-8). We can set the encoding as an option to `import delimited`. The default encoding is `latin1`.
 
 ```
-import delimited "data/WDICountry.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
+import delimited "data/raw/worldbank/WDICountry.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
 ```
 {: .source}
 Checking "Côte d'Ivoire" and "Curaçao," we find the correct characters. The options `varnames(1) bindquotes(strict) encoding("utf-8")` are almost always necessary to properly read .csv files.
