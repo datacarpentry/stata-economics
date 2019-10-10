@@ -22,7 +22,7 @@ keypoints:
 
 Save the .do file in the editor as `read_reshape_gdp.do`. 
 
-Create a `code` folder inside your project folder `dc-economics` and put it there. 
+Create a `code` folder inside your project folder `stata-economics` and put it there. 
 
 You can use basic shell commands such as `cd`, `pwd`, `ls` and `mkdir` in Stata. 
 ```
@@ -90,7 +90,7 @@ file data/derived/gdp_per_capita.dta saved
 {: .callout}
 
 > ## Challenge
-> Change your current working directory to `/home/user/dc-economics/data`. How can you run the .do file at `/home/user/dc-economics/code/read_reshape_gdp.do`?
+> Change your current working directory to `/home/user/stata-economics/data`. How can you run the .do file at `/home/user/stata-economics/code/read_reshape_gdp.do`?
 >
 > > ## Solution
 > > You can run the .do file with its relative path, `do "../code/read_reshape_gdp.do"`. However, the last command uses a relative path, `data/derived/gdp_per_capita.dta`. Starting from the current directory, it would save the dataset under `data/data/derived/gdp_per_capita.dta`, a nonexistent directory! Change to the upper level directory first.
@@ -138,8 +138,8 @@ We are loading a dataset from the web. For larger datasets, this can be frustrat
 The `copy` command is similar to the Shell command `cp` in that `copy x y` copies a file from location `x` to location `y`. But Stata's copy command has the added feature that it can also copy from a URL.
 
 ```
-mkdir "data/raw"
-copy "https://raw.githubusercontent.com/korenmiklos/dc-economics-data/master/data/web/gdp.csv" "data/raw/gdp.csv"
+mkdir "data/raw/web"
+copy "https://raw.githubusercontent.com/korenmiklos/dc-economics-data/master/data/web/gdp.csv" "data/raw/web/gdp.csv"
 ```
 {: .source}
 
@@ -150,12 +150,12 @@ Keep raw data separate from data that you are working on to make sure you do not
 > > ## Solution
 > > The content of `code/read_gdp.do`:
 > > ```
-> > copy "https://raw.githubusercontent.com/korenmiklos/dc-economics-data/master/data/web/gdp.csv" "data/raw/gdp.csv"
+> > copy "https://raw.githubusercontent.com/korenmiklos/dc-economics-data/master/data/web/gdp.csv" "data/raw/web/gdp.csv"
 > > ```
 > > {: .source}
 > > (Note the `mkdir` is not included.) The content of `code/reshape_gdp.do`:
 > > ```
-> > import delimited "data/raw/gdp.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
+> > import delimited "data/raw/web/gdp.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
 > > reshape long gdp, i(countrycode) j(year)
 > > rename gdp gdp_per_capita
 > > save "data/derived/gdp_per_capita.dta"
