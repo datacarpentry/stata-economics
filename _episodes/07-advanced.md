@@ -21,7 +21,7 @@ keypoints:
 ## Advanced example of macro evaluation and for loops
 ```
 clear all
-import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
+import delimited "data/raw/worldbank/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
 
 local merchandise_trade "TG.VAL.TOTL.GD.ZS"
 local life_expectancy "SP.DYN.LE00.IN"
@@ -54,7 +54,7 @@ foreach var in `variables' {
 drop indicatorcode indicatorname
 reshape wide v, i(countrycode year) j(variable_name) string
 rename v* *
-save "data/WDI-select-variables.dta", replace
+save "data/derived/WDI-select-variables.dta", replace
 ```
 {: .source}
 
@@ -93,12 +93,12 @@ Because Stata keeps only one dataset at a time in memory, you may need to save a
 Merge names of countries and the income group classification from `WDICountry.csv`.
 
 ```
-import delimited "data/WDICountry.csv", varnames(1) bindquotes(strict) clear
+import delimited "data/raw/worldbank/WDICountry.csv", varnames(1) bindquotes(strict) clear
 keep countrycode shortname incomegroup
 tempfile wdi
 save `wdi', replace
 
-use "data/WDI-select-variables.dta", clear
+use "data/derived/WDI-select-variables.dta", clear
 merge m:1 countrycode using `wdi', keep(master match) nogen
 ```
 {: .source}
@@ -109,7 +109,7 @@ reshape wide v, i(countrycode year) j(variable_name) string
 tempfile wide_wdi
 save `wide_wdi', replace
 rename v* *
-save "data/WDI-select-variables.dta", replace
+save "data/derived/WDI-select-variables.dta", replace
 use `wide_wdi', clear
 * do something else with the wide data
 ```
@@ -122,14 +122,14 @@ There are two dedicated Stata commands to put aside a dataset in memory and reus
 reshape wide v, i(countrycode year) j(variable_name) string
 preserve
 rename v* *
-save "data/WDI-select-variables.dta", replace
+save "data/derived/WDI-select-variables.dta", replace
 restore
 * do something else with the wide data
 ```
 {: .source}
 
 ```
-import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
+import delimited "data/raw/worldbank/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
 local gdp_per_capita "NY.GDP.PCAP.PP.KD"
 keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "SP.DYN.LE00.IN", "`gdp_per_capita'", "SP.POP.TOTL", "EN.POP.DNST")
 reshape long v, i(countrycode indicatorcode) j(year)
@@ -143,7 +143,7 @@ replace variable_name = "population_density" if indicatorcode == "EN.POP.DNST"
 drop indicatorcode indicatorname
 reshape wide v, i(countrycode year) j(variable_name) string
 rename v* *
-save "data/WDI-select-variables.dta", replace
+save "data/derived/WDI-select-variables.dta", replace
 
 ```
 {: .source}
@@ -165,7 +165,7 @@ WHhereas `read_wdi_variables.do` will look like
 
 
 ```
-import delimited "data/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
+import delimited "data/raw/worldbank/WDIData.csv", varnames(1) bindquotes(strict) encoding("utf-8") clear
 keep if inlist(indicatorcode, "TG.VAL.TOTL.GD.ZS", "NY.GDP.PCAP.PP.KD", "SP.POP.TOTL")
 reshape long v, i(countrycode indicatorcode) j(year)
 replace year = year - 5 + 1960
@@ -175,7 +175,7 @@ do code/generate_variable_name.do
 drop indicatorcode indicatorname
 reshape wide v, i(countrycode year) j(variable_name) string
 rename v* *
-save "data/WDI-select-variables.dta", replace
+save "data/derived/WDI-select-variables.dta", replace
 ```
 
 
