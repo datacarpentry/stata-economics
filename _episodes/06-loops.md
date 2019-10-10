@@ -216,14 +216,14 @@ Note that the loop variable is a macro, not a scalar. This helps us write code w
 > Write a do-file named "append-gdp-all.do" that appends all data which name matches the pattern gdp`year'.dta. Generate a variable called year that records the gdp year as indicated in the name of the file. Label the variables accordingly. Save the final dataset as gdp1990-2017.dta".
 > > ## Solution
 > > ```
-> > use "data/gdp1990.dta", clear
+> > use "data/derived/gdp1990.dta", clear
 > > generate year = 1990
 > > label variable gdp_per_capita "GDP per capita"
 > > label variable year "Year"
 > >  forvalues year = 1991/2017 {
-> >      append using "data/gdp`year'.dta"
+> >      append using "data/derived/gdp`year'.dta"
 > >      replace year = `year' if missing(year)
-> >  save "data/gdp1990-2017.dta", replace
+> >  save "data/derived/gdp1990-2017.dta", replace
 > >  }
 > > ```
 > > {: .output}
