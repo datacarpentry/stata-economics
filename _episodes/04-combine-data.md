@@ -20,21 +20,21 @@ The commands `append` and `merge` combine a dataset in memory (the "master" data
 
 The command `append` is used to combine datasets with the same columns, each representing a different set of observations. A common use case is combining large datasets broken into smaller chunks.
 
-Load GDP data from the annual files `data/gdp1990.dta`, `data/gdp1991.dta`, etc.
+Load GDP data from the annual files `data/derived/gdp1990.dta`, `data/derived/gdp1991.dta`, etc.
 ```
-use "data/gdp1990.dta", clear
+use "data/derived/gdp1990.dta", clear
 describe
-append using "data/gdp1991.dta"
+append using "data/derived/gdp1991.dta"
 describe
 ```
 {: .source}
 
 ```
-. use "data/gdp1990.dta", clear
+. use "data/derived/gdp1990.dta", clear
 
 . describe
 
-Contains data from data/gdp1990.dta
+Contains data from data/derived/gdp1990.dta
   obs:           264                          
  vars:             2                          22 Aug 2019 13:39
  size:         2,904                          
@@ -47,11 +47,11 @@ gdp_per_capita  double  %8.0g                 gdp_per_capita v
 --------------------------------------------------------------------------------------
 Sorted by: countrycode
 
-. append using "data/gdp1991.dta"
+. append using "data/derived/gdp1991.dta"
 
 . describe
 
-Contains data from data/gdp1990.dta
+Contains data from data/derived/gdp1990.dta
   obs:           528                          
  vars:             2                          22 Aug 2019 13:39
  size:         5,808                          
@@ -70,9 +70,9 @@ Sorted by:
 
 Note that the files does not contain a year variable, so we would not know which observation is coming from which year. We modify the code to create a variable called `year`.
 ```
-use "data/gdp1990.dta", clear
+use "data/derived/gdp1990.dta", clear
 generate year = 1990
-append using "data/gdp1991.dta"
+append using "data/derived/gdp1991.dta"
 ```
 {: .source}
 Looking at the data, we see that variables that have the same name are combined as expected. 
@@ -84,11 +84,11 @@ We can also see the edge of the two datasets: the master data ends with "Zimbabw
 Because the variable `year` was not defined in `gdp1991.dta`, its values are missing for observations that comes from this file. This suggest that we can update the year based on missing values. Our final combination code will look like this.
 
 ```
-use "data/gdp1990.dta", clear
+use "data/derived/gdp1990.dta", clear
 generate year = 1990
-append using "data/gdp1991.dta"
+append using "data/derived/gdp1991.dta"
 replace year = 1991 if missing(year)
-append using "data/gdp1992.dta"
+append using "data/derived/gdp1992.dta"
 replace year = 1992 if missing(year)
 ...
 ```
