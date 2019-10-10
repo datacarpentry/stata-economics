@@ -70,25 +70,25 @@ cd ..
 Everything we do pointing and clicking leaves a trace in the command line. This will help us write reproducible code later.
 
 ```
-use "/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics/data/dist_cepii.dta"
+use "/Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics/data/raw/cepii/dist_cepii.dta"
 ```
 {: .source}
 
 
 > ## Challenge
-> If your current working directory is `/home/user/dc-economics`, which of the following can you use to load the data in `/home/user/dc-economics/data/dist_cepii.dta`?
-> 1. `use "/home/user/dc-economics/data/dist_cepii.dta"`
-> 2. `use "data/dist_cepii.dta"`
-> 3. `use "/data/dist_cepii.dta"`
-> 4. `use "data\dist_cepii.dta"`
+> If your current working directory is `/home/user/stata-economics`, which of the following can you use to load the data in `/home/user/stata-economics/data/raw/cepii/dist_cepii.dta`?
+> 1. `use "/home/user/stata-economics/data/raw/cepii/dist_cepii.dta"`
+> 2. `use "data/raw/cepii/dist_cepii.dta"`
+> 3. `use "/data/raw/cepii/dist_cepii.dta"`
+> 4. `use "data\raw\cepii\dist_cepii.dta"`
 > 5. `use "../dist_cepii.dta"`
 > 
 > > ## Solution
 > > 1. Yes. You can always use the _absolute path_ of a datafile you want to load. It is good practice to put the filename inside double quotes to guard against problems caused by spaces and other special characters in filenames. Note, however, that your code may not run on someone else's computer where the absolute path is different.
 > > 2. Yes. Here you are using a _relative path_. 
-> > 3. No. This is an absolute path because it starts with `/`, but it is not the correct absolute path for `/home/user/dc-economics/data/dist_cepii.dta`.
+> > 3. No. This is an absolute path because it starts with `/`, but it is not the correct absolute path for `/home/user/stata-economics/data/raw/cepii/dist_cepii.dta`.
 > > 4. It depends. This will work on Windows, but not on Linux and Mac machines. Use forward slash, `/` instead.
-> > 5. No. This would look for `dist_cepii.dta` in the directory `/home/user`, one level up from the current working directory, `/home/user/dc-economics`.
+> > 5. No. This would look for `dist_cepii.dta` in the directory `/home/user`, one level up from the current working directory, `/home/user/stata-economics`.
 > {: .solution}
 {: .challenge}
 
@@ -110,8 +110,7 @@ What do these variables mean? Can we use more verbose names for them?
 ```
 . describe
 
-Contains data from /Users/koren/Dropbox/teaching/courses/2019/carpentries/stata-economics/dat
-> a/dist_cepii.dta
+Contains data from /stata-economics/data/raw/cepii/dist_cepii.dta
   obs:        50,176                          
  vars:            14                          8 Oct 2004 20:08
  size:     1,906,688                          
@@ -413,7 +412,7 @@ Stata documentation is of really high quality. It gives plenty of examples and o
 ![Detailed formulas]({{ "/img/formulas.png" | relative_url }})
 
 > ## Challenge
-> Load `data/dist_cepii.dta`. Explore the variable `distw` (weighted average distance between cities in the pair of countries).
+> Load `data/raw/cepii/dist_cepii.dta`. Explore the variable `distw` (weighted average distance between cities in the pair of countries).
 > 1. What is the unit of measurement?
 > 2. What is the smallest and largest value?
 > 3. In how many cases is this variable missing?
@@ -426,7 +425,7 @@ Stata documentation is of really high quality. It gives plenty of examples and o
 {: .challenge}
 
 > ## Challenge
-> Load `data/dist_cepii.dta`. Do you use `codebook` or `inspect` to check how many distinct countries are coded in `iso_d`?
+> Load `data/raw/cepii/dist_cepii.dta`. Do you use `codebook` or `inspect` to check how many distinct countries are coded in `iso_d`?
 > > ## Solution
 > > ```
 > > codebook iso_d
