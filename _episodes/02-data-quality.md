@@ -286,7 +286,17 @@ In general, we recommend against using `force` options with Stata commands as it
 
 The same non reversible process could happen if you use `drop` or `keep` commands. You might need to go back to the original dataset and read it in again. Drop eliminates variables or observations from the data in memory. Keep stores the variables that you specified in your varlist. 
 
-Instead of using `force` option we can write a function that extracts the year from the text. The function `substr` extracts a portion of a string variable.
+Instead of using `force` option we can write a function that extracts the year from the text. The function `substr` extracts a portion of a string variable. You must have to give three domains `substr(s,n1,n2)` to specify your command appropriately.  
+
+```
+. display substr("apple", 1, 3)
+app
+```
+{: .output}
+
+You can see from this example that the first `s` domain was a string, the second `n1` was a real number and the third `n2` was an other real number. The `n1` is the starting character, and `n2` is the length of the string in characters. 
+
+Now we can generate a new `year` variable by the help of the `substr` function and the `latestpopulationcensus` string variable. 
 
 ```
 . drop censusyear
