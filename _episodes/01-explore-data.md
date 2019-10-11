@@ -23,6 +23,28 @@ How do you find your current working directory? Check the bottom line of the Sta
 
 ![Two ways of checking your working directory]({{ "/img/pwd.png" | relative_url }})
 
+When you use the command window Stata shows the outputs in the results window. The `display` command in Stata, which is similar than print command in other programming languages, could displays strings, values or produces outputs from the programs that you write.
+
+```
+. display "Hello world!"
+```
+{: .source}
+```
+Hello world!
+```
+{: .output}
+
+Interactively `display` can be used as a substitute for a hand calculator.
+
+ ```
+. display 2*2
+ ```
+{: .source}
+```
+4
+```
+{: .output}
+
 > ## Backward or forward?
 > On a Windows machine, Stata will display your working directory with a backslash (`\`) separating its components, like
 > `C:\Users\koren\Dropbox\teaching\courses\2019\carpentries\stata-economics`.
