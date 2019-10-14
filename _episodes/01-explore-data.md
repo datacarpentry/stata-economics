@@ -297,8 +297,6 @@ If you don't know or recall a command in Stata, searching the Internet will almo
 
 ![Manual Stata Label]({{ "/img/help-label.png" | relative_url }})
 
-
-
 ## Command syntax
 
 The `summarize` command displays summary statistics about a variable.
@@ -425,11 +423,19 @@ dist:  simple distance                                      Number of Observatio
 ```
 {: .output}
 
+You can reach the Stata built in manuals if you write `help` and the name of the command into the command line. 
+```
+help summarize 
+```
+{: .source}
+
+In the help documentation you can find syntax details, descriptions, links, options and examples. 
+
 ![Getting help]({{ "/img/help-summarize.png" | relative_url }})
 
 ![Search for PDF manual]({{ "/img/google-manual.png" | relative_url }})
 
-Stata documentation is of really high quality. It gives plenty of examples and often includes the precise formula a given command is using.
+Sometimes Stata documentation is of really high quality. It gives plenty of examples and often includes the precise formula a given command is using.
 
 ![Detailed formulas]({{ "/img/formulas.png" | relative_url }})
 
