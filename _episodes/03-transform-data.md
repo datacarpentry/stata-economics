@@ -238,7 +238,7 @@ Different shapes of the data are useful for different tasks. For example, we may
 
 ![help reshape]({{ "/img/help-reshape.png" | relative_url }})
 
-To practice reshaping, load a somewhat precleaned subset of the WDI dataset from the web. This will also show us how to work with data from the web. The data file we will be working with is located at `https://raw.githubusercontent.com/korenmiklos/dc-economics-data/master/data/web/gdp.csv`. Please go ahead and copy this URL from the Etherpad so that you do not have to type it.
+To practice reshaping, load a somewhat precleaned subset of the WDI dataset from the web. This will also show us how to work with data from the web. The data file we will be working with is located at `https://raw.githubusercontent.com/korenmiklos/dc-economics-data/master/data/web/gdp.csv`. Please go ahead and copy this URL from the shared notes so that you do not have to type it.
 
 The command `import delimited`, but also `use` can load files directly from the web, if we pass them a URL. The URL has to be in quotes because it is full of strange characters.
 
