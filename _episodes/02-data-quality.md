@@ -452,6 +452,11 @@ generate censusyear = real(substr(latestpopulationcensus, 1, 4))
 {: .challenge}
 
 ## Missing values
+
+> ## Missing values
+> When a numerical variable contains no information for a particular observation, either because data was not recorded or because its calculation was erroneous, its value becomes *missing*. This is a special value, different from all actual numbers with its special rules of arithmetic. (Missing or null values or "not-a-numbers" are denoted *NaN*, *NULL*, or *None* in other programming languages.) 
+{: .callout}
+
 As seen from the table above, Stata denotes missing values with `.` We can use the `missing` function to test if a variable or an expression returns a missing value.
 ```
 . display missing(2018)
