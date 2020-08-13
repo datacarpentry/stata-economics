@@ -46,7 +46,7 @@ Notices:
   use the material.
 
 Stata screenshots are used with the permission of StataCorp
-LLC. All rights reserved.
+LLC to use in this and derived instructional materials. All other rights reserved.
 
 ## Software
 

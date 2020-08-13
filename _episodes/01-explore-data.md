@@ -19,6 +19,8 @@ keypoints:
 
 ![The Stata interface]({{ "/img/interface.png" | relative_url }})
 
+> Stata screenshots are used with the permission of StataCorp LLC to use in this and derived instructional materials. All other rights reserved.
+
 How do you find your current working directory? Check the bottom line of the Stata application window, or enter the command `pwd`.
 
 ![Two ways of checking your working directory]({{ "/img/pwd.png" | relative_url }})
