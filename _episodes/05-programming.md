@@ -20,11 +20,10 @@ keypoints:
 
 ## Running .do files
 
-Save the .do file in the editor as `read_reshape_gdp.do`. 
-
-Create a `code` folder inside your project folder `stata-economics` and put it there. 
+Take the commands you have copied in the .do file editor in [Episode 3]({{ "/03-transform-data/" | relative_url }}) and save it. Create a `code` folder inside your project folder `stata-economics` and save the file there as as `code/read_reshape_gdp.do`. 
 
 You can use basic shell commands such as `cd`, `pwd`, `ls` and `mkdir` in Stata. 
+
 ```
 pwd
 mkdir code
