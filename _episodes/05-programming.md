@@ -182,7 +182,7 @@ Macros are useful for storing values and reusing them later. They are the most p
 
 There are two types of macros, local and global.  Local macros are valid only in a single
 execution of commands in do-files.  Global macros will persist until you delete them or the session is ended.
-We recommend the use of local macros and this is what we cover first.
+Precisely because global macros are persistent you might inadvertently use the wrong value. We therefore recommend the use of local macros and this is what we cover first.
 
 ```
 . local begin_year 1991

@@ -16,14 +16,14 @@ Sometimes you will need to do repetitive tasks in the process of data manipulati
 
 ```
 . use "data/derived/gdp_per_capita.dta", clear
-.summarize gdp_per_capita if year == 2010
-.summarize gdp_per_capita if year == 2011
-.summarize gdp_per_capita if year == 2012
-.summarize gdp_per_capita if year == 2013
-.summarize gdp_per_capita if year == 2014
-.summarize gdp_per_capita if year == 2015
-.summarize gdp_per_capita if year == 2016
-.summarize gdp_per_capita if year == 2017
+. summarize gdp_per_capita if year == 2010
+. summarize gdp_per_capita if year == 2011
+. summarize gdp_per_capita if year == 2012
+. summarize gdp_per_capita if year == 2013
+. summarize gdp_per_capita if year == 2014
+. summarize gdp_per_capita if year == 2015
+. summarize gdp_per_capita if year == 2016
+. summarize gdp_per_capita if year == 2017
 ```
 {: .output}
 
@@ -376,7 +376,7 @@ Copying and pasting are prone to errors. Not all will be easy to spot and fix.
 local base_year 1991
 foreach var in gdp_per_capita population {
     egen `var'_`base_year' = mean(cond(year == `base_year', `var', .)), by(countrycode)
-    generate `var'_indevar = `var' / `var'_`base_year' * 100
+    generate `var'_index = `var' / `var'_`base_year' * 100
 }
 ```
 {: .source}
@@ -399,6 +399,22 @@ foreach var of varlist *_index {
 }
 ```
 {: .source}
+
+> ## Consistent variable names are friends of loops
+> If you build a consistent system of variable names, it is much easier to automate repetitive tasks with for loops. For example, you might have saved the mean of each variable with the naming patter `*_mean`. 
+> ```
+> foreach var in gdp_per_capita population {
+>     egen `var'_mean = mean(`var')
+> }
+> * some more code
+> foreach var in gdp_per_capita population {
+>     generate `var'_demeaned = `var' - `var'_mean
+> }
+> ```
+> {: .source}
+> It is much easier to reuse these variable names than if you had called them `mean_gdp` and `avg_population`.
+{: .callout}
+
 
 
 You can reuse the loop variable later in different loops. Note the use of variable name wildcards.
