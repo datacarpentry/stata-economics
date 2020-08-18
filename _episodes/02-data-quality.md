@@ -188,7 +188,7 @@ Strings always have to encapsulated in `""`.
 > ## Challenge
 > You have a database named `balances.dta` in `UTF-8` encoding. The database has a unique identifier variable `ceg_id` in the third column. Ceg_id is the Company Registration Number which have possible zeros as a first character. You also have addresses variable which contains full firm adresses between double quotes, stored in a long string format. 
 You have a dataset already loaded into your Stata.
-
+>
 Please write an import delimited for balances.dta and read the ceg_id variable as a string variable. If you get stuck feel free to use the help of the `import delimited` command. 
 > > ## Solution
 > > import delimited balances.dta,varnames(1) stringcols(3) bindquotes(strict) encoding("utf-8") clear
