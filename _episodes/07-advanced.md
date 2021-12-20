@@ -161,7 +161,7 @@ replace variable_name = "population" if indicatorcode == "SP.POP.TOTL"
 replace variable_name = "population_density" if indicatorcode == "EN.POP.DNST"
 ```
 
-WHhereas `read_wdi_variables.do` will look like
+Whereas `read_wdi_variables.do` will look like
 
 
 ```
@@ -178,7 +178,26 @@ rename v* *
 save "data/derived/WDI-select-variables.dta", replace
 ```
 
+## Custom programs
 
+It is possible to define custom functions (programs) within `.do` files. This can be used to simplify complex calculations or improve code readability. For example, suppose that we want to create a custom mapping from one variable, then instead of creating multiple lines with `if` conditions, we can create a program that will simplify entry of the mapping.
+```
+clear all
+sysuse auto
+
+program define country_of_origin
+	foreach c in `2'{
+		display "Country of origin for car make `c' is set to `1'"
+		replace dummy_country_of_origin = "`1'" if make=="`c'"
+	}
+end
+
+* note that since strings contain spaces, they have to be quoted
+gen dummy_country_of_origin = ""
+country_of_origin "USA" `" "AMC Pacer" "AMC Spirit" "'
+country_of_origin "JP" `" "Mazda GLC" "Subaru" "Honda Accord" "Honda Civic" "'
+```
+{: .source}
 
 
 {% include links.md %}
